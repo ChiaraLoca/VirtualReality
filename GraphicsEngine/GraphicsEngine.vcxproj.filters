@@ -72,6 +72,9 @@
     <ClInclude Include="OrthoCamera.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="CounterLight.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphicsEngine.cpp">
@@ -126,6 +129,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="OrthoCamera.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="CounterLight.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

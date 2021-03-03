@@ -2,6 +2,8 @@
 #include "Object.h"
 #include "Node.h"
 #include "ListCamera.h"
+#include "CounterLight.h"
+
 
 #include <map>
 #include "OrthoCamera.h"
