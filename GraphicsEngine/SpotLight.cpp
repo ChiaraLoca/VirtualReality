@@ -9,7 +9,6 @@ SpotLight::SpotLight(std::string name,glm::mat4 matrix,
 	float cutoff, glm::vec3 direction)
 	:Light( name,{ 0,0,0,1 },matrix, ambient, diffuse, specular), _cutoff{ cutoff }, _direction{direction}
 {
-	_valueLight = CounterLight::getValue();
 	glEnable(_valueLight);
 }
 

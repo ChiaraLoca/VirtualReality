@@ -15,7 +15,7 @@ protected:
 
 public:
 	Light(std::string name, glm::vec4 position,glm::mat4 matrix,
-		glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular, int valueLight=10);
+		glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular);
 	
 	virtual void render();
 };

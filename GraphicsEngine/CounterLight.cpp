@@ -10,7 +10,7 @@ int CounterLight::getValue()
 {
 	if ((_startValueLight+_counter) >= _maxValueLight) {
 		// Not possible, too much light
-		return 20;
+		_counter = 0;
 	}
 	
 	int name = _startValueLight + _counter;
