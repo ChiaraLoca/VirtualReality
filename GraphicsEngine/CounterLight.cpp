@@ -1,27 +1,49 @@
 #include "CounterLight.h"
 
+#include "GL/freeglut.h"
+#include <map>
 
 
-int _startValueLight = 0x4000;
-int _counter = 0;
-int _maxValueLight = 0x4007; //glGetIntegerv (GL_MAX_LIGHTS, maxNrOfLights );
+std::map<int, bool> valueUsed;
 
-int CounterLight::getValue()
+bool isCounterInitialize = false;
+
+int CounterLight::getFreeLightValue()
 {
-	if ((_startValueLight+_counter) >= _maxValueLight) {
-		// Not possible, too much light
-		_counter = 0;
+	//control if the map is initialized
+	if (!isCounterInitialize) {
+		for (auto i = 0; i < 8; ++i) {
+			valueUsed.insert(std::pair<int, bool>(GL_LIGHT0 + i, false));
+		}
+		isCounterInitialize = true;
 	}
-	
-	int name = _startValueLight + _counter;
-	++_counter;
-	return name;
 
+	//Return the first value free
+	for (auto it = valueUsed.begin(); it != valueUsed.end(); ++it) {
+		if (!it->second) {
+			it->second = true;
+			return it->first;
+		}
+	}
+
+
+	return 0;
+}
+
+void CounterLight::freeValue(int valueToFree)
+{
+	try {
+		valueUsed.at(valueToFree) = false;
+	}
+	catch (const std::out_of_range& e) {
+		std::cerr << valueToFree << " is not a valide light value" << std::endl;
+	}
 }
 
 void CounterLight::clear()
 {
-	_counter = 0;
+	valueUsed.clear();
+	isCounterInitialize = false;
 }
 
 

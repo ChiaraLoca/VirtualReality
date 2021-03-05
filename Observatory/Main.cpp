@@ -242,7 +242,7 @@ void observatoryScene()
     std::string s{ util.buildContext("../OVOResources","/") };
 
     OVOReader reader{ s };
-    root = reader.load("ObservatoryScene.OVO");
+    root = reader.load("GiadaLuci.OVO");
 
     _graphicsEngine.setRoot(root);
 

@@ -4,6 +4,7 @@ class CounterLight
 {
 
 public:
-	static int getValue();
+	static int getFreeLightValue();
+	static void freeValue(int valueToFree);
 	static void clear();
 };
