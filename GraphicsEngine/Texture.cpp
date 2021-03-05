@@ -47,7 +47,16 @@ void Texture::loadFromFile(std::string fileName)
 	glBindTexture(GL_TEXTURE_2D, _texId);
 	FIBITMAP* bitmap = FreeImage_Load(FreeImage_GetFileType(fileName.c_str(), 0),fileName.c_str());
 	FreeImage_FlipVertical(bitmap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap),0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
+	
+	if (FreeImage_GetBPP(bitmap) == 32)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap),0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
+	
+	else if (FreeImage_GetBPP(bitmap) == 24)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
+	else {
+		printf(getId()+": Invalid texture");
+	}
+
 	FreeImage_Unload(bitmap);
 }
 
