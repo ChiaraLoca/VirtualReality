@@ -237,7 +237,8 @@ void test()
 }
 void observatoryScene()
 {
-    _graphicsEngine.initialize();
+    if (_graphicsEngine.initialize() < 0)
+        return;
     UtilClient util{};
     std::string s{ util.buildContext("../OVOResources","/") };
 
@@ -283,7 +284,7 @@ void observatoryScene()
 }
 int main()
 {
-	test();
+	//test();
 
     UtilClient util{};
     util.infoText();

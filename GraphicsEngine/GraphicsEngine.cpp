@@ -7,7 +7,7 @@
 #include "Material.h"
 #include "GraphicsEngine.h"
 
-void LIB_API GraphicsEngine::initialize()
+int LIB_API GraphicsEngine::initialize()
 {
     // Initializing the required buffers
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
@@ -24,11 +24,35 @@ void LIB_API GraphicsEngine::initialize()
     // Create the window with a specific title:   
     _windowId = glutCreateWindow(_title);
 
+    //Create context OpenGL_2.1
+    // Init Glew (*after* the context creation):
+    glewExperimental = GL_TRUE;
+    glewInit();
+    GLenum err = glewInit();
+    if (err != GLEW_OK){
+        // Error loading GLEW
+        std::cout << "GLEW has error" << std::endl;
+        return -2;
+    }
+    // OpenGL 2.1 is required:
+    if (!glewIsSupported("GL_VERSION_2_1"))
+    {
+        std::cout << "OpenGL 2.1 not supported" << std::endl;
+        return -1;
+    }
+
     glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
-    glEnable(GL_NORMALIZE);
+   // glEnable(GL_NORMALIZE);
+
+    // Tell OpenGL that you want to use vertex arrays for the given attributes:
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    return 0;
 }
 
 void LIB_API GraphicsEngine::setBackgroundColor(float r, float g, float b, float a)

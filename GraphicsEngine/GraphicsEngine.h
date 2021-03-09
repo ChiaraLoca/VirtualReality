@@ -46,7 +46,7 @@ public:
 	GraphicsEngine(char* title, int dimx = 1000, int dimy = 1000, int posx = 100, int posy = 100)
 		: _dimx{ dimx }, _dimy{ dimy }, _posx{ posx }, _posy{ posy }, _frames{ 0 }, _title{ title } {}
 
-	void initialize();
+	int initialize();
 	void setBackgroundColor(float r, float g, float b,float a =0);
 	void setDimension(float dimx, float dimy);
 	void setPosition(float posx, float posy);

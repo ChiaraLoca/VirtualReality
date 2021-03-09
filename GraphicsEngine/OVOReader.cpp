@@ -301,9 +301,13 @@ Mesh* OVOReader::loadMesh(char* data)
 	}
 
 	std::vector<Face> meshFaces;
+	// Creation of the array for the mesh
+	std::shared_ptr<float[]> vertexArray (new float[faces * 3]);
+	std::shared_ptr<float[]>  normalArray(new float[faces * 3]);
+	std::shared_ptr<float[]>  textureArray(new float[faces * 2]);
 
 	// Faces:
-	for (unsigned int c = 0; c < faces; c++)
+	/*for (unsigned int c = 0; c < faces; c++)
 	{
 		// Face indexes:
 		unsigned int face[3];
@@ -312,11 +316,35 @@ Mesh* OVOReader::loadMesh(char* data)
 
 		Face meshFace(meshVertexes.at(face[0]), meshVertexes.at(face[1]), meshVertexes.at(face[2]));
 		meshFaces.push_back(meshFace);
+
+	}*/
+	
+	int i{ 0 };
+	for (auto ver : meshVertexes) {
+		vertexArray[i] = ver._vertex.x;
+		vertexArray[i+1] = ver._vertex.y;
+		vertexArray[i+2] = ver._vertex.z;
+		i += 3;
+	}
+
+	i = 0;
+	for (auto norm : meshVertexes) {
+		normalArray[i] = norm._normal.x;
+		normalArray[i + 1] = norm._normal.y;
+		normalArray[i + 2] = norm._normal.z;
+		i += 3;
+	}
+
+	i =  0;
+	for (auto tex : meshVertexes) {
+		vertexArray[i] = tex._texture.s;
+		vertexArray[i + 1] = tex._texture.t;
+		i += 2;
 	}
 
 
 	std::shared_ptr<Material> material = getMaterialFromName(materialName);
-	Mesh* thisMesh = new Mesh{ meshName, matrix, meshFaces, material };
+	Mesh* thisMesh = new Mesh{ meshName, matrix, vertexArray, normalArray, textureArray, material };
 
 	recursiveLoadChild(thisMesh, children);
 	return thisMesh;
