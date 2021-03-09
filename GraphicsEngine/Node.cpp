@@ -70,7 +70,7 @@ Node* Node::getParent() const
     return _parent;
 }
 
-void Node::setParent( Node* obj) {
+void Node::setParent(Node* obj) {
     _parent = obj;
 }
 
