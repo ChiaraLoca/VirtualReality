@@ -230,11 +230,11 @@ void timerCallback(int value)
 
 
 
-void test()
+/*void test()
 {
     Test test;
     test.runTest();
-}
+}*/
 void observatoryScene()
 {
     if (_graphicsEngine.initialize() < 0)

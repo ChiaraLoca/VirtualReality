@@ -3,8 +3,9 @@
 #include <GL/freeglut.h>
 
 #include "Mesh.h"
+#include <iostream>
 
-Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<Face> meshFaces, std::shared_ptr<Material> material)
+/*Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<Face> meshFaces, std::shared_ptr<Material> material)
 	:Node {meshName,matrix,ObjectType::Mesh} , _meshFaces{meshFaces}, _material{material}
 {
 	// Generate a vertex buffer and bind it:
@@ -14,7 +15,6 @@ Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<Face> meshFaces, 
 	// Create the ptr 
 	auto vertex = new float[_meshFaces.size() * 3];
 	
-
 	// Copy the face index data from system to video memory
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _meshFaces.size() * 3, vertex, GL_STATIC_DRAW);
 
@@ -23,28 +23,28 @@ Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<Face> meshFaces, 
 
 	glGenBuffers(1, &_textureVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _textureVbo);
-}
+}*/
 
-Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::shared_ptr<float[]> vertexArray, std::shared_ptr<float[]> normalArray,
-	std::shared_ptr<float[]> textureArray, std::shared_ptr<Material> material)
+Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArray, std::vector<float> normalArray,
+	std::vector<float> textureArray, std::shared_ptr<Material> material)
 	:Node{ meshName,matrix,ObjectType::Mesh }, _material{ material }
 {
 	// Generate a vertex buffer and bind it:
 	glGenBuffers(1, &_vertexVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexVbo);
 	// Copy the face index data from system to video memory
-	_vertexNumber = sizeof(vertexArray.get());
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexArray.get()),vertexArray.get(), GL_STATIC_DRAW);
+	_vertexNumber = vertexArray.size();							//todo: size() * sizeof(float) --> check stessa dimensione vertex=normal=texture
+	glBufferData(GL_ARRAY_BUFFER, vertexArray.size() * sizeof(float),vertexArray.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &_normalVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _normalVbo);
 	// Copy the face index data from system to video memory
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(normalArray.get()), normalArray.get(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, normalArray.size() * sizeof(float), normalArray.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &_textureVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _textureVbo);
 	// Copy the face index data from system to video memory
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(textureArray.get()), textureArray.get(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, textureArray.size() * sizeof(float), textureArray.data(), GL_STATIC_DRAW);
 }
 
 void LIB_API Mesh::render()

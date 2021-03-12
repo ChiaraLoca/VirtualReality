@@ -1,4 +1,4 @@
-#include "Test.h"
+/*#include "Test.h"
 #include <glm/gtx/string_cast.hpp>
 
 int Test::runTest()
@@ -266,3 +266,4 @@ void Test::setAllParentTest(Node* parent)
 }
 
 
+*/

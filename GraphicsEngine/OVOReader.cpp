@@ -300,46 +300,29 @@ Mesh* OVOReader::loadMesh(char* data)
 		meshVertexes.push_back(meshVertex);
 	}
 
-	std::vector<Face> meshFaces;
-	// Creation of the array for the mesh
-	std::shared_ptr<float[]> vertexArray (new float[faces * 3]);
-	std::shared_ptr<float[]>  normalArray(new float[faces * 3]);
-	std::shared_ptr<float[]>  textureArray(new float[faces * 2]);
-
-	// Faces:
-	/*for (unsigned int c = 0; c < faces; c++)
-	{
-		// Face indexes:
-		unsigned int face[3];
-		memcpy(face, data + position, sizeof(unsigned int) * 3);
-		position += sizeof(unsigned int) * 3;
-
-		Face meshFace(meshVertexes.at(face[0]), meshVertexes.at(face[1]), meshVertexes.at(face[2]));
-		meshFaces.push_back(meshFace);
-
-	}*/
+	// Creation of the vector for the mesh
+	std::vector<float> vertexArray; 
+	std::vector<float> normalArray;
+	std::vector<float> textureArray;
 	
-	int i{ 0 };
+
 	for (auto ver : meshVertexes) {
-		vertexArray[i] = ver._vertex.x;
-		vertexArray[i+1] = ver._vertex.y;
-		vertexArray[i+2] = ver._vertex.z;
-		i += 3;
+		vertexArray.push_back(ver._vertex.x);
+		vertexArray.push_back(ver._vertex.y);
+		vertexArray.push_back(ver._vertex.z);
 	}
 
-	i = 0;
 	for (auto norm : meshVertexes) {
-		normalArray[i] = norm._normal.x;
-		normalArray[i + 1] = norm._normal.y;
-		normalArray[i + 2] = norm._normal.z;
-		i += 3;
+		normalArray.push_back(norm._normal.x);
+		normalArray.push_back(norm._normal.y);
+		normalArray.push_back(norm._normal.z);
+		normalArray.push_back(norm._normal.w); //todo: non so se é giusto
+
 	}
 
-	i =  0;
 	for (auto tex : meshVertexes) {
-		vertexArray[i] = tex._texture.s;
-		vertexArray[i + 1] = tex._texture.t;
-		i += 2;
+		textureArray.push_back(tex._texture.s);
+		textureArray.push_back(tex._texture.t);
 	}
 
 

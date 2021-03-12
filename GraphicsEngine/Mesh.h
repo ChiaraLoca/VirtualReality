@@ -15,10 +15,10 @@ private:
 
     unsigned int _vertexNumber;
 public:
-    Mesh(std::string meshName, glm::mat4 matrix, std::vector<Face> meshFaces, std::shared_ptr<Material> material); //da togliere
+  //  Mesh(std::string meshName, glm::mat4 matrix, std::vector<Face> meshFaces, std::shared_ptr<Material> material); //da togliere
 
-    Mesh(std::string meshName, glm::mat4 matrix, std::shared_ptr<float[]> vertexArray, std::shared_ptr<float[]> normalArray, 
-        std::shared_ptr<float[]> textureArray, std::shared_ptr<Material> material);
+    Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArray, std::vector<float> normalArray,
+        std::vector<float> textureArray, std::shared_ptr<Material> material);
 
 
     virtual void render();

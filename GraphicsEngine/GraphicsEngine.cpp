@@ -11,8 +11,14 @@ int LIB_API GraphicsEngine::initialize()
 {
     // Initializing the required buffers
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+
+    //Initialize OpenGL_4.4 context
+    //glutInitContextVersion(4, 4);
+    //glutInitContextProfile(GLUT_CORE_PROFILE);
+
+    // Create window
     glutInitWindowPosition(_posx, _posy);
-   
+
     // FreeGLUT can parse command-line params, in case:
     int argc = 1;
     char* argv[1] = { (char*)"Something" }; // Silly initialization
@@ -35,7 +41,7 @@ int LIB_API GraphicsEngine::initialize()
         return -2;
     }
     // OpenGL 2.1 is required:
-    if (!glewIsSupported("GL_VERSION_2_1"))
+    if (!glewIsSupported("GL_VERSION_2_1")) //GL_VERSION_4_4
     {
         std::cout << "OpenGL 2.1 not supported" << std::endl;
         return -1;
@@ -186,5 +192,26 @@ void GraphicsEngine::setTimerCallback(int time, void(*call)(int), int value) {
     glutTimerFunc(time, call, value);
 }
 
+/*
+// Very simple debug callback:
+void __stdcall DebugCallback( GLenum source, GLenum type,  GLuint id, GLenum severity,  GLsizei length,
+                                const GLchar* message, GLvoid * userParam)
+{
+    printf("OpenGL says: %s n", message);
+}
+
+void GraphicsEngine::enableDebugger() {
+    // Enable the debug flag during context creation:
+    glutInitContextFlags(GLUT_DEBUG);
+    glDebugMessageCallback((GLDEBUGPROC) DebugCallback, nullptr);
+
+    // Enable debug notifications
+    #if DEBUG
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    #else
+        glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    #endif
+}
+*/
 
 
