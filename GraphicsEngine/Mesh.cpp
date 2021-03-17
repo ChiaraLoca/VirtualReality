@@ -88,9 +88,6 @@ void LIB_API Mesh::render()
 
 	glDrawArrays(GL_TRIANGLES,0,_vertexNumber);
 
-	// Force rendering completion
-	glFlush();
-
 }
 
 void LIB_API Mesh::set_material(std::shared_ptr<Material> material) {

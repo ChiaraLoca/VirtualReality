@@ -300,29 +300,62 @@ Mesh* OVOReader::loadMesh(char* data)
 		meshVertexes.push_back(meshVertex);
 	}
 
+	std::vector<Face> meshFaces;
+
+	// Faces:
+	for (unsigned int c = 0; c < faces; c++)
+	{
+		// Face indexes:
+		unsigned int face[3];
+		memcpy(face, data + position, sizeof(unsigned int) * 3);
+		position += sizeof(unsigned int) * 3;
+
+		Face meshFace(meshVertexes.at(face[0]), meshVertexes.at(face[1]), meshVertexes.at(face[2]));
+		meshFaces.push_back(meshFace);
+	}
+
 	// Creation of the vector for the mesh
 	std::vector<float> vertexArray; 
 	std::vector<float> normalArray;
 	std::vector<float> textureArray;
 	
 
-	for (auto ver : meshVertexes) {
-		vertexArray.push_back(ver._vertex.x);
-		vertexArray.push_back(ver._vertex.y);
-		vertexArray.push_back(ver._vertex.z);
-	}
+	for (auto m : meshFaces) {
+		vertexArray.push_back(m._v1._vertex.x);
+		vertexArray.push_back(m._v1._vertex.y);
+		vertexArray.push_back(m._v1._vertex.z);
 
-	for (auto norm : meshVertexes) {
-		normalArray.push_back(norm._normal.x);
-		normalArray.push_back(norm._normal.y);
-		normalArray.push_back(norm._normal.z);
-		normalArray.push_back(norm._normal.w); //todo: non so se é giusto
+		vertexArray.push_back(m._v2._vertex.x);
+		vertexArray.push_back(m._v2._vertex.y);
+		vertexArray.push_back(m._v2._vertex.z);
 
-	}
+		vertexArray.push_back(m._v3._vertex.x);
+		vertexArray.push_back(m._v3._vertex.y);
+		vertexArray.push_back(m._v3._vertex.z);
 
-	for (auto tex : meshVertexes) {
-		textureArray.push_back(tex._texture.s);
-		textureArray.push_back(tex._texture.t);
+		normalArray.push_back(m._v1._normal.x);
+		normalArray.push_back(m._v1._normal.y);
+		normalArray.push_back(m._v1._normal.z);
+		//normalArray.push_back(m._v1._normal.w);
+
+		normalArray.push_back(m._v2._normal.x);
+		normalArray.push_back(m._v2._normal.y);
+		normalArray.push_back(m._v2._normal.z);
+		//normalArray.push_back(m._v2._normal.w);
+
+		normalArray.push_back(m._v3._normal.x);
+		normalArray.push_back(m._v3._normal.y);
+		normalArray.push_back(m._v3._normal.z);
+		//normalArray.push_back(m._v3._normal.w);
+
+		textureArray.push_back(m._v1._texture.s);
+		textureArray.push_back(m._v1._texture.t);
+
+		textureArray.push_back(m._v2._texture.s);
+		textureArray.push_back(m._v2._texture.t);
+
+		textureArray.push_back(m._v3._texture.s);
+		textureArray.push_back(m._v3._texture.t);
 	}
 
 
