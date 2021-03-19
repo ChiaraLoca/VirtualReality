@@ -9,6 +9,7 @@ class LIB_API Mesh : public Node
 private:
     std::vector<Face> _meshFaces;
     std::shared_ptr<Material> _material;
+    unsigned int _vao;
     unsigned int _vertexVbo;
     unsigned int _normalVbo;
     unsigned int _textureVbo;

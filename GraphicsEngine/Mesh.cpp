@@ -29,6 +29,10 @@ Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArra
 	std::vector<float> textureArray, std::shared_ptr<Material> material)
 	:Node{ meshName,matrix,ObjectType::Mesh }, _material{ material }
 {
+	// Generate a vertex array object and bind it:
+	glGenVertexArrays(1, &_vao);						
+	glBindVertexArray(_vao);
+
 	// Generate a vertex buffer and bind it:
 	glGenBuffers(1, &_vertexVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexVbo);
@@ -88,6 +92,8 @@ void LIB_API Mesh::render()
 
 	glDrawArrays(GL_TRIANGLES,0,_vertexNumber);
 
+	// Disable VAO when not needed:
+	glBindVertexArray(0);	// TODO: CHECK VAO
 }
 
 void LIB_API Mesh::set_material(std::shared_ptr<Material> material) {
@@ -99,6 +105,8 @@ Mesh::~Mesh()
 	glDeleteBuffers(1, &_vertexVbo);
 	glDeleteBuffers(1, &_normalVbo);
 	glDeleteBuffers(1, &_textureVbo);
+	// Dispose VAO:
+	glDeleteVertexArrays(1, &_vao); // TODO: CHECK VAO
 }
 
 
