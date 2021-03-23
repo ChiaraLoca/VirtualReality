@@ -166,10 +166,13 @@
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="OVOReader.h" />
     <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="Program.h" />
     <ClInclude Include="RenderList.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="UtilRender.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +191,12 @@
     <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="OVOReader.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="Program.cpp" />
     <ClCompile Include="RenderList.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="UtilRender.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>

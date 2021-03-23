@@ -7,14 +7,21 @@
 #include "Material.h"
 #include "GraphicsEngine.h"
 
+#include"Program.h"
+
 int LIB_API GraphicsEngine::initialize()
 {
     // Initializing the required buffers
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
     //Initialize OpenGL_4.4 context
-    //glutInitContextVersion(4, 4);
+    glutInitContextVersion(4, 4);
     //glutInitContextProfile(GLUT_CORE_PROFILE);
+    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
+    glutInitContextFlags(GLUT_DEBUG);
+    // Enable the debug flag during context creation:
+    
+                                      
 
     // Create window
     glutInitWindowPosition(_posx, _posy);
@@ -33,30 +40,39 @@ int LIB_API GraphicsEngine::initialize()
     //Create context OpenGL_2.1
     // Init Glew (*after* the context creation):
     glewExperimental = GL_TRUE;
-    glewInit();
-    GLenum err = glewInit();
-    if (err != GLEW_OK){
-        // Error loading GLEW
-        std::cout << "GLEW has error" << std::endl;
-        return -2;
-    }
-    // OpenGL 2.1 is required:
-    if (!glewIsSupported("GL_VERSION_2_1")) //GL_VERSION_4_4
+    GLenum error = glewInit();
+    if (error != GLEW_OK)
     {
-        std::cout << "OpenGL 2.1 not supported" << std::endl;
+        std::cout << "[ERROR] " << glewGetErrorString(error) << std::endl;
         return -1;
     }
+    else
+        if (GLEW_VERSION_4_4)
+            std::cout << "Driver supports OpenGL 4.4\n" << std::endl;
+        else
+        {
+            std::cout << "[ERROR] OpenGL 4.4 not supported\n" << std::endl;
+            return -1;
+        }
 
-    glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
+    //glDebugMessageCallback((GLDEBUGPROC)DebugCallback, nullptr);
+    enableDebugger();
+
+    
+
+    //glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
+    glClearColor(1.0, 0.0 ,0.83 ,0.5);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
-    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
-   // glEnable(GL_NORMALIZE);
+    //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
+    glEnable(GL_NORMALIZE);
 
     // Tell OpenGL that you want to use vertex arrays for the given attributes:
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    
 
     return 0;
 }
@@ -139,7 +155,9 @@ void GraphicsEngine::clear()
 {
     // Clear the screen:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
+    //glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
+    //glClearColor(1.0, 0.0, 0.83, 0.5);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
 }
 
 void GraphicsEngine::swapBuffer()
@@ -192,26 +210,44 @@ void GraphicsEngine::setTimerCallback(int time, void(*call)(int), int value) {
     glutTimerFunc(time, call, value);
 }
 
-/*
+
 // Very simple debug callback:
 void __stdcall DebugCallback( GLenum source, GLenum type,  GLuint id, GLenum severity,  GLsizei length,
                                 const GLchar* message, GLvoid * userParam)
 {
-    printf("OpenGL says: %s n", message);
+    printf("OpenGL says: %s \n", message);
 }
 
 void GraphicsEngine::enableDebugger() {
     // Enable the debug flag during context creation:
-    glutInitContextFlags(GLUT_DEBUG);
+    
     glDebugMessageCallback((GLDEBUGPROC) DebugCallback, nullptr);
-
-    // Enable debug notifications
-    #if DEBUG
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    #else
-        glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    #endif
+    // Enable debug notifications:
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    
 }
-*/
+
+LIB_API void GraphicsEngine::initShaders()
+{
+    Shader* vertexShader = new Shader();
+    Shader* fragmentShader= new Shader();
+
+    vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShader);
+    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShader);
+
+    
+
+    Program::program.build(vertexShader, fragmentShader);
+    Program::program.render();
+    Program::program.bind(0, "in_Position");
+    Program::program.bind(1, "in_Color");
+
+    // Get shader variable locations:
+    Program::program.projLoc = Program::program.getParamLocation("projection");
+    Program::program.mvLoc = Program::program.getParamLocation("modelview");
+    
+
+}
+
 
 

@@ -22,11 +22,11 @@ LIB_API Light::~Light()
 
 void LIB_API Light::render()
 {
-	glMatrixMode(GL_MODELVIEW);
+	//glMatrixMode(GL_MODELVIEW);
 	Node::render();
 
-	glLightfv(_valueLight, GL_AMBIENT, glm::value_ptr(_ambient));
+	/*glLightfv(_valueLight, GL_AMBIENT, glm::value_ptr(_ambient));
 	glLightfv(_valueLight, GL_DIFFUSE, glm::value_ptr(_diffuse));
 	glLightfv(_valueLight, GL_SPECULAR, glm::value_ptr(_specular));
-	glLightfv(_valueLight, GL_POSITION, glm::value_ptr(_position));
+	glLightfv(_valueLight, GL_POSITION, glm::value_ptr(_position));*/
 }

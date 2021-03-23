@@ -6,11 +6,11 @@
 
 void LIB_API  Material::render()
 {
-	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, _shininess);
+	/*glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, _shininess);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(_ambient));
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(_diffuse));
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(_specular));
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(_emission));
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(_emission));*/
 
 	if (_texture != nullptr) {
 		glEnable(GL_TEXTURE_2D);

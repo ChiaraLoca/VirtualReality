@@ -5,25 +5,7 @@
 #include "Mesh.h"
 #include <iostream>
 
-/*Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<Face> meshFaces, std::shared_ptr<Material> material)
-	:Node {meshName,matrix,ObjectType::Mesh} , _meshFaces{meshFaces}, _material{material}
-{
-	// Generate a vertex buffer and bind it:
-	glGenBuffers(1, &_vertexVbo);
-	glBindBuffer(GL_ARRAY_BUFFER, _vertexVbo);
 
-	// Create the ptr 
-	auto vertex = new float[_meshFaces.size() * 3];
-	
-	// Copy the face index data from system to video memory
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _meshFaces.size() * 3, vertex, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &_normalVbo);
-	glBindBuffer(GL_ARRAY_BUFFER, _normalVbo); 
-
-	glGenBuffers(1, &_textureVbo);
-	glBindBuffer(GL_ARRAY_BUFFER, _textureVbo);
-}*/
 
 Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArray, std::vector<float> normalArray,
 	std::vector<float> textureArray, std::shared_ptr<Material> material)
@@ -37,7 +19,7 @@ Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArra
 	glGenBuffers(1, &_vertexVbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexVbo);
 	// Copy the face index data from system to video memory
-	_vertexNumber = vertexArray.size();							//todo: size() * sizeof(float) --> check stessa dimensione vertex=normal=texture
+	_vertexNumber = vertexArray.size();							
 	glBufferData(GL_ARRAY_BUFFER, vertexArray.size() * sizeof(float),vertexArray.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &_normalVbo);
@@ -49,6 +31,19 @@ Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArra
 	glBindBuffer(GL_ARRAY_BUFFER, _textureVbo);
 	// Copy the face index data from system to video memory
 	glBufferData(GL_ARRAY_BUFFER, textureArray.size() * sizeof(float), textureArray.data(), GL_STATIC_DRAW);
+
+	//COLORI
+	/*glGenBuffers(1, &_colorVbo);
+	glBindBuffer(GL_ARRAY_BUFFER, _colorVbo);
+
+	auto color = new unsigned char[_vertexNumber * 4];
+	for (int c = 0; c < _vertexNumber * 4; c++)
+		color[c] = rand() % 255;
+
+	// Copy data to the buffer:
+	glBufferData(GL_ARRAY_BUFFER, _vertexNumber * 4 * sizeof(unsigned char), color, GL_STATIC_DRAW);
+	glVertexAttribPointer((GLuint)1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, nullptr);
+	glEnableVertexAttribArray(1);*/
 }
 
 void LIB_API Mesh::render()
@@ -59,28 +54,7 @@ void LIB_API Mesh::render()
 
 	Node::render();
 
-	/*for (auto const face : _meshFaces)
-	{
-		glBegin(GL_TRIANGLES);
-			// vertex v1
-			glNormal3f(face._v1._normal.x, face._v1._normal.y, face._v1._normal.z);
-			glTexCoord2f(face._v1._texture.s, face._v1._texture.t);
-			glVertex3f(face._v1._vertex.x, face._v1._vertex.y, face._v1._vertex.z);
-
-			// vertex v2
-			glNormal3f(face._v2._normal.x, face._v2._normal.y, face._v2._normal.z);
-			glTexCoord2f(face._v2._texture.s, face._v2._texture.t);
-			glVertex3f(face._v2._vertex.x, face._v2._vertex.y, face._v2._vertex.z);
-
-			// vertex v3
-			glNormal3f(face._v3._normal.x, face._v3._normal.y, face._v3._normal.z);
-			glTexCoord2f(face._v3._texture.s, face._v3._texture.t);
-			glVertex3f(face._v3._vertex.x, face._v3._vertex.y, face._v3._vertex.z);
-		glEnd();
-
-		glBindBuffer(GL_ARRAY_BUFFER, _vertexVbo);
-	}*/
-
+	
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexVbo);
 	glVertexPointer(3, GL_FLOAT, 0, nullptr);
 

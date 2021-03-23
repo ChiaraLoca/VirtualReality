@@ -13,6 +13,7 @@ private:
     unsigned int _vertexVbo;
     unsigned int _normalVbo;
     unsigned int _textureVbo;
+    unsigned int _colorVbo;
 
     unsigned int _vertexNumber;
 public:

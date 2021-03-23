@@ -16,6 +16,6 @@ void SpotLight::render()
 {
 	
 	Light::render();
-	glLightfv(_valueLight, GL_SPOT_DIRECTION, glm::value_ptr(_direction));
-	glLightfv(_valueLight, GL_SPOT_CUTOFF,&_cutoff);
+	/*glLightfv(_valueLight, GL_SPOT_DIRECTION, glm::value_ptr(_direction));
+	glLightfv(_valueLight, GL_SPOT_CUTOFF,&_cutoff);*/
 }

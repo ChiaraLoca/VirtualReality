@@ -43,6 +43,9 @@ int _height = 0;
 bool isHatchOnOpen = true;
 bool showOrthoText = true;
 
+
+
+
 void displayCall() {
 
     _graphicsEngine.clear();
@@ -241,7 +244,7 @@ void observatoryScene()
         return;
     UtilClient util{};
     std::string s{ util.buildContext("../OVOResources","/") };
-
+    _graphicsEngine.initShaders();
     OVOReader reader{ s };
     root = reader.load("GiadaLuci.OVO");
 
@@ -251,7 +254,7 @@ void observatoryScene()
 
     glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 30.0f, -100.0f));
     m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)180), glm::vec3(0.0f, 1.0f, 0.0f));
-    PerspectiveCamera* c1 = new PerspectiveCamera("Camera1", m, 1, 200);
+    PerspectiveCamera* c1 = new PerspectiveCamera("Camera1", m, 1, 400);
 
     m = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 100.0f, 0.0f));
     m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)270), glm::vec3(1.0f, 0.0f, 0.0f));

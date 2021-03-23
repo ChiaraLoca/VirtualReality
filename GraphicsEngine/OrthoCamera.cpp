@@ -1,6 +1,7 @@
 #include "OrthoCamera.h"
-#include <GL/freeglut.h>
 
+#include "Program.h"
+#include <GL/freeglut.h>
 OrthoCamera::OrthoCamera(std::string name, glm::mat4 matrix)
 	:Camera{ name,matrix,ObjectType::Camera,0,0 }
 {
@@ -9,10 +10,16 @@ OrthoCamera::OrthoCamera(std::string name, glm::mat4 matrix)
 void LIB_API OrthoCamera::render()
 {
 	// Set orthographic projection:
-	glMatrixMode(GL_PROJECTION);
+	/*glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(_view_matrix));
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(glm::value_ptr(glm::mat4(1)));
+	glLoadMatrixf(glm::value_ptr(glm::mat4(1)));*/
+
+
+
+	Program::program.setMatrix(Program::program.mvLoc, glm::mat4(1));
+	Program::program.setMatrix(Program::program.projLoc, _view_matrix);
+
 
 	// Disable lighting before rendering 2D text:
 	glDisable(GL_LIGHTING);
