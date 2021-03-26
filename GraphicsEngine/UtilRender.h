@@ -15,6 +15,9 @@ public:
 	int getParamLocation(const char* name);
 	void setMatrix(int param, const glm::mat4& mat);
 
+	void setMatrix(int param, const glm::mat3& mat);
+
+
 	void setFloat(int param, float value);
 
 	void setInt(int param, int value);

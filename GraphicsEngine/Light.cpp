@@ -1,6 +1,6 @@
 #include "Light.h"
 #include "CounterLight.h"
-
+#include "Program.h"
 
 // FreeGLUT:
 #include <GL/freeglut.h>
@@ -11,12 +11,12 @@ LIB_API Light::Light(std::string name, glm::vec4 position, glm::mat4 matrix,
 	: Node{ name,matrix,ObjectType::Light }, _position{ position },
 	_ambient{ ambient }, _diffuse{ diffuse }, _specular{ specular },_valueLight{CounterLight::getFreeLightValue()}
 {
-	glEnable(_valueLight);
+	//glEnable(_valueLight);
 }
 
 LIB_API Light::~Light()
 {
-	glDisable(_valueLight);
+	//glDisable(_valueLight);
 	CounterLight::freeValue(_valueLight);
 }
 
@@ -25,8 +25,21 @@ void LIB_API Light::render()
 	//glMatrixMode(GL_MODELVIEW);
 	Node::render();
 
+
 	/*glLightfv(_valueLight, GL_AMBIENT, glm::value_ptr(_ambient));
 	glLightfv(_valueLight, GL_DIFFUSE, glm::value_ptr(_diffuse));
 	glLightfv(_valueLight, GL_SPECULAR, glm::value_ptr(_specular));
 	glLightfv(_valueLight, GL_POSITION, glm::value_ptr(_position));*/
+
+	auto ambPos = Program::program.getParamLocation("lightAmbient");
+	Program::program.setVec3(ambPos, _ambient);
+
+	auto diffPos = Program::program.getParamLocation("lightDiffuse");
+	Program::program.setVec3(diffPos, _diffuse);
+
+	auto specPos = Program::program.getParamLocation("lightSpecular");
+	Program::program.setVec3(specPos, _specular);
+
+	auto lightPos = Program::program.getParamLocation("lightPos");
+	Program::program.setVec3(lightPos, _position);
 }

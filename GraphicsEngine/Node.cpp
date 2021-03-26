@@ -1,10 +1,10 @@
 // FreeGLUT:
 
+#include "Util.h"
 
 #include "Node.h"
 #include "Program.h"
 
-#include <GL/freeglut.h>
 LIB_API Node::Node(std::string name, glm::mat4 matrix, ObjectType type) : Object{ type,name }
 {
     _matrix = matrix;
@@ -16,8 +16,8 @@ void LIB_API Node::render()
     //glLoadMatrixf(glm::value_ptr(_finalMatrix));
     
     Program::program.setMatrix(Program::program.mvLoc, _finalMatrix);
+    Program::program.setMatrix(Program::program.normLoc, glm::inverseTranspose(glm::mat3(_finalMatrix)));
     
-
 }
 
 glm::mat4 LIB_API Node::getMatrix() const

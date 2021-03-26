@@ -58,12 +58,8 @@ int LIB_API GraphicsEngine::initialize()
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_LIGHTING);
     //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
-    glEnable(GL_NORMALIZE);
 
-    // Tell OpenGL that you want to use vertex arrays for the given attributes:
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    
 
     //Initialize shaders
     initShaders();
@@ -231,11 +227,13 @@ LIB_API void GraphicsEngine::initShaders()
     Program::program.build(vertexShader, fragmentShader);
     Program::program.render();
     Program::program.bind(0, "in_Position");
-    Program::program.bind(1, "in_Color");
+    Program::program.bind(1, "in_Normal");
 
     // Get shader variable locations:
     Program::program.projLoc = Program::program.getParamLocation("projection");
     Program::program.mvLoc = Program::program.getParamLocation("modelview");
+    Program::program.normLoc = Program::program.getParamLocation("normalMatrix");
+
 }
 
 

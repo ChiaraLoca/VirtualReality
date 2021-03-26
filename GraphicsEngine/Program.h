@@ -13,6 +13,8 @@ public:
 
 	int projLoc;
 	int mvLoc;
+	int normLoc;
+
 
 
 	static Program program;

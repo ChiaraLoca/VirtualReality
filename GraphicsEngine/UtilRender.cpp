@@ -23,6 +23,11 @@ int UtilRender::getParamLocation(const char* name)
 {
 	glUniformMatrix4fv(param, 1, GL_FALSE, glm::value_ptr(mat));
 }
+ void UtilRender::setMatrix(int param, const glm::mat3& mat)
+ {
+	 glUniformMatrix3fv(param, 1, GL_FALSE, glm::value_ptr(mat));
+
+ }
  void UtilRender::setFloat(int param, float value)
 {
 	glUniform1f(param, value);

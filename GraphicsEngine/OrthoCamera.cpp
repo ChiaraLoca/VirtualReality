@@ -18,6 +18,8 @@ void LIB_API OrthoCamera::render()
 
 
 	Program::program.setMatrix(Program::program.mvLoc, glm::mat4(1));
+	Program::program.setMatrix(Program::program.normLoc, glm::mat3(1));
+
 	Program::program.setMatrix(Program::program.projLoc, _view_matrix);
 
 

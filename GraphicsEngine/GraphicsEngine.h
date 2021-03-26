@@ -77,7 +77,7 @@ public:
 	void setTimerCallback(int time,void(*call1)(int),int value);
 
 
-	const char* vertShader = R"(
+	const char* vertShaderEasy = R"(
 	   #version 440 core
 
 	   uniform mat4 projection;
@@ -97,8 +97,7 @@ public:
 	   }
 		)";
 
-	////////////////////////////
-	const char* fragShader = R"(
+	const char* fragShaderEasy = R"(
 	   #version 440 core
 
 	   in  vec3 out_Color;
@@ -111,6 +110,66 @@ public:
 			vec3 fog = vec3(1.0f, 1.0f, 1.0f);
 			frag_Output = vec4(mix(out_Color, fog, dist), 1.0f);
 		}
+		)";
+
+	/////////////////////////////////////////////////////////
+
+	const char* vertShader = R"(
+	   #version 440 core
+			// Uniforms:
+			uniform mat4 projection;
+			uniform mat4 modelview;
+			uniform mat3 normalMatrix; // Inverse-transpose
+			// Attributes:
+			layout(location = 0) in vec3 in_Position;
+			layout(location = 1) in vec3 in_Normal;
+			// Varying:
+			out vec4 fragPos; // In eye coordinates
+			out vec3 normal;
+			void main(void)
+			{
+				fragPos = modelview * vec4(in_Position, 1.0f);
+				gl_Position = projection * fragPos;
+				normal =  normalMatrix * in_Normal;
+			}
+		)";
+
+	const char* fragShader = R"(
+	   #version 440 core
+			// Varying variables from the vertex shader:
+			in vec4 fragPos;
+			in vec3 normal;
+			out vec4 fragOutput;
+			// Material properties:
+			uniform vec3 matEmission;
+			uniform vec3 matAmbient;
+			uniform vec3 matDiffuse;
+			uniform vec3 matSpecular;
+			uniform float matShininess;
+			// Light properties:
+			uniform vec3 lightPos; // In eye coordinates
+			uniform vec3 lightAmbient;
+			uniform vec3 lightDiffuse;
+			uniform vec3 lightSpecular;
+
+			void main(void)
+				{
+				// Emission and ambient:
+				vec3 fragColor = matEmission + matAmbient * lightAmbient;
+				// Diffuse term:
+				vec3 _normal = normalize(normal);
+				vec3 lightDir = normalize(lightPos - fragPos.xyz);
+				float nDotL = dot(lightDir, _normal);
+				if (nDotL > 0.0f) {
+					fragColor += matDiffuse * nDotL * lightDiffuse;
+					// Specular term:
+					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+					float nDotHV = dot(_normal, halfVector);
+					fragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecular;
+				}
+
+				fragOutput = vec4(fragColor, 1.0f);
+			}
 		)";
 };
 

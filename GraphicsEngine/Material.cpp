@@ -1,6 +1,8 @@
 #include "Material.h"
 #include "Util.h"
 
+#include "Program.h"
+
 // FreeGLUT:
 #include <GL/freeglut.h>
 
@@ -11,6 +13,23 @@ void LIB_API  Material::render()
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(_diffuse));
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(_specular));
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(_emission));*/
+
+
+	auto shiPos = Program::program.getParamLocation("matShininess");
+	Program::program.setFloat(shiPos, _shininess);
+
+	auto ambPos = Program::program.getParamLocation("matAmbient");
+	Program::program.setVec3(ambPos, _ambient);
+
+	auto ambDiff = Program::program.getParamLocation("matDiffuse");
+	Program::program.setVec3(ambDiff, _diffuse);
+
+	auto emiPos = Program::program.getParamLocation("matEmission");
+	Program::program.setVec3(emiPos, _emission);
+
+	auto specPos = Program::program.getParamLocation("matSpecular");
+	Program::program.setVec3(specPos, _specular);
+
 
 	if (_texture != nullptr) {
 		glEnable(GL_TEXTURE_2D);
