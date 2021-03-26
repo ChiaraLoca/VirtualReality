@@ -1,18 +1,37 @@
 // Header:
 #include "shader.h"
 
+// Glew (include it before GL.h):
+#include <GL/glew.h>
+
+// FreeGLUT:
+#include <GL/freeglut.h>
+
 Shader::Shader() : type(TYPE_UNDEFINED){}
 Shader::~Shader()
 {
 	if (glId)
-		glDeleteShader(glId);
-			
-
-		
+		glDeleteShader(glId);		
 }
 
+int Shader::getKind(int type) {
+	int i = 0;
+	switch (type)
+	{
+		////////////////////
+	case TYPE_VERTEX: //
+		return GL_VERTEX_SHADER;
 
+		//////////////////////
+	case TYPE_FRAGMENT: //
+		return GL_FRAGMENT_SHADER;
 
+		///////////
+	default: //
+		std::cout << "[ERROR] Invalid kind" << std::endl;
+		return -1;
+	}
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -31,24 +50,9 @@ bool Shader::loadFromMemory(int type, const char* data)
 	}
 
 	// Check kind:
-	int glKind = 0;
-	switch (type)
-	{
-		////////////////////
-	case TYPE_VERTEX: //
-		glKind = GL_VERTEX_SHADER;
-		break;
-
-		//////////////////////
-	case TYPE_FRAGMENT: //
-		glKind = GL_FRAGMENT_SHADER;
-		break;
-
-		///////////
-	default: //
-		std::cout << "[ERROR] Invalid kind" << std::endl;
+	int glKind = getKind(type);
+	if (glKind < 0)
 		return false;
-	}
 
 	// Destroy if already loaded:
 	if (glId)

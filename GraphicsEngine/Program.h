@@ -6,11 +6,7 @@ class LIB_API Program : public UtilRender, public Object
 {
 public:
 	Program();
-	~Program() {
-		if(glId)
-			glDeleteProgram(glId);
-	
-	}
+	~Program();
 
 	bool build(Shader* vertexShader, Shader* fragmentShader);			
 	bool render(void* data = nullptr);

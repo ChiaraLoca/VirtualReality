@@ -232,7 +232,6 @@ void timerCallback(int value)
 
 
 
-
 /*void test()
 {
     Test test;
@@ -244,11 +243,14 @@ void observatoryScene()
         return;
     UtilClient util{};
     std::string s{ util.buildContext("../OVOResources","/") };
-    _graphicsEngine.initShaders();
+
     OVOReader reader{ s };
     root = reader.load("GiadaLuci.OVO");
 
     _graphicsEngine.setRoot(root);
+
+    //BACKGROUND
+    _graphicsEngine.setBackgroundColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     //CAMERE
 

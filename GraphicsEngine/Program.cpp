@@ -1,14 +1,24 @@
 #include "Program.h"
 
+// Glew (include it before GL.h):
+#include <GL/glew.h>
+
+// FreeGLUT:
+#include <GL/freeglut.h>
+
 Program LIB_API Program::program;
-
-
 
 Program::Program()
 	:Object{ ObjectType::Program ,"Program"}
 {
 
 }
+
+Program::~Program() {
+	if (glId)
+		glDeleteProgram(glId);
+
+};
 
 bool LIB_API Program::build(Shader* vertexShader, Shader* fragmentShader){
 	// Safety net:

@@ -22,7 +22,7 @@ void LIB_API OrthoCamera::render()
 
 
 	// Disable lighting before rendering 2D text:
-	glDisable(GL_LIGHTING);
+	//glDisable(GL_LIGHTING);
 
 	// Write some text:
 	char text[64];
@@ -34,7 +34,7 @@ void LIB_API OrthoCamera::render()
 	glutBitmapString(GLUT_BITMAP_8_BY_13, (unsigned char*)text);
 
 	// Reactivate lighting:
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 }
 
 void LIB_API OrthoCamera::setWidthHeight(int width, int height)

@@ -154,6 +154,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Face.h" />
+    <ClInclude Include="FragmentShader.h" />
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="ListCamera.h" />
@@ -174,11 +175,13 @@
     <ClInclude Include="Util.h" />
     <ClInclude Include="UtilRender.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Face.cpp" />
+    <ClCompile Include="FragmentShader.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="ListCamera.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UtilRender.cpp" />
     <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

@@ -16,12 +16,8 @@ int LIB_API GraphicsEngine::initialize()
 
     //Initialize OpenGL_4.4 context
     glutInitContextVersion(4, 4);
-    //glutInitContextProfile(GLUT_CORE_PROFILE);
-    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
-    glutInitContextFlags(GLUT_DEBUG);
-    // Enable the debug flag during context creation:
-    
-                                      
+    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);     //or glutInitContextProfile(GLUT_CORE_PROFILE);
+    glutInitContextFlags(GLUT_DEBUG);             
 
     // Create window
     glutInitWindowPosition(_posx, _posy);
@@ -55,15 +51,12 @@ int LIB_API GraphicsEngine::initialize()
             return -1;
         }
 
-    //glDebugMessageCallback((GLDEBUGPROC)DebugCallback, nullptr);
     enableDebugger();
-
-    
 
     //glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
     glClearColor(1.0, 0.0 ,0.83 ,0.5);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHTING);
     //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
     glEnable(GL_NORMALIZE);
 
@@ -72,7 +65,8 @@ int LIB_API GraphicsEngine::initialize()
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    
+    //Initialize shaders
+    initShaders();
 
     return 0;
 }
@@ -155,9 +149,8 @@ void GraphicsEngine::clear()
 {
     // Clear the screen:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
-    //glClearColor(1.0, 0.0, 0.83, 0.5);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
+    
 }
 
 void GraphicsEngine::swapBuffer()
@@ -235,8 +228,6 @@ LIB_API void GraphicsEngine::initShaders()
     vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShader);
     fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShader);
 
-    
-
     Program::program.build(vertexShader, fragmentShader);
     Program::program.render();
     Program::program.bind(0, "in_Position");
@@ -245,8 +236,6 @@ LIB_API void GraphicsEngine::initShaders()
     // Get shader variable locations:
     Program::program.projLoc = Program::program.getParamLocation("projection");
     Program::program.mvLoc = Program::program.getParamLocation("modelview");
-    
-
 }
 
 

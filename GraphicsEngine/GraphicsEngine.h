@@ -42,6 +42,8 @@ private:
 	int _frames;
 	Node* _root; // contains a reference to the root of the scene
 	void enableDebugger();
+	void initShaders();
+
 
 public:
 	GraphicsEngine(char* title, int dimx = 1000, int dimy = 1000, int posx = 100, int posy = 100)
@@ -73,47 +75,43 @@ public:
 	void setReshapeCallback(void(*call2)(int, int));
 	void setKeyboardCallback(void (*call)(unsigned char, int, int));
 	void setTimerCallback(int time,void(*call1)(int),int value);
-	void initShaders();
 
 
 	const char* vertShader = R"(
-   #version 440 core
+	   #version 440 core
 
-   uniform mat4 projection;
-   uniform mat4 modelview;
+	   uniform mat4 projection;
+	   uniform mat4 modelview;
 
-   layout(location = 0) in vec3 in_Position;
-   layout(location = 1) in vec4 in_Color;
+	   layout(location = 0) in vec3 in_Position;
+	   layout(location = 1) in vec4 in_Color;
 
-   out vec3 out_Color;
-   out float dist;
+	   out vec3 out_Color;
+	   out float dist;
 
-   void main(void)
-   {
-      gl_Position = projection * modelview * vec4(in_Position, 1.0f);
-      dist = abs(gl_Position.z / 100.0f);
-      out_Color = in_Color.rgb;
-   }
-	)";
+	   void main(void)
+	   {
+		  gl_Position = projection * modelview * vec4(in_Position, 1.0f);
+		  dist = abs(gl_Position.z / 100.0f);
+		  out_Color = in_Color.rgb;
+	   }
+		)";
 
 	////////////////////////////
 	const char* fragShader = R"(
-   #version 440 core
+	   #version 440 core
 
-   in  vec3 out_Color;
-   in  float dist;
+	   in  vec3 out_Color;
+	   in  float dist;
    
-   out vec4 frag_Output;
+	   out vec4 frag_Output;
 
-   void main(void)
-   {
-		vec3 fog = vec3(1.0f, 1.0f, 1.0f);
-		frag_Output = vec4(mix(out_Color, fog, dist), 1.0f);
-	}
-	)";
-
-	//vec3 fog = vec3(1.0f, 1.0f, 1.0f);
-	//frag_Output = vec4(mix(out_Color, fog, dist), 1.0f);
+	   void main(void)
+	   {
+			vec3 fog = vec3(1.0f, 1.0f, 1.0f);
+			frag_Output = vec4(mix(out_Color, fog, dist), 1.0f);
+		}
+		)";
 };
 
 
