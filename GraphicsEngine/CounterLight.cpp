@@ -13,7 +13,7 @@ int CounterLight::getFreeLightValue()
 	//control if the map is initialized
 	if (!isCounterInitialize) {
 		for (auto i = 0; i < 8; ++i) {
-			valueUsed.insert(std::pair<int, bool>(GL_LIGHT0 + i, false));
+			//valueUsed.insert(std::pair<int, bool>(GL_LIGHT0 + i, false));
 		}
 		isCounterInitialize = true;
 	}
