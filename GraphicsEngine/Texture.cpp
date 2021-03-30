@@ -16,10 +16,10 @@ bool Texture::freeimageInit = false;
 Texture::Texture(std::string name) : Object{ ObjectType::Texture,name }
 {
 	if(!freeimageInit){
-		FreeImage_Initialise();
+		//FreeImage_Initialise();
 		freeimageInit = true;
 	}
-	glGenTextures(1, &_texId);
+	//glGenTextures(1, &_texId);
 }
 
 
@@ -39,12 +39,12 @@ void Texture::render()
 
 Texture::~Texture()
 {
-	glDeleteTextures(1, &_texId); 
+	//glDeleteTextures(1, &_texId); 
 }
 
 void Texture::loadFromFile(std::string fileName)
 {
-	glBindTexture(GL_TEXTURE_2D, _texId);
+	/*glBindTexture(GL_TEXTURE_2D, _texId);
 	FIBITMAP* bitmap = FreeImage_Load(FreeImage_GetFileType(fileName.c_str(), 0),fileName.c_str());
 	FreeImage_FlipVertical(bitmap);
 	
@@ -58,6 +58,7 @@ void Texture::loadFromFile(std::string fileName)
 	}
 
 	FreeImage_Unload(bitmap);
+	*/
 }
 
 void Texture::free()

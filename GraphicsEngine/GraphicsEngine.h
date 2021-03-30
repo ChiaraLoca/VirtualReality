@@ -146,6 +146,7 @@ public:
 			uniform vec3 matDiffuse;
 			uniform vec3 matSpecular;
 			uniform float matShininess;
+
 			// Light properties:
 			uniform vec3 lightPos; // In eye coordinates
 			uniform vec3 lightAmbient;

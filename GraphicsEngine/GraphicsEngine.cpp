@@ -16,7 +16,7 @@ int LIB_API GraphicsEngine::initialize()
 
     //Initialize OpenGL_4.4 context
     glutInitContextVersion(4, 4);
-    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);     //or glutInitContextProfile(GLUT_CORE_PROFILE);
+    glutInitContextProfile(GLUT_CORE_PROFILE);     //or glutInitContextProfile(GLUT_COMPABILITY_PROFILE);
     glutInitContextFlags(GLUT_DEBUG);             
 
     // Create window
@@ -53,8 +53,7 @@ int LIB_API GraphicsEngine::initialize()
 
     enableDebugger();
 
-    //glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
-    glClearColor(1.0, 0.0 ,0.83 ,0.5);
+    glClearColor(_bgcolor.r, _bgcolor.g, _bgcolor.b, _bgcolor.a);
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_LIGHTING);
     //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights

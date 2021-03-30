@@ -30,13 +30,14 @@ void LIB_API  Material::render()
 	auto specPos = Program::program.getParamLocation("matSpecular");
 	Program::program.setVec3(specPos, _specular);
 
-
+	/*
 	if (_texture != nullptr) {
 		glEnable(GL_TEXTURE_2D);
 		_texture->render();
 	}
 	else
 		glDisable(GL_TEXTURE_2D);
+		*/
 }
 
 void Material::setTexture(std::shared_ptr<Texture> texture)

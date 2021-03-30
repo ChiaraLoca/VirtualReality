@@ -15,13 +15,13 @@ void LIB_API OrthoCamera::render()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(glm::mat4(1)));*/
 
-
+	/*
 
 	Program::program.setMatrix(Program::program.mvLoc, glm::mat4(1));
 	Program::program.setMatrix(Program::program.normLoc, glm::mat3(1));
 
 	Program::program.setMatrix(Program::program.projLoc, _view_matrix);
-
+	*/
 
 	// Disable lighting before rendering 2D text:
 	//glDisable(GL_LIGHTING);
@@ -31,9 +31,9 @@ void LIB_API OrthoCamera::render()
 
 	sprintf(text, "FPS: %d", _fps);
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	/*glColor3f(1.0f, 1.0f, 1.0f);
 	glRasterPos2f(1.0f, 2.0f);
-	glutBitmapString(GLUT_BITMAP_8_BY_13, (unsigned char*)text);
+	glutBitmapString(GLUT_BITMAP_8_BY_13, (unsigned char*)text);*/
 
 	// Reactivate lighting:
 	//glEnable(GL_LIGHTING);
