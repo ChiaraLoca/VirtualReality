@@ -42,7 +42,7 @@ public: //
 
 	// Constants:
 protected:
-	static const unsigned int MAX_LOGSIZE = 4096;  ///< Max output size in char for a shader log
+	static const unsigned int MAX_LOGSIZE = 4096;  // Max output size in char for a shader log
 
 private:
 	int virtual getKind(int type);

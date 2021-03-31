@@ -5,7 +5,16 @@
 // FreeGLUT:
 #include <GL/freeglut.h>
 
-
+/**
+ * @brief Construct a new Light object 
+ * 
+ * @param name of the light in the file .OVO 
+ * @param position of the light
+ * @param matrix of of tha light. Is in object coordinate
+ * @param ambient of the light
+ * @param diffuse of the light 
+ * @param specular of the light 
+ */
 LIB_API Light::Light(std::string name, glm::vec4 position, glm::mat4 matrix,
 	glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular)
 	: Node{ name,matrix,ObjectType::Light }, _position{ position },
@@ -14,12 +23,21 @@ LIB_API Light::Light(std::string name, glm::vec4 position, glm::mat4 matrix,
 	//glEnable(_valueLight);
 }
 
+/**
+ * @brief Destruct an Light object
+ * 
+ */
 LIB_API Light::~Light()
 {
 	//glDisable(_valueLight);
 	CounterLight::freeValue(_valueLight);
 }
 
+/**
+ * @brief Render of the light.
+ * 	It sets all the vector that the fragmentshaden needs
+ * 
+ */
 void LIB_API Light::render()
 {
 	//glMatrixMode(GL_MODELVIEW);
