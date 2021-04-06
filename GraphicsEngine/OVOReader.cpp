@@ -90,6 +90,12 @@ public:
 	};
 };
 
+/**
+ * @brief loading an object chunk
+ * 
+ * @param data chunk
+ * @return version id
+ */
 int OVOReader::loadObject(char* data)
 {
 	unsigned int position = 0;
@@ -100,6 +106,12 @@ int OVOReader::loadObject(char* data)
 	return versionId;
 }
 
+/**
+ * @brief loading a node
+ * 
+ * @param data chunk
+ * @return node
+ */
 Node* OVOReader::loadNode(char* data)
 {
 	unsigned int position = 0;
@@ -123,6 +135,12 @@ Node* OVOReader::loadNode(char* data)
 	return thisNode;
 }
 
+/**
+ * @brief loading a material
+ * 
+ * @param data chunk
+ * @return material
+ */
 Material* OVOReader::loadMaterial(char* data)
 {
 	unsigned int position = 0;
@@ -173,6 +191,12 @@ Material* OVOReader::loadMaterial(char* data)
 	return newMaterial;
 }
 
+/**
+ * @brief loading a mesh
+ * 
+ * @param data chunk
+ * @return mesh
+ */
 Mesh* OVOReader::loadMesh(char* data)
 {
 	unsigned int position = 0;
@@ -357,7 +381,6 @@ Mesh* OVOReader::loadMesh(char* data)
 		textureArray.push_back(m._v3._texture.t);
 	}
 
-
 	std::shared_ptr<Material> material = getMaterialFromName(materialName);
 	Mesh* thisMesh = new Mesh{ meshName, matrix, vertexArray, normalArray, textureArray, material };
 
@@ -365,6 +388,12 @@ Mesh* OVOReader::loadMesh(char* data)
 	return thisMesh;
 }
 
+/**
+ * @brief loading a light
+ * 
+ * @param data chunk
+ * @return light
+ */
 Light* OVOReader::loadLight(char* data)
 {
 	unsigned int position = 0;
@@ -451,21 +480,45 @@ Light* OVOReader::loadLight(char* data)
 	return thisLight;
 }
 
+/**
+ * @brief computing ambient term from albedo
+ * 
+ * @param color albedo
+ * @return ambient component
+ */
 glm::vec4 OVOReader::computeAmbient(glm::vec3 color)
 {
 	return glm::vec4{ color * 0.2f ,1 };
 }
 
+/**
+ * @brief computing specular term from albedo
+ *
+ * @param color albedo
+ * @return specular component
+ */
 glm::vec4 OVOReader::computeSpecular(glm::vec3 color)
 {
 	return glm::vec4{ color * 0.4f, 1 };
 }
 
+/**
+ * @brief computing diffuse term from albedo
+ *
+ * @param color albedo
+ * @return diffuse component
+ */
 glm::vec4 OVOReader::computeDiffuse(glm::vec3 color)
 {
 	return glm::vec4{ color * 0.6f, 1 };
 }
 
+/**
+ * @brief loading each child of the current node
+ * 
+ * @param node
+ * @param children
+ */
 void OVOReader::recursiveLoadChild(Node* node, unsigned int children)
 {
 	while (node->getNrOfChildren() < children) {
@@ -477,6 +530,12 @@ void OVOReader::recursiveLoadChild(Node* node, unsigned int children)
 	}
 }
 
+/**
+ * @brief loading an already red material from its name
+ * 
+ * @param name of the material
+ * @return material (or null)
+ */
 std::shared_ptr<Material> OVOReader::getMaterialFromName(const char* name)
 {
 	if (_materials.count(name))
@@ -484,6 +543,12 @@ std::shared_ptr<Material> OVOReader::getMaterialFromName(const char* name)
 	return nullptr;
 }
 
+/**
+ * @brief loading an already red texture from its name
+ *
+ * @param name of the texture
+ * @return texture (or null)
+ */
 std::shared_ptr<Texture> OVOReader::getTextureFromName(const char* name)
 {
 	if (_textures.count(name))
@@ -491,6 +556,11 @@ std::shared_ptr<Texture> OVOReader::getTextureFromName(const char* name)
 	return nullptr;
 }
 
+/**
+ * @brief loading a specific chunk
+ * 
+ * @return the object related to the chunk
+ */
 Object* OVOReader::loadAndSelect()
 {
 	Object* result;
@@ -551,6 +621,12 @@ Object* OVOReader::loadAndSelect()
 	return result;
 }
 
+/**
+ * @brief loading each chunk
+ * 
+ * @param fileName of the .OVO
+ * @return the root of the hierarcy
+ */
 Node* OVOReader::load(const char* fileName)
 {
 	std::string str = _context + fileName;
@@ -574,11 +650,21 @@ Node* OVOReader::load(const char* fileName)
 	return root;
 }
 
+/**
+ * @brief constructor of the ovoreader
+ * initialize the context
+ * 
+ * @param context of the resources
+ */
 OVOReader::OVOReader(std::string context)
 	:_context{context}
 {
 }
 
+/**
+ * @brief descructor of the ovoreader
+ * 
+ */
 OVOReader::~OVOReader()
 {
 }

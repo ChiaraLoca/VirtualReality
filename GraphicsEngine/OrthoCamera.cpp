@@ -52,7 +52,7 @@ void LIB_API OrthoCamera::render()
 }
 
 /**
- * @brief set the dimension of the window on each frame, for take into consideration the eventual resize
+ * @brief set the dimension of the window on each frame, for take into consideration the eventual resize and compute the orthographic matrix
  * 
  * @param width of the window
  * @param height of the window
