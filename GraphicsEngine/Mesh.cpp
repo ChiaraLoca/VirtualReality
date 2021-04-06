@@ -94,7 +94,7 @@ Mesh::~Mesh()
 	glDeleteBuffers(1, &_vertexVbo);
 	glDeleteBuffers(1, &_normalVbo);
 	glDeleteBuffers(1, &_textureVbo);
-	// Dispose VAO:
+	// Dispose VAO
 	glDeleteVertexArrays(1, &_vao); 
 }
 

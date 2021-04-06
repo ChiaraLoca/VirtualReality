@@ -21,7 +21,7 @@ void LIB_API Material::render()
 
 
 	auto shiPos = Program::program.getParamLocation("matShininess");
-	Program::program.setFloat(shiPos, _shininess);
+	Program::program.setFloat(shiPos, 1.0f); //todo cambia _shininess
 
 	auto ambPos = Program::program.getParamLocation("matAmbient");
 	Program::program.setVec3(ambPos, _ambient);

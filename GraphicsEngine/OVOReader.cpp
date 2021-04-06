@@ -12,7 +12,6 @@
 #include "Vertex.h"
 #include "Face.h"
 
-
 using namespace std;
 
 // Stripped-down redefinition of OvObject (just for the chunk IDs):
@@ -436,7 +435,7 @@ Light* OVOReader::loadLight(char* data)
 
 	// transform lightname to string (for constructor)
 	std::string strlightName;
-	strlightName.append(lightName); 
+	strlightName.append(lightName);
 
 	switch ((OvLight::Subtype) subtype)
 	{

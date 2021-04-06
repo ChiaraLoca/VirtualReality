@@ -1,9 +1,11 @@
 #include "Light.h"
 #include "CounterLight.h"
 #include "Program.h"
+#include "glm/gtx/string_cast.hpp"
 
 // FreeGLUT:
 #include <GL/freeglut.h>
+#include <iostream>
 
 /**
  * @brief Construct a new Light object 
@@ -59,5 +61,7 @@ void LIB_API Light::render()
 	Program::program.setVec3(specPos, _specular);
 
 	auto lightPos = Program::program.getParamLocation("lightPos");
+	
+	//std::cout << glm::to_string(getFinalMatrix());glm::vec4(getFinalMatrix()[0][3], getFinalMatrix()[1][3],	getFinalMatrix()[2][3], getFinalMatrix()[3][3])
 	Program::program.setVec3(lightPos, _position);
 }
