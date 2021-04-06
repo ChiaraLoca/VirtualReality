@@ -6,7 +6,16 @@
 #include <iostream>
 
 
-
+/**
+ * @brief constructor of a new Mesh object
+ * 
+ * @param meshName in the .OVO file
+ * @param matrix of the mesh
+ * @param vertexArray from the .OVO, contains all vertexes
+ * @param normalArray from the .OVO, contains all normals
+ * @param textureArray from the .OVO, contains all texture's coordinates
+ * @param material associeted to the mesh
+ */
 Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArray, std::vector<float> normalArray,
 	std::vector<float> textureArray, std::shared_ptr<Material> material)
 	:Node{ meshName,matrix,ObjectType::Mesh }, _material{ material }
@@ -45,6 +54,11 @@ Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArra
 
 }
 
+/**
+ * @brief render of the Mesh
+ * first in renders the associeted material (eventually) and then the elements of the mesh
+ * 
+ */
 void LIB_API Mesh::render()
 {
 	if (_material!= nullptr) {
@@ -58,20 +72,30 @@ void LIB_API Mesh::render()
 	glDrawArrays(GL_TRIANGLES,0,_vertexNumber);
 
 	// Disable VAO when not needed:
-	glBindVertexArray(0);	// TODO: CHECK VAO
+	glBindVertexArray(0);	
 }
 
+/**
+ * @brief material setter
+ * 
+ * @param material to set
+ */
 void LIB_API Mesh::set_material(std::shared_ptr<Material> material) {
 	_material = material;
 }
 
+/**
+ * @brief destructor of the mesh
+ * it releases all unused resources
+ * 
+ */
 Mesh::~Mesh()
 {
 	glDeleteBuffers(1, &_vertexVbo);
 	glDeleteBuffers(1, &_normalVbo);
 	glDeleteBuffers(1, &_textureVbo);
 	// Dispose VAO:
-	glDeleteVertexArrays(1, &_vao); // TODO: CHECK VAO
+	glDeleteVertexArrays(1, &_vao); 
 }
 
 

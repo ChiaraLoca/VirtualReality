@@ -6,7 +6,12 @@
 // FreeGLUT:
 #include <GL/freeglut.h>
 
-void LIB_API  Material::render()
+/**
+ * @brief render of the Material
+ * it sets all Material's properties
+ * 
+ */
+void LIB_API Material::render()
 {
 	/*glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, _shininess);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(_ambient));
@@ -40,19 +45,38 @@ void LIB_API  Material::render()
 		*/
 }
 
+/**
+ * @brief sets Material's texture
+ * 
+ * @param texture
+ */
 void Material::setTexture(std::shared_ptr<Texture> texture)
 {
 	_texture = texture;
 }
 
-
+/**
+ * @brief constructor of a new Material object
+ * 
+ * @param name of the material in the .OVO file
+ * @param emission component
+ * @param ambient component
+ * @param diffuse component
+ * @param specular component
+ * @param shininess component
+ * @param texture associeted to the material (eventually)
+ */
 LIB_API Material::Material(std::string name,
 	glm::vec4 emission,glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular , float shininess, std::shared_ptr<Texture>texture)
 	:Object{ ObjectType::Material,name }, _shininess{ shininess }, _texture{texture},
 	_ambient{ ambient }, _diffuse{ diffuse }, _specular{ specular }, _emission{ emission }
 {
 }
-
+// TODO: serve?
+/**
+ * @brief constructor of a new Material object
+ * 
+ */
 LIB_API Material::Material()
 	: Object{ ObjectType::Material,"no-name material" }, _shininess{ 0.0f },
 	_ambient{ glm::vec4{1.0f} }, _diffuse{ glm::vec4{1.0f} }, _specular{ glm::vec4{1.0f} }, _emission{ glm::vec4{1.0f } }

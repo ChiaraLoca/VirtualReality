@@ -35,7 +35,7 @@ LIB_API Light::~Light()
 
 /**
  * @brief Render of the light.
- * 	It sets all the vector that the fragmentshaden needs
+ * 	It sets all the vector that the fragment shader needs
  * 
  */
 void LIB_API Light::render()

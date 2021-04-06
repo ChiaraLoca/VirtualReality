@@ -2,11 +2,23 @@
 
 #include "Program.h"
 #include <GL/freeglut.h>
+
+/**
+ * @brief constructor of a new OrthoCamera object
+ * 
+ * @param name of the orthocamera
+ * @param matrix of the orthocamera
+ */
 OrthoCamera::OrthoCamera(std::string name, glm::mat4 matrix)
 	:Camera{ name,matrix,ObjectType::Camera,0,0 }
 {
 }
 
+/**
+ * @brief render of the orthocamera
+ * it prints text to the window
+ * 
+ */
 void LIB_API OrthoCamera::render()
 {
 	// Set orthographic projection:
@@ -39,6 +51,12 @@ void LIB_API OrthoCamera::render()
 	//glEnable(GL_LIGHTING);
 }
 
+/**
+ * @brief set the dimension of the window on each frame, for take into consideration the eventual resize
+ * 
+ * @param width of the window
+ * @param height of the window
+ */
 void LIB_API OrthoCamera::setWidthHeight(int width, int height)
 {
 	_width = width;
@@ -50,6 +68,11 @@ void LIB_API OrthoCamera::setWidthHeight(int width, int height)
 	_view_matrix = glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f);
 }
 
+/**
+ * @brief fps setter
+ * 
+ * @param fps to set
+ */
 void OrthoCamera::setFps(int fps)
 {
 	_fps = fps;
