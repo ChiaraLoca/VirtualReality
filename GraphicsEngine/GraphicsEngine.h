@@ -172,6 +172,32 @@ public:
 				fragOutput = vec4(fragColor, 1.0f);
 			}
 		)";
+	const char* fragShaderMultiLight = R"(				//TODO DA FINIRE
+	   #version 440 core
+			// Varying variables from the vertex shader:
+			in vec4 fragPos;
+			in vec3 normal;
+			out vec4 fragOutput;
+			// Material properties:
+			uniform vec3 matEmission;
+			uniform vec3 matAmbient;
+			uniform vec3 matDiffuse;
+			uniform vec3 matSpecular;
+			uniform float matShininess;
+
+			// Light properties:
+			const float maxLights{8};
+			uniform vec3 lightPos[maxLights]; // In eye coordinates
+			uniform vec3 lightAmbient[maxLights];
+			uniform vec3 lightDiffuse[maxLights];
+			uniform vec3 lightSpecular[maxLights];
+
+			void main(void)
+				{
+					
+				}
+			
+		)";
 };
 
 
