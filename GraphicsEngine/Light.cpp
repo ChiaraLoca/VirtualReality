@@ -62,6 +62,7 @@ void LIB_API Light::render()
 
 	auto lightPos = Program::program.getParamLocation("lightPos");
 	
-	//std::cout << glm::to_string(getFinalMatrix());glm::vec4(getFinalMatrix()[0][3], getFinalMatrix()[1][3],	getFinalMatrix()[2][3], getFinalMatrix()[3][3])
+	_position = glm::vec4(getFinalMatrix()[3][0], getFinalMatrix()[3][1], getFinalMatrix()[3][2], getFinalMatrix()[3][3]);
+
 	Program::program.setVec3(lightPos, _position);
 }
