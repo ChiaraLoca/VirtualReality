@@ -374,7 +374,7 @@ LIB_API void GraphicsEngine::initShaders()
     Shader* fragmentShader= new Shader();
 
     vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShader);
-    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShader);
+    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderMultiLight);
 
     Program::program.build(vertexShader, fragmentShader);
     Program::program.render();

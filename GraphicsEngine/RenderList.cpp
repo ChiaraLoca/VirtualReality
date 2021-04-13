@@ -23,7 +23,7 @@ bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 
 bool LIB_API  RenderList::removeAll() {
 	_map.clear();
-	CounterLight::clear();
+	Light::resetLight();
 	return true;
 	
 }

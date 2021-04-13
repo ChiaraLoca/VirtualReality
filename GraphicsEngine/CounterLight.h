@@ -3,7 +3,7 @@
 class CounterLight
 {
 
-public:
+private:
 	static int getFreeLightValue();
 	static void freeValue(int valueToFree);
 	static void clear();

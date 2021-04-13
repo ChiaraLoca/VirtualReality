@@ -19,5 +19,7 @@ public:
 	
 	virtual void render();
 
+	static void resetLight();
+
 	virtual ~Light();
 };

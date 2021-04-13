@@ -173,7 +173,7 @@ public:
 			}
 		)";
 	const char* fragShaderMultiLight = R"(				//TODO DA FINIRE
-	   #version 440 core
+	   #version 440 core 
 			// Varying variables from the vertex shader:
 			in vec4 fragPos;
 			in vec3 normal;
@@ -186,17 +186,44 @@ public:
 			uniform float matShininess;
 
 			// Light properties:
-			const float maxLights{8};
-			uniform vec3 lightPos[maxLights]; // In eye coordinates
-			uniform vec3 lightAmbient[maxLights];
-			uniform vec3 lightDiffuse[maxLights];
-			uniform vec3 lightSpecular[maxLights];
-
-			void main(void)
-				{
-					
-				}
+			uniform int maxLights;
+			uniform vec3 lightPos[8]; // In eye coordinates
+			uniform vec3 lightAmbient[8];
+			uniform vec3 lightDiffuse[8];
+			uniform vec3 lightSpecular[8];
 			
+			vec3 CalcOmniLight(int index)
+			{
+				vec3 internalFragColor = matEmission + matAmbient * lightAmbient[index];
+				// Diffuse term:
+				vec3 _normal = normalize(normal);
+				vec3 lightDir = normalize(lightPos[index] - fragPos.xyz);
+				float nDotL = dot(lightDir, _normal);
+				if (nDotL > 0.0f) {
+					internalFragColor += matDiffuse * nDotL * lightDiffuse[index];
+					// Specular term:
+					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+					float nDotHV = dot(_normal, halfVector);
+					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecular[index];
+				}
+				return internalFragColor;
+			} 
+
+			void main()
+			{
+
+
+				// phase 1: Directional lighting
+				//vec3 result = CalcDirLight(dirLight, norm, viewDir);
+				// phase 2: Point lights			
+				vec3 result;
+				for(int i = 0; i < maxLights; i++)
+					result += CalcOmniLight(i);    
+				// phase 3: Spot light
+				//result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
+    
+				fragOutput = vec4(result, 1.0f);
+			}
 		)";
 };
 

@@ -15,8 +15,6 @@ public:
 	int mvLoc;
 	int normLoc;
 
-
-
 	static Program program;
 };
 
