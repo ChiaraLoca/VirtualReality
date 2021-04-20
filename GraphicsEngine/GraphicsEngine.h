@@ -172,7 +172,7 @@ public:
 				fragOutput = vec4(fragColor, 1.0f);
 			}
 		)";
-	const char* fragShaderMultiLight = R"(				//TODO DA FINIRE
+	const char* fragShaderMultiLight = R"(				
 	   #version 440 core 
 			// Varying variables from the vertex shader:
 			in vec4 fragPos;
@@ -186,11 +186,12 @@ public:
 			uniform float matShininess;
 
 			// Light properties:
-			uniform int maxLights;
-			uniform vec3 lightPos[8]; // In eye coordinates
-			uniform vec3 lightAmbient[8];
-			uniform vec3 lightDiffuse[8];
-			uniform vec3 lightSpecular[8];
+			#define MAX_LIGHT 8
+			
+			uniform vec3 lightPos[MAX_LIGHT]; // In eye coordinates
+			uniform vec3 lightAmbient[MAX_LIGHT];
+			uniform vec3 lightDiffuse[MAX_LIGHT];
+			uniform vec3 lightSpecular[MAX_LIGHT];
 			
 			vec3 CalcOmniLight(int index)
 			{
@@ -210,17 +211,14 @@ public:
 			} 
 
 			void main()
-			{
-
-
-				// phase 1: Directional lighting
-				//vec3 result = CalcDirLight(dirLight, norm, viewDir);
-				// phase 2: Point lights			
+			{		
 				vec3 result;
-				for(int i = 0; i < maxLights; i++)
-					result += CalcOmniLight(i);    
-				// phase 3: Spot light
-				//result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
+				/*if(lightDiffuse[0][0]<0.7 && lightDiffuse[0][0]>0.5)
+					fragOutput = vec4(0.8f);*/
+					
+				for(int i = 0; i < MAX_LIGHT; i++){
+					result += CalcOmniLight(i);
+				}
     
 				fragOutput = vec4(result, 1.0f);
 			}

@@ -25,8 +25,6 @@ LIB_API Light::Light(std::string name, glm::vec4 position, glm::mat4 matrix,
 	_ambient{ ambient }, _diffuse{ diffuse }, _specular{ specular },_valueLight{lightCounter++}
 {
 	//glEnable(_valueLight);
-	auto maxLight = Program::program.getParamLocation("maxLights");
-	Program::program.setInt(maxLight, lightCounter);
 }
 
 /**
@@ -53,7 +51,7 @@ void LIB_API Light::render()
 	/*glLightfv(_valueLight, GL_AMBIENT, glm::value_ptr(_ambient));
 	glLightfv(_valueLight, GL_DIFFUSE, glm::value_ptr(_diffuse));
 	glLightfv(_valueLight, GL_SPECULAR, glm::value_ptr(_specular));
-	glLightfv(_valueLight, GL_POSITION, glm::value_ptr(_position));*/
+	glLightfv(_valueLight, GL_POSITION, glm::value_ptr(_position));
 
 	auto ambPos = Program::program.getParamLocation("lightAmbient[" + _valueLight + ']');
 	Program::program.setVec3(ambPos, _ambient);
@@ -68,7 +66,7 @@ void LIB_API Light::render()
 	
 	_position = glm::vec4(getFinalMatrix()[3][0], getFinalMatrix()[3][1], getFinalMatrix()[3][2], getFinalMatrix()[3][3]);
 
-	Program::program.setVec3(lightPos, _position);
+	Program::program.setVec3(lightPos, _position);*/
 }
 
 void Light::resetLight()

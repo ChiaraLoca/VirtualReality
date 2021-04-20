@@ -8,6 +8,7 @@ bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 	
 	if (obj->getType() == ObjectType::Light) {
 		_map.insert(_map.begin(),{ (Node*)obj, mat });
+		CounterLight::add((Light *)obj);
 	}
 	else if (obj->getType() == ObjectType::Camera)
 	{
@@ -21,9 +22,11 @@ bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 	return true;
 }
 
+
 bool LIB_API  RenderList::removeAll() {
 	_map.clear();
 	Light::resetLight();
+	CounterLight::clear();
 	return true;
 	
 }
@@ -42,6 +45,14 @@ void RenderList::render() {
 		i->first->setFinalMatrix(current->getInverseMatrix() * i->second);
 		i->first->render();
 	}
+
+	CounterLight::render();
+
+	for (auto i = _map.begin(); i != _map.end(); i++) {
+		i->first->render();
+	}
+
+
 
 	if (_showOrthoCamera)
 		_ortho->render();

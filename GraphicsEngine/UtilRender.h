@@ -12,7 +12,7 @@ public:
 	UtilRender():glId(0){};
 	virtual ~UtilRender() {};
 
-	int getParamLocation(const char* name);
+	int getParamLocation(std::string name);
 	void setMatrix(int param, const glm::mat4& mat);
 
 	void setMatrix(int param, const glm::mat3& mat);
@@ -25,6 +25,8 @@ public:
 	void setVec3(int param, const glm::vec3& vect);
 
 	void setVec4(int param, const glm::vec4& vect);
+
+	void setVec3Array(int param, glm::vec3 vect[], int sizeVec);
 
 	void bind(int location, const char* attribName);
 
