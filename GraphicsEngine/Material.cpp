@@ -71,6 +71,11 @@ LIB_API Material::Material(std::string name,
 	:Object{ ObjectType::Material,name }, _shininess{ shininess }, _texture{texture},
 	_ambient{ ambient }, _diffuse{ diffuse }, _specular{ specular }, _emission{ emission }
 {
+	if (_texture == nullptr) { // if there's no texture sets default texture
+		std::shared_ptr<Texture> default_texture(new Texture("default_texture"));
+		_texture = default_texture;
+		_texture->loadDefaultTexture();
+	}
 }
 // TODO: serve?
 /**

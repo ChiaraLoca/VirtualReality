@@ -16,10 +16,10 @@ bool Texture::freeimageInit = false;
 Texture::Texture(std::string name) : Object{ ObjectType::Texture,name }
 {
 	if(!freeimageInit){
-		//FreeImage_Initialise();
+		FreeImage_Initialise();
 		freeimageInit = true;
 	}
-	//glGenTextures(1, &_texId);
+	glGenTextures(1, &_texId);
 }
 
 
@@ -39,7 +39,7 @@ void Texture::render()
 
 Texture::~Texture()
 {
-	//glDeleteTextures(1, &_texId); 
+	glDeleteTextures(1, &_texId); 
 }
 
 void Texture::loadFromFile(std::string fileName)
@@ -59,6 +59,21 @@ void Texture::loadFromFile(std::string fileName)
 
 	FreeImage_Unload(bitmap);
 	*/
+}
+
+void Texture::loadDefaultTexture()
+{
+	const char texFilename[] = "../OVOResources/default_texture.jpg";
+
+	// Load texture:
+	FIBITMAP* fBitmap = FreeImage_Load(FreeImage_GetFileType(texFilename, 0), texFilename);
+	if (fBitmap == nullptr)
+		std::cout << "[ERROR] Unable to load texture" << std::endl;
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FreeImage_GetWidth(fBitmap), FreeImage_GetHeight(fBitmap), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(fBitmap));
+
+	// Free resources:
+	FreeImage_Unload(fBitmap);
 }
 
 void Texture::free()

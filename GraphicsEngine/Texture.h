@@ -14,6 +14,7 @@ public:
     ~Texture();
     static void free();
     void loadFromFile(std::string fileName);
+    void loadDefaultTexture();
     virtual void render();
 };
 
