@@ -63,7 +63,7 @@ void Texture::loadFromFile(std::string fileName)
 
 void Texture::loadDefaultTexture()
 {
-	const char texFilename[] = "../OVOResources/default_texture.jpg";
+	/*const char texFilename[] = "../OVOResources/default_texture.jpg";
 
 	// Load texture:
 	FIBITMAP* fBitmap = FreeImage_Load(FreeImage_GetFileType(texFilename, 0), texFilename);
@@ -73,7 +73,7 @@ void Texture::loadDefaultTexture()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FreeImage_GetWidth(fBitmap), FreeImage_GetHeight(fBitmap), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(fBitmap));
 
 	// Free resources:
-	FreeImage_Unload(fBitmap);
+	FreeImage_Unload(fBitmap);*/
 }
 
 void Texture::free()
