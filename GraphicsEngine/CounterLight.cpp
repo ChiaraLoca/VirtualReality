@@ -1,4 +1,5 @@
 #include "CounterLight.h"
+#include "Program.h"
 
 #include "GL/freeglut.h"
 #include <map>
@@ -16,7 +17,7 @@ int CounterLight::getFreeLightValue()
 {
 	//control if the map is initialized
 	if (!isCounterInitialize) {
-		for (auto i = 0; i < 8; ++i) {
+		for (auto i = 0; i < Program::maxLight; ++i) {
 			valueUsed.insert(std::pair<int, bool>(GL_LIGHT0 + i, false));
 		}
 		isCounterInitialize = true;
@@ -51,10 +52,51 @@ void CounterLight::freeValue(int valueToFree)
  * @brief Reset the map by cleaning it
  * 
  */
-void CounterLight::clear()
+/*void CounterLight::clear()
 {
 	valueUsed.clear();
 	isCounterInitialize = false;
+}*/
+
+#include "OmniLight.h"
+std::vector<Light*> _listLight;
+
+void CounterLight::add(Light* light)
+{
+	if (_listLight.size() >= Program::maxLight)
+		return;
+	if (OmniLight* omni = dynamic_cast<OmniLight*>(light))
+		_listLight.push_back(omni);
 }
 
+void CounterLight::render()
+{
+	std::vector<glm::vec3> position(Program::maxLight - _listLight.size(),glm::vec3(0.0));
+	std::vector<glm::vec3> ambient(Program::maxLight - _listLight.size(), glm::vec3(0.0));
+	std::vector<glm::vec3> diffuse(Program::maxLight - _listLight.size(), glm::vec3(0.0));
+	std::vector<glm::vec3> specular(Program::maxLight - _listLight.size(), glm::vec3(0.0));
 
+
+	for (auto l : _listLight) {
+		position.push_back(glm::vec3(l->getFinalMatrix()[3][0], l->getFinalMatrix()[3][1], l->getFinalMatrix()[3][2]));
+		ambient.push_back(l->getAmbient());
+		diffuse.push_back(l->getDiffuse());
+		specular.push_back(l->getSpecular());
+	}
+	
+	auto ambPos = Program::program.getParamLocation("lightAmbient");
+	Program::program.setVec3Array(ambPos, ambient.data(), sizeof(ambient.data()));
+
+	auto diffPos = Program::program.getParamLocation("lightDiffuse");
+	Program::program.setVec3Array(diffPos, diffuse.data(),sizeof(diffuse.data()));
+
+	auto specPos = Program::program.getParamLocation("lightSpecular");
+	Program::program.setVec3Array(specPos, specular.data(), sizeof(specular.data()));
+
+	auto lightPos = Program::program.getParamLocation("lightPos");
+	Program::program.setVec3Array(lightPos, position.data(), sizeof(position.data()));
+}
+
+void CounterLight::clear() {
+	_listLight.clear();
+}

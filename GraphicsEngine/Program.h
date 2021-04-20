@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "UtilRender.h"
 #include "Object.h"
+
 class LIB_API Program : public UtilRender, public Object
 {
 public:
@@ -15,8 +16,7 @@ public:
 	int mvLoc;
 	int normLoc;
 
-
-
 	static Program program;
+	static int const maxLight{ 8 };
 };
 

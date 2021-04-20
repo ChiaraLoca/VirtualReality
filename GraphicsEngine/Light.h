@@ -19,5 +19,15 @@ public:
 	
 	virtual void render();
 
+	static void resetLight();
+
+	glm::vec4 getPosition() const { return _position; };
+	glm::vec4 getAmbient() const { return _ambient; };
+	glm::vec4 getDiffuse() const { return _diffuse; };
+	glm::vec4 getSpecular() const { return _specular; };
+
+
+
+
 	virtual ~Light();
 };

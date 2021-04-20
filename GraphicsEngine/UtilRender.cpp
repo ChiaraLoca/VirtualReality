@@ -1,17 +1,17 @@
 #include "UtilRender.h"
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-int UtilRender::getParamLocation(const char* name)
+int UtilRender::getParamLocation(std::string name)
 {
 	// Safety net:
-	if (name == nullptr)
+	if (name.empty())
 	{
 		std::cout << "[ERROR] Invalid params" << std::endl;
 		return 0;
 	}
 
 	// Return location:
-	int r = glGetUniformLocation(glId, name);
+	int r = glGetUniformLocation(glId, name.c_str());
 	if (r == -1)
 		std::cout << "[ERROR] Param '" << name << "' not found" << std::endl;
 	return r;
@@ -44,6 +44,11 @@ int UtilRender::getParamLocation(const char* name)
 {
 	glUniform4fv(param, 1, glm::value_ptr(vect));
 }
+
+ void UtilRender::setVec3Array(int param, glm::vec3 vect[], int sizeVec)
+ {
+	 glUniform3fv(param, sizeVec, (float *)vect);
+ }
 
  void UtilRender::bind(int location, const char* attribName)
 {
