@@ -90,6 +90,9 @@
     <ClInclude Include="VertexShader.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="FBO.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphicsEngine.cpp">
@@ -162,6 +165,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="FBO.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

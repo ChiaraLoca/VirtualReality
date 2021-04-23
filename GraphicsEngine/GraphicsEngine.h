@@ -43,6 +43,7 @@ private:
 	Node* _root; // contains a reference to the root of the scene
 	void enableDebugger();
 	void initShaders();
+	void initFbo();
 
 
 public:
@@ -291,6 +292,63 @@ public:
 				}
 
 				fragOutput = texel*vec4(fragColor, 1.0f);
+			}
+		)";
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	const char* fragShaderTextureMultiLight = R"(
+	   #version 440 core
+			// Varying variables from the vertex shader:
+			in vec4 fragPos;
+			in vec3 normal;
+			in vec2 texCoord;
+			out vec4 fragOutput;
+			// Material properties:
+			uniform vec3 matEmission;
+			uniform vec3 matAmbient;
+			uniform vec3 matDiffuse;
+			uniform vec3 matSpecular;
+			uniform float matShininess;
+
+			// Light properties:
+			#define MAX_LIGHT 8
+			
+			uniform vec3 lightPos[MAX_LIGHT]; // In eye coordinates
+			uniform vec3 lightAmbient[MAX_LIGHT];
+			uniform vec3 lightDiffuse[MAX_LIGHT];
+			uniform vec3 lightSpecular[MAX_LIGHT];
+
+			// Texture mapping:
+			layout(binding = 0) uniform sampler2D texSampler;
+
+			vec3 CalcOmniLight(int index)
+			{
+				vec3 internalFragColor = matEmission + matAmbient * lightAmbient[index];
+				// Diffuse term:
+				vec3 _normal = normalize(normal);
+				vec3 lightDir = normalize(lightPos[index] - fragPos.xyz);
+				float nDotL = dot(lightDir, _normal);
+				if (nDotL > 0.0f) {
+					internalFragColor += matDiffuse * nDotL * lightDiffuse[index];
+					// Specular term:
+					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+					float nDotHV = dot(_normal, halfVector);
+					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecular[index];
+				}
+				return internalFragColor;
+			} 
+
+			void main(void)
+				{
+				// Texture element:
+				vec4 texel = texture(texSampler, texCoord);
+
+				vec3 result;	
+				for(int i = 0; i < MAX_LIGHT; i++){
+					result += CalcOmniLight(i);
+				}
+
+				fragOutput = texel*vec4(result, 1.0f);
 			}
 		)";
 };

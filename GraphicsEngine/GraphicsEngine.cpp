@@ -67,6 +67,9 @@ int LIB_API GraphicsEngine::initialize()
     //Initialize shaders
     initShaders();
 
+    //Initalize FBOs
+    initFbo();
+
     return 0;
 }
 
@@ -373,19 +376,28 @@ LIB_API void GraphicsEngine::initShaders()
     Shader* vertexShader = new Shader();
     Shader* fragmentShader= new Shader();
 
-    vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShader);
-    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderMultiLight);
+    vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShaderTexture);
+    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderTextureMultiLight);
 
     Program::program.build(vertexShader, fragmentShader);
     Program::program.render();
     Program::program.bind(0, "in_Position");
     Program::program.bind(1, "in_Normal");
+    Program::program.bind(2, "in_TexCoord");
 
     // Get shader variable locations:
     Program::program.projLoc = Program::program.getParamLocation("projection");
     Program::program.mvLoc = Program::program.getParamLocation("modelview");
     Program::program.normLoc = Program::program.getParamLocation("normalMatrix");
 
+}
+
+/**
+ * @brief Intitializer of FBO
+ *
+ */
+void GraphicsEngine::initFbo()
+{
 }
 
 
