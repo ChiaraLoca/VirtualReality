@@ -6,7 +6,8 @@
 
 #include "Material.h"
 #include "GraphicsEngine.h"
-#include"Program.h"
+#include "Program.h"
+#include "FboContainer.h"
 
 /**
  * @brief Initialization of all component of the GraphicsEngine
@@ -191,7 +192,9 @@ void GraphicsEngine::render()
 {
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
+    FboContainer::fboContainer.render();
     RenderList::renderList.render();
+    FboContainer::fboContainer.disable();
 }
 
 /**
@@ -398,6 +401,13 @@ LIB_API void GraphicsEngine::initShaders()
  */
 void GraphicsEngine::initFbo()
 {
+
+  /*  fbo[c] = new Fbo();
+    fbo[c]->bindTexture(0, Fbo::BIND_COLORTEXTURE, fboTexId[c]);
+    fbo[c]->bindRenderBuffer(1, Fbo::BIND_DEPTHBUFFER, APP_FBOSIZEX, APP_FBOSIZEY);
+    if (!fbo[c]->isOk())
+        std::cout << "[ERROR] Invalid FBO" << std::endl; */
+
 }
 
 

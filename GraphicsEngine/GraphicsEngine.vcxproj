@@ -157,6 +157,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Face.h" />
     <ClInclude Include="FBO.h" />
+    <ClInclude Include="FboContainer.h" />
     <ClInclude Include="FragmentShader.h" />
     <ClInclude Include="GraphicsEngine.h" />
     <ClInclude Include="Light.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="FBO.cpp" />
+    <ClCompile Include="FboContainer.cpp" />
     <ClCompile Include="FragmentShader.cpp" />
     <ClCompile Include="GraphicsEngine.cpp" />
     <ClCompile Include="Light.cpp" />

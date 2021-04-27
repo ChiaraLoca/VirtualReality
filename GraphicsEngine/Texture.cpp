@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include "FboContainer.h"
 #include <iostream>
 // Glew (include it before GL.h):
 #include <GL/glew.h>
@@ -22,6 +23,8 @@ Texture::Texture(std::string name) : Object{ ObjectType::Texture,name }
 		freeimageInit = true;
 	}
 	glGenTextures(1, &_texId);
+	FboContainer::fboContainer.addTexture(_texId);
+
 }
 
 
