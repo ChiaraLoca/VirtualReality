@@ -4,26 +4,38 @@
 class LIB_API FboContainer
 {
 public:
-	FboContainer();
-	~FboContainer();
 
-	void addTexture(int idTexture);
-	void render();
 	void disable();
-
-	static FboContainer fboContainer;
-
+	 FboContainer();
+	 void render();
+	 FBO* get(int i);
 private:
-	// Enumerations:
-	enum : unsigned int 
+
+	glm::mat4 _fboPerspective;
+	glm::mat4 _ortho;
+	unsigned int boxVertexVbo = 0;
+	unsigned int boxTexCoordVbo = 0;
+
+	enum Eye
 	{
-		LEFT_EYE = 0,
-		RIGHT_EYE,
-		MAX_EYE,
+		EYE_LEFT = 0,
+		EYE_RIGHT = 1,
+
+		// Terminator:
+		EYE_LAST,
 	};
 
 	//static FBO* fboEye[2];
-	FBO* fbo = new FBO();
+
+	FBO* fbo[EYE_LAST] = { nullptr, nullptr };
+	unsigned int fboTexId[EYE_LAST] = { 0, 0 };
 	int counter = 0;
+
+
+
+	void createBox();
+
+	void createTexBox();
+	
 };
 

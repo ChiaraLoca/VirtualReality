@@ -20,7 +20,9 @@
 OrthoCamera* orthoCamera;
 Node* root;
 char titolo[] = "Osservatorio";
-GraphicsEngine _graphicsEngine(titolo);
+int _width = 1024;
+int _height = 512;
+GraphicsEngine _graphicsEngine(titolo, _width, _height);
 bool observatoryOpen = true;
 int frames=0;
 
@@ -38,8 +40,7 @@ float maxOpening = 0.94f;
 float currentOpening = 0.94f;
 bool showLaser = true;
 bool hasToBeOff = false;
-int _width = 0;
-int _height = 0;
+
 bool isHatchOnOpen = true;
 bool showOrthoText = true;
 
@@ -57,10 +58,14 @@ void displayCall() {
 
 void reshapeCall(int width, int height)
 {
-    _width = width;
-    _height = height;
-    ((PerspectiveCamera*) _graphicsEngine.getCurrentCamera())->setWidthHeight(width, height);
-	orthoCamera->setWidthHeight(width, height);
+    _width;
+    _height;
+    ((PerspectiveCamera*) _graphicsEngine.getCurrentCamera())->setWidthHeight(_width, _height);
+	orthoCamera->setWidthHeight(_width, _height);
+
+    if (width != _width || height != _height)
+        _graphicsEngine.resize();
+
 }
 
 bool doShowLaser(bool show) {

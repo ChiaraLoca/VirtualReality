@@ -37,12 +37,12 @@ void LIB_API Material::render()
 
 	_texture->render();
 	/*if (_texture != nullptr) {
-		glEnable(GL_TEXTURE_2D);
+		//glEnable(GL_TEXTURE_2D);
 		_texture->render();
 	}
-	else
-		glDisable(GL_TEXTURE_2D);
-	*/
+	/*else
+		glDisable(GL_TEXTURE_2D);*/
+	
 }
 
 /**

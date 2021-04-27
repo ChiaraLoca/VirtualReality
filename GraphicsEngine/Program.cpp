@@ -69,7 +69,7 @@ bool LIB_API Program::build(Shader* vertexShader, Shader* fragmentShader){
 	glGetProgramInfoLog(glId, MAX_LOGSIZE, &length, buffer);
 	if (status == false)
 	{
-		std::cout << "[ERROR] Program link error: " << buffer << std::endl;
+		std::cout << "[ERROR] Program link error:" << buffer << std::endl;
 		return false;
 	}
 	glValidateProgram(glId);

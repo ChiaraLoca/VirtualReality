@@ -4,10 +4,13 @@
 // FreeGLUT:
 #include <GL/freeglut.h>
 
+#include "Util.h"
 #include "Material.h"
 #include "GraphicsEngine.h"
 #include "Program.h"
 #include "FboContainer.h"
+
+
 
 /**
  * @brief Initialization of all component of the GraphicsEngine
@@ -69,7 +72,8 @@ int LIB_API GraphicsEngine::initialize()
     initShaders();
 
     //Initalize FBOs
-    initFbo();
+    //initFbo();
+    _fboContainer = new FboContainer();
 
     return 0;
 }
@@ -182,6 +186,17 @@ void GraphicsEngine::refresh()
     // Force rendering refresh:
     glutPostWindowRedisplay(_windowId);
 }
+void GraphicsEngine::resize()
+{
+   /* fboPerspective = glm::perspective(glm::radians(45.0f), (float)APP_FBOSIZEX / (float)APP_FBOSIZEY, 1.0f, 1024.0f);
+    ortho = glm::ortho(0.0f, (float)APP_WINDOWSIZEX, 0.0f, (float)APP_WINDOWSIZEY, -1.0f, 1.0f);*/
+
+    // (bad) trick to avoid window resizing:
+    
+        glutReshapeWindow(_dimx, _dimy);
+}
+
+
 
 /**
  * @brief Main rendering method
@@ -192,9 +207,16 @@ void GraphicsEngine::render()
 {
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
-    FboContainer::fboContainer.render();
-    RenderList::renderList.render();
-    FboContainer::fboContainer.disable();
+    setStandardShader();
+    for (int c = 0; c < 2; c++)
+    {
+        // Render into this FBO:
+        _fboContainer->get(c)->render();
+        RenderList::renderList.render();
+    }
+    setPassthroughShader();
+    _fboContainer->render();
+    _fboContainer->disable();
 }
 
 /**
@@ -376,8 +398,13 @@ void GraphicsEngine::enableDebugger() {
  */
 LIB_API void GraphicsEngine::initShaders()
 {
+    setStandardShader();
+
+}
+LIB_API void GraphicsEngine::setStandardShader()
+{
     Shader* vertexShader = new Shader();
-    Shader* fragmentShader= new Shader();
+    Shader* fragmentShader = new Shader();
 
     vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShaderTexture);
     fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderTextureMultiLight);
@@ -392,7 +419,29 @@ LIB_API void GraphicsEngine::initShaders()
     Program::program.projLoc = Program::program.getParamLocation("projection");
     Program::program.mvLoc = Program::program.getParamLocation("modelview");
     Program::program.normLoc = Program::program.getParamLocation("normalMatrix");
+}
 
+
+LIB_API void GraphicsEngine::setPassthroughShader()
+{
+    // Build passthrough shader:
+    Shader*  passthroughVs = new Shader();
+    passthroughVs->loadFromMemory(Shader::TYPE_VERTEX, passthroughVertShader);
+
+    Shader*  passthroughFs = new Shader();
+    passthroughFs->loadFromMemory(Shader::TYPE_FRAGMENT, passthroughFragShader);
+
+    
+    Program::program.build(passthroughVs, passthroughFs);
+    Program::program.render();
+
+    // Bind params:
+    Program::program.bind(0, "in_Position");
+    Program::program.bind(2, "in_TexCoord");
+
+    Program::program.projLoc = Program::program.getParamLocation("projection");
+    Program::program.mvLoc = Program::program.getParamLocation("modelview");
+    Program::program.ptColorLoc = Program::program.getParamLocation("color");
 }
 
 /**
@@ -402,11 +451,7 @@ LIB_API void GraphicsEngine::initShaders()
 void GraphicsEngine::initFbo()
 {
 
-  /*  fbo[c] = new Fbo();
-    fbo[c]->bindTexture(0, Fbo::BIND_COLORTEXTURE, fboTexId[c]);
-    fbo[c]->bindRenderBuffer(1, Fbo::BIND_DEPTHBUFFER, APP_FBOSIZEX, APP_FBOSIZEY);
-    if (!fbo[c]->isOk())
-        std::cout << "[ERROR] Invalid FBO" << std::endl; */
+   
 
 }
 

@@ -15,6 +15,7 @@ public:
 	int projLoc;
 	int mvLoc;
 	int normLoc;
+	int ptColorLoc;
 
 	static Program program;
 	static int const maxLight{ 8 };

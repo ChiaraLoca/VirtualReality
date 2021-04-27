@@ -8,6 +8,7 @@
 #include "Util.h"
 #include "Node.h"
 #include "RenderList.h"
+#include "FboContainer.h"
 
 #ifdef _WINDOWS
 #include <Windows.h>
@@ -41,6 +42,7 @@ private:
 	char* _title;
 	int _frames;
 	Node* _root; // contains a reference to the root of the scene
+	FboContainer* _fboContainer;
 	void enableDebugger();
 	void initShaders();
 	void initFbo();
@@ -76,7 +78,10 @@ public:
 	void setReshapeCallback(void(*call2)(int, int));
 	void setKeyboardCallback(void (*call)(unsigned char, int, int));
 	void setTimerCallback(int time,void(*call1)(int),int value);
-
+	void resize();
+	void setStandardShader();
+	void setPassthroughShader();
+	
 
 	const char* vertShaderEasy = R"(
 	   #version 440 core
@@ -303,6 +308,7 @@ public:
 			in vec3 normal;
 			in vec2 texCoord;
 			out vec4 fragOutput;
+			
 			// Material properties:
 			uniform vec3 matEmission;
 			uniform vec3 matAmbient;
@@ -334,8 +340,9 @@ public:
 					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
 					float nDotHV = dot(_normal, halfVector);
 					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecular[index];
-				}
-				return internalFragColor;
+			}
+			return internalFragColor;
+
 			} 
 
 			void main(void)
@@ -343,14 +350,69 @@ public:
 				// Texture element:
 				vec4 texel = texture(texSampler, texCoord);
 
+
+
+
 				vec3 result;	
 				for(int i = 0; i < MAX_LIGHT; i++){
 					result += CalcOmniLight(i);
 				}
 
 				fragOutput = texel*vec4(result, 1.0f);
+
 			}
 		)";
+
+	const char* passthroughVertShader = R"(
+   #version 440 core
+
+   // Uniforms:
+   uniform mat4 projection;
+   uniform mat4 modelview;   
+
+   // Attributes:
+   layout(location = 0) in vec2 in_Position;   
+   layout(location = 2) in vec2 in_TexCoord;
+
+   // Varying:   
+   out vec2 texCoord;
+
+   void main(void)
+   {      
+      gl_Position = projection * modelview * vec4(in_Position, 0.0f, 1.0f);    
+      texCoord = in_TexCoord;
+   }
+)";
+
+	const char* passthroughFragShader = R"(
+   #version 440 core
+   
+   in vec2 texCoord;
+   
+   uniform vec4 color;
+
+   out vec4 fragOutput;   
+
+   // Texture mapping:
+   layout(binding = 0) uniform sampler2D texSampler;
+
+   void main(void)   
+   {  
+      // Texture element:
+      vec4 texel = texture(texSampler, texCoord);      
+      
+      // Final color:
+		vec4 verde =  vec4(1.0f, 0.0f, 1.0f,0.5f);
+      //fragOutput = color * texel;       
+		fragOutput = verde * texel;    
+   }
+)";
+
+
+
+
+
+
 };
 
 
