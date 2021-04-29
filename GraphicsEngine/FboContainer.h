@@ -13,6 +13,7 @@ private:
 
 	glm::mat4 _fboPerspective;
 	glm::mat4 _ortho;
+	unsigned int _vao;
 	unsigned int boxVertexVbo = 0;
 	unsigned int boxTexCoordVbo = 0;
 

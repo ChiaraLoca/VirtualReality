@@ -402,9 +402,9 @@ public:
       vec4 texel = texture(texSampler, texCoord);      
       
       // Final color:
-		vec4 verde =  vec4(1.0f, 0.0f, 1.0f,0.5f);
-      //fragOutput = color * texel;       
-		fragOutput = verde * texel;    
+		//vec4 verde =  vec4(1.0f, 0.0f, 1.0f,0.5f);
+        fragOutput = color * texel;       
+		//fragOutput = verde * texel;    
    }
 )";
 

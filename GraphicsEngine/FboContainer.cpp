@@ -21,7 +21,7 @@ FboContainer::FboContainer()
     _ortho = glm::ortho(0.0f, (float)APP_WINDOWSIZEX, 0.0f, (float)APP_WINDOWSIZEY, -1.0f, 1.0f);
 
     createBox();
-    createTexBox();
+    //createTexBox();
 
     for (int c = 0; c < EYE_LAST; c++)
     {
@@ -44,6 +44,8 @@ FboContainer::FboContainer()
 
 void FboContainer::render()
 {
+    glBindVertexArray(_vao);
+
     // Set a matrix for the left "eye":    
     glm::mat4 f = glm::mat4(1.0f);
 
@@ -51,7 +53,7 @@ void FboContainer::render()
     Program::program.render();
     Program::program.setMatrix(Program::program.projLoc , _ortho);
     Program::program.setMatrix(Program::program.mvLoc, f);
-    
+    Program::program.setVec4(Program::program.ptColorLoc, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 
     glBindBuffer(GL_ARRAY_BUFFER, boxVertexVbo);
     glVertexAttribPointer((GLuint)0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -83,6 +85,9 @@ FBO* FboContainer::get(int i)
 
 void FboContainer::createBox()
 {
+    glGenVertexArrays(1, &_vao);
+    glBindVertexArray(_vao);
+
     // Create a 2D box for screen rendering:
     glm::vec2* boxPlane = new glm::vec2[4];
     boxPlane[0] = glm::vec2(0.0f, 0.0f);
@@ -96,10 +101,7 @@ void FboContainer::createBox()
     glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(glm::vec2), boxPlane, GL_STATIC_DRAW);
     glVertexAttribPointer((GLuint)0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
     delete[] boxPlane;
-}
 
-void FboContainer::createTexBox()
-{
     glm::vec2* texCoord = new glm::vec2[4];
     texCoord[0] = glm::vec2(0.0f, 0.0f);
     texCoord[1] = glm::vec2(1.0f, 0.0f);
@@ -111,4 +113,13 @@ void FboContainer::createTexBox()
     glVertexAttribPointer((GLuint)2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(2);
     delete[] texCoord;
+
+    // OpenGL settings:     
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_DEPTH_TEST);
+}
+
+void FboContainer::createTexBox()
+{
+    
 }

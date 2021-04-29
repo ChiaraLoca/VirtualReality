@@ -58,8 +58,7 @@ void displayCall() {
 
 void reshapeCall(int width, int height)
 {
-    _width;
-    _height;
+    // lasciamo così?
     ((PerspectiveCamera*) _graphicsEngine.getCurrentCamera())->setWidthHeight(_width, _height);
 	orthoCamera->setWidthHeight(_width, _height);
 
@@ -67,6 +66,8 @@ void reshapeCall(int width, int height)
         _graphicsEngine.resize();
 
 }
+
+// aggiungere close callback
 
 bool doShowLaser(bool show) {
     Node* laser = _graphicsEngine.getNodeByName("FascioLaser");

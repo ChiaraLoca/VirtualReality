@@ -22,7 +22,7 @@
 int LIB_API GraphicsEngine::initialize()
 {
     // Initializing the required buffers
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
     //Initialize OpenGL_4.4 context
     glutInitContextVersion(4, 4);
@@ -31,6 +31,7 @@ int LIB_API GraphicsEngine::initialize()
 
     // Create window
     glutInitWindowPosition(_posx, _posy);
+    glutInitWindowSize(_dimx, _dimy);
 
     // FreeGLUT can parse command-line params, in case:
     int argc = 1;
@@ -74,6 +75,7 @@ int LIB_API GraphicsEngine::initialize()
     //Initalize FBOs
     //initFbo();
     _fboContainer = new FboContainer();
+    glViewport(0, 0, _dimx, _dimy);
 
     return 0;
 }
@@ -208,15 +210,18 @@ void GraphicsEngine::render()
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
     setStandardShader();
-    for (int c = 0; c < 2; c++)
+    for (int c = 0; c < 2; c++) // fix hardcode
     {
         // Render into this FBO:
         _fboContainer->get(c)->render();
+        // Clear the FBO content:
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         RenderList::renderList.render();
     }
+    _fboContainer->disable();
+    glViewport(0, 0, _dimx, _dimy);
     setPassthroughShader();
     _fboContainer->render();
-    _fboContainer->disable();
 }
 
 /**
