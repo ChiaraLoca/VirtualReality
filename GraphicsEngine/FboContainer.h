@@ -9,6 +9,7 @@ public:
 	 FboContainer();
 	 void render();
 	 FBO* get(int i);
+	 unsigned int getFboTexId(int i);
 private:
 
 	glm::mat4 _fboPerspective;
@@ -38,5 +39,8 @@ private:
 
 	void createTexBox();
 	
+	
+
+
 };
 

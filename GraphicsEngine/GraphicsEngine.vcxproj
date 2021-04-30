@@ -120,14 +120,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>FREEGLUT_STATIC;FREEIMAGE;GLEW_STATIC;FREEGLUT_STATIC;_DEBUG;_CONSOLE;GRAPHICSENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../dependencies/glew/include;../dependencies/freeimage/include;../dependencies/freeglut/include;../dependencies/glm/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../dependencies/glew/include;../dependencies/freeimage/include;../dependencies/freeglut/include;../dependencies/glm/include;../dependencies/openvr/include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>../dependencies/freeimage/lib/$(Platform)/$(Configuration);../dependencies/glew/lib/x64/Debug;../dependencies/freeglut/lib/$(Platform)/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../dependencies/freeimage/lib/$(Platform)/$(Configuration);../dependencies/glew/lib/x64/Debug;../dependencies/freeglut/lib/$(Platform)/$(Configuration);../dependencies/openvr/lib/$(Platform)/$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>FreeImageLib.lib;glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -139,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>FREEGLUT_STATIC;FREEIMAGE;GLEW_STATIC;NDEBUG;GRAPHICSENGINE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../dependencies/glew/include;../dependencies/freeimage/include;../dependencies/freeglut/include;../dependencies/glm/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../dependencies/glew/include;../dependencies/freeimage/include;../dependencies/freeglut/include;../dependencies/glm/include;../dependencies/openvr/include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -148,7 +148,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>../dependencies/freeimage/lib/$(Platform)/$(Configuration);../dependencies/glew/lib/x64/Debug;../dependencies/freeglut/lib/$(Platform)/$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../dependencies/freeimage/lib/$(Platform)/$(Configuration);../dependencies/glew/lib/x64/Debug;../dependencies/freeglut/lib/$(Platform)/$(Configuration);../dependencies/openvr/lib/$(Platform)/$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>FreeImageLib.lib;glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -168,11 +168,13 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OmniLight.h" />
+    <ClInclude Include="OpenVR.h" />
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="OVOReader.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="RenderList.h" />
+    <ClInclude Include="OVRManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Texture.h" />
@@ -202,6 +204,7 @@
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="RenderList.cpp" />
+    <ClCompile Include="OVRManager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Texture.cpp" />

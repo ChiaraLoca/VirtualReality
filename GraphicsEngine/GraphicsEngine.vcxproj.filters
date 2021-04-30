@@ -96,6 +96,12 @@
     <ClInclude Include="FboContainer.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="OpenVR.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="OVRManager.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphicsEngine.cpp">
@@ -174,6 +180,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="FboContainer.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="OVRManager.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

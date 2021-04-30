@@ -10,6 +10,8 @@
 #include "RenderList.h"
 #include "FboContainer.h"
 
+
+
 #ifdef _WINDOWS
 #include <Windows.h>
 
@@ -43,6 +45,7 @@ private:
 	int _frames;
 	Node* _root; // contains a reference to the root of the scene
 	FboContainer* _fboContainer;
+	
 	void enableDebugger();
 	void initShaders();
 	void initFbo();
@@ -307,6 +310,7 @@ public:
 			in vec4 fragPos;
 			in vec3 normal;
 			in vec2 texCoord;
+
 			out vec4 fragOutput;
 			
 			// Material properties:
@@ -402,9 +406,8 @@ public:
       vec4 texel = texture(texSampler, texCoord);      
       
       // Final color:
-		//vec4 verde =  vec4(1.0f, 0.0f, 1.0f,0.5f);
-        fragOutput = color * texel;       
-		//fragOutput = verde * texel;    
+      fragOutput = color * texel;       
+		
    }
 )";
 

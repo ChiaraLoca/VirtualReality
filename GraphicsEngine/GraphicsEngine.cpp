@@ -9,6 +9,7 @@
 #include "GraphicsEngine.h"
 #include "Program.h"
 #include "FboContainer.h"
+#include "OVRManager.h"
 
 
 
@@ -75,6 +76,11 @@ int LIB_API GraphicsEngine::initialize()
     //Initalize FBOs
     //initFbo();
     _fboContainer = new FboContainer();
+    
+    if(OVRManager::ovrManager.init()>0)
+    {
+        return -3;
+    }
     glViewport(0, 0, _dimx, _dimy);
 
     return 0;
@@ -210,14 +216,37 @@ void GraphicsEngine::render()
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
     setStandardShader();
-    for (int c = 0; c < 2; c++) // fix hardcode
+
+    
+    OVRManager::ovrManager.update();
+    glm::mat4 headPos = OVRManager::ovrManager.getModelviewMatrix();
+    for (int curEye = 0; curEye < OpenVR::EYE_LAST; curEye++)
     {
+        
+        glm::mat4 projMat = OVRManager::ovrManager.getProjMatrix(curEye);
+        glm::mat4 eye2Head = OVRManager::ovrManager.getEye2HeadMatrix(curEye);
+
+        // Update camera projection matrix:
+        glm::mat4 ovrProjMat = projMat * glm::inverse(eye2Head);
+        #ifdef APP_VERBOSE   
+            std::cout << "Eye " << curEye << " proj matrix: " << glm::to_string(ovrProjMat) << std::endl;
+        #endif
+
+        // Update camera modelview matrix:
+        glm::mat4 ovrModelViewMat = glm::inverse(headPos); // Inverted because this is the camera matrix
+        #ifdef APP_VERBOSE   
+            std::cout << "Eye " << curEye << " modelview matrix: " << glm::to_string(ovrModelViewMat) << std::endl;
+        #endif
+
+
         // Render into this FBO:
-        _fboContainer->get(c)->render();
+        _fboContainer->get(curEye)->render();
         // Clear the FBO content:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         RenderList::renderList.render();
+        OVRManager::ovrManager.pass(curEye, _fboContainer->getFboTexId(curEye));
     }
+    OVRManager::ovrManager.render();
     _fboContainer->disable();
     glViewport(0, 0, _dimx, _dimy);
     setPassthroughShader();
