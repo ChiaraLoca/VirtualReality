@@ -128,8 +128,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>../dependencies/freeimage/lib/$(Platform)/$(Configuration);../dependencies/glew/lib/x64/Debug;../dependencies/freeglut/lib/$(Platform)/$(Configuration);../dependencies/openvr/lib/$(Platform)/$(Configuration)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImageLib.lib;glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImageLib.lib;glew.lib;openvr_api64.lib;openvr_api64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\dependencies\openvr\bin\$(Platform)\$(Configuration)\openvr_api64.dll $(OutDir) /Y &gt; nul</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -149,8 +152,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>../dependencies/freeimage/lib/$(Platform)/$(Configuration);../dependencies/glew/lib/x64/Debug;../dependencies/freeglut/lib/$(Platform)/$(Configuration);../dependencies/openvr/lib/$(Platform)/$(Configuration)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FreeImageLib.lib;glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImageLib.lib;glew.lib;openvr_api64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\dependencies\openvr\bin\$(Platform)\$(Configuration)\openvr_api64.dll $(OutDir) /Y &gt; nul</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />

@@ -45,7 +45,6 @@ int LIB_API GraphicsEngine::initialize()
     // Create the window with a specific title:   
     _windowId = glutCreateWindow(_title);
 
-    //Create context OpenGL_2.1
     // Init Glew (*after* the context creation):
     glewExperimental = GL_TRUE;
     GLenum error = glewInit();
@@ -70,18 +69,20 @@ int LIB_API GraphicsEngine::initialize()
     //glEnable(GL_LIGHTING);
     //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
 
+    if (OVRManager::ovrManager.init() < 0)
+    {
+        return -3;
+    }
+
     //Initialize shaders
     initShaders();
 
     //Initalize FBOs
     //initFbo();
-    _fboContainer = new FboContainer();
+    _fboContainer = new FboContainer(OVRManager::ovrManager.getfboSizeX(), OVRManager::ovrManager.getfboSizeX());
     
-    if(OVRManager::ovrManager.init()>0)
-    {
-        return -3;
-    }
     glViewport(0, 0, _dimx, _dimy);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     return 0;
 }
@@ -222,7 +223,6 @@ void GraphicsEngine::render()
     glm::mat4 headPos = OVRManager::ovrManager.getModelviewMatrix();
     for (int curEye = 0; curEye < OpenVR::EYE_LAST; curEye++)
     {
-        
         glm::mat4 projMat = OVRManager::ovrManager.getProjMatrix(curEye);
         glm::mat4 eye2Head = OVRManager::ovrManager.getEye2HeadMatrix(curEye);
 

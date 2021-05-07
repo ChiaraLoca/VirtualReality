@@ -50,4 +50,21 @@ void OVRManager::render()
 	_ovr->render();
 }
 
+void OVRManager::setFboSize()
+{
+	_fboSizeX = _ovr->getHmdIdealHorizRes();
+	_fboSizeY = _ovr->getHmdIdealVertRes();
+	std::cout << "   Ideal resolution :  " << _fboSizeX << "x" << _fboSizeY << std::endl;
+}
+
+int OVRManager::getfboSizeX()
+{
+	return _fboSizeX;
+}
+
+int OVRManager::getfboSizeY()
+{
+	return _fboSizeY;
+}
+
 

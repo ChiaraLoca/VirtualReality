@@ -14,12 +14,13 @@ public:
 	glm::mat4 getModelviewMatrix();
 	void pass(int c, unsigned int fboTexId);
 	void render();
+	void setFboSize();
+	int getfboSizeX();
+	int getfboSizeY();
 
 private:
 	 OpenVR* _ovr;
-
-	
-
-	
+	 int _fboSizeX = 0;
+	 int _fboSizeY = 0;
 };
 

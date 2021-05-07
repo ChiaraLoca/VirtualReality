@@ -14,7 +14,7 @@ void FboContainer::disable()
     FBO::disable();
 }
 
-FboContainer::FboContainer()
+FboContainer::FboContainer(int fboSixeX, int fboSixeY)
 {
     
     _fboPerspective = glm::perspective(glm::radians(45.0f), (float)APP_FBOSIZEX / (float)APP_FBOSIZEY, 1.0f, 1024.0f);
@@ -27,7 +27,7 @@ FboContainer::FboContainer()
     {
         glGenTextures(1, &fboTexId[c]);
         glBindTexture(GL_TEXTURE_2D, fboTexId[c]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, APP_FBOSIZEX, APP_FBOSIZEY, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, fboSixeX, fboSixeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
