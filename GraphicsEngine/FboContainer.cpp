@@ -35,7 +35,7 @@ FboContainer::FboContainer(int fboSixeX, int fboSixeY)
 
         fbo[c] = new FBO();
         fbo[c]->bindTexture(0, FBO::BIND_COLORTEXTURE, fboTexId[c]);
-        fbo[c]->bindRenderBuffer(1, FBO::BIND_DEPTHBUFFER, APP_FBOSIZEX, APP_FBOSIZEY);
+        fbo[c]->bindRenderBuffer(1, FBO::BIND_DEPTHBUFFER, fboSixeX, fboSixeY);
         if (!fbo[c]->isOk())
             std::cout << "[ERROR] Invalid FBO" << std::endl;
     }

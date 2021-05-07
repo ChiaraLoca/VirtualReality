@@ -79,7 +79,7 @@ int LIB_API GraphicsEngine::initialize()
 
     //Initalize FBOs
     //initFbo();
-    _fboContainer = new FboContainer(OVRManager::ovrManager.getfboSizeX(), OVRManager::ovrManager.getfboSizeX());
+    _fboContainer = new FboContainer(OVRManager::ovrManager.getfboSizeX(), OVRManager::ovrManager.getfboSizeY());
     
     glViewport(0, 0, _dimx, _dimy);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
