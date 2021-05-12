@@ -84,17 +84,17 @@ void CounterLight::render()
 		specular.push_back(l->getSpecular());
 	}
 	
-	auto ambPos = Program::program.getParamLocation("lightAmbient");
-	Program::program.setVec3Array(ambPos, ambient.data(), sizeof(ambient.data()));
+	auto ambPos = Program::programPPL.getParamLocation("lightAmbient");
+	Program::programPPL.setVec3Array(ambPos, ambient.data(), sizeof(ambient.data()));
 
-	auto diffPos = Program::program.getParamLocation("lightDiffuse");
-	Program::program.setVec3Array(diffPos, diffuse.data(),sizeof(diffuse.data()));
+	auto diffPos = Program::programPPL.getParamLocation("lightDiffuse");
+	Program::programPPL.setVec3Array(diffPos, diffuse.data(),sizeof(diffuse.data()));
 
-	auto specPos = Program::program.getParamLocation("lightSpecular");
-	Program::program.setVec3Array(specPos, specular.data(), sizeof(specular.data()));
+	auto specPos = Program::programPPL.getParamLocation("lightSpecular");
+	Program::programPPL.setVec3Array(specPos, specular.data(), sizeof(specular.data()));
 
-	auto lightPos = Program::program.getParamLocation("lightPos");
-	Program::program.setVec3Array(lightPos, position.data(), sizeof(position.data()));
+	auto lightPos = Program::programPPL.getParamLocation("lightPos");
+	Program::programPPL.setVec3Array(lightPos, position.data(), sizeof(position.data()));
 }
 
 void CounterLight::clear() {

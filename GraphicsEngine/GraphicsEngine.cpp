@@ -22,6 +22,11 @@
  */
 int LIB_API GraphicsEngine::initialize()
 {
+    // FreeGLUT can parse command-line params, in case:
+    int argc = 1;
+    char* argv[1] = { (char*)"Something" }; // Silly initialization
+    glutInit(&argc, argv);
+
     // Initializing the required buffers
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
@@ -34,10 +39,7 @@ int LIB_API GraphicsEngine::initialize()
     glutInitWindowPosition(_posx, _posy);
     glutInitWindowSize(_dimx, _dimy);
 
-    // FreeGLUT can parse command-line params, in case:
-    int argc = 1;
-    char* argv[1] = { (char*)"Something" }; // Silly initialization
-    glutInit(&argc, argv);
+    
 
     // Set some optional flags:
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
@@ -69,18 +71,25 @@ int LIB_API GraphicsEngine::initialize()
     //glEnable(GL_LIGHTING);
     //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
 
-    if (OVRManager::ovrManager.init() < 0)
-    {
-        return -3;
-    }
+   
 
     //Initialize shaders
     initShaders();
 
     //Initalize FBOs
     //initFbo();
+    if (OVRManager::ovrManager.init() < 0)
+    {
+        return -3;
+    }
+
+    OVRManager::ovrManager.setFboSize();
+
+
     _fboContainer = new FboContainer(OVRManager::ovrManager.getfboSizeX(), OVRManager::ovrManager.getfboSizeY());
     
+    
+
     glViewport(0, 0, _dimx, _dimy);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -217,7 +226,7 @@ void GraphicsEngine::render()
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
     setStandardShader();
-
+    
     
     OVRManager::ovrManager.update();
     glm::mat4 headPos = OVRManager::ovrManager.getModelviewMatrix();
@@ -238,6 +247,13 @@ void GraphicsEngine::render()
             std::cout << "Eye " << curEye << " modelview matrix: " << glm::to_string(ovrModelViewMat) << std::endl;
         #endif
 
+        /*
+        Program::programPPL.render();
+        Program::programPPL.setMatrix(Program::programPPL.projLoc, ovrProjMat);
+        Program::programPPL.setMatrix(Program::programPPL.mvLoc, ovrModelViewMat);
+        glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(ovrModelViewMat));
+        Program::programPPL.setMatrix3(Program::programPPL.normLoc, normalMatrix);*/
+
 
         // Render into this FBO:
         _fboContainer->get(curEye)->render();
@@ -250,6 +266,8 @@ void GraphicsEngine::render()
     _fboContainer->disable();
     glViewport(0, 0, _dimx, _dimy);
     setPassthroughShader();
+    
+   
     _fboContainer->render();
 }
 
@@ -433,6 +451,7 @@ void GraphicsEngine::enableDebugger() {
 LIB_API void GraphicsEngine::initShaders()
 {
     setStandardShader();
+    setPassthroughShader();
 
 }
 LIB_API void GraphicsEngine::setStandardShader()
@@ -443,16 +462,16 @@ LIB_API void GraphicsEngine::setStandardShader()
     vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShaderTexture);
     fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderTextureMultiLight);
 
-    Program::program.build(vertexShader, fragmentShader);
-    Program::program.render();
-    Program::program.bind(0, "in_Position");
-    Program::program.bind(1, "in_Normal");
-    Program::program.bind(2, "in_TexCoord");
+    Program::programPPL.build(vertexShader, fragmentShader);
+    Program::programPPL.render();
+    Program::programPPL.bind(0, "in_Position");
+    Program::programPPL.bind(1, "in_Normal");
+    Program::programPPL.bind(2, "in_TexCoord");
 
     // Get shader variable locations:
-    Program::program.projLoc = Program::program.getParamLocation("projection");
-    Program::program.mvLoc = Program::program.getParamLocation("modelview");
-    Program::program.normLoc = Program::program.getParamLocation("normalMatrix");
+    Program::programPPL.projLoc = Program::programPPL.getParamLocation("projection");
+    Program::programPPL.mvLoc = Program::programPPL.getParamLocation("modelview");
+    Program::programPPL.normLoc = Program::programPPL.getParamLocation("normalMatrix");
 }
 
 
@@ -466,16 +485,16 @@ LIB_API void GraphicsEngine::setPassthroughShader()
     passthroughFs->loadFromMemory(Shader::TYPE_FRAGMENT, passthroughFragShader);
 
     
-    Program::program.build(passthroughVs, passthroughFs);
-    Program::program.render();
+    Program::programPT.build(passthroughVs, passthroughFs);
+    Program::programPT.render();
 
     // Bind params:
-    Program::program.bind(0, "in_Position");
-    Program::program.bind(2, "in_TexCoord");
+    Program::programPT.bind(0, "in_Position");
+    Program::programPT.bind(2, "in_TexCoord");
 
-    Program::program.projLoc = Program::program.getParamLocation("projection");
-    Program::program.mvLoc = Program::program.getParamLocation("modelview");
-    Program::program.ptColorLoc = Program::program.getParamLocation("color");
+    Program::programPT.projLoc = Program::programPT.getParamLocation("projection");
+    Program::programPT.mvLoc = Program::programPT.getParamLocation("modelview");
+    Program::programPT.ptColorLoc = Program::programPT.getParamLocation("color");
 }
 
 /**

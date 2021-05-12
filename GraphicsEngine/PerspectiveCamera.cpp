@@ -30,8 +30,8 @@ void LIB_API PerspectiveCamera::render()
 	glMatrixMode(GL_MODELVIEW);*/
 
 	
-	Program::program.setMatrix(Program::program.projLoc, _view_matrix);
-	Program::program.setMatrix(Program::program.normLoc, glm::inverseTranspose(glm::mat3(_view_matrix)));
+	Program::programPPL.setMatrix(Program::programPPL.projLoc, _view_matrix);
+	Program::programPPL.setMatrix(Program::programPPL.normLoc, glm::inverseTranspose(glm::mat3(_view_matrix)));
 }
 
 /**

@@ -71,13 +71,13 @@ void Texture::loadFromFile(std::string fileName)
 	FIBITMAP* fBitmap = FreeImage_Load(FreeImage_GetFileType(fileName.c_str(), 0), fileName.c_str());
 	if (fBitmap == nullptr)
 		std::cout << "[ERROR] Unable to load texture" << std::endl;
-	int intFormat = GL_RGBA8;
-	// int intFormat = GL_COMPRESSED_RGB;
+	//int intFormat = GL_RGBA8;
+	int intFormat = GL_COMPRESSED_RGB;
 	GLenum extFormat = GL_BGR;
 	if (FreeImage_GetBPP(fBitmap) == 32)
 	{
-		intFormat = GL_RGBA8;
-		// intFormat = GL_COMPRESSED_RGBA;
+		//intFormat = GL_RGBA8;
+		intFormat = GL_COMPRESSED_RGBA;
 		extFormat = GL_BGRA;
 	}
 

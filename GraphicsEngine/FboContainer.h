@@ -6,7 +6,7 @@ class LIB_API FboContainer
 public:
 
 	 void disable();
-	 FboContainer(int fboSixeX, int fboSixeY);
+	 FboContainer(int fboSizeX, int fboSizeY);
 	 void render();
 	 FBO* get(int i);
 	 unsigned int getFboTexId(int i);

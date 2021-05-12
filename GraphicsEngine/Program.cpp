@@ -6,7 +6,8 @@
 // FreeGLUT:
 #include <GL/freeglut.h>
 
-Program LIB_API Program::program;
+Program LIB_API Program::programPPL;
+Program LIB_API Program::programPT;
 
 Program::Program()
 	:Object{ ObjectType::Program ,"Program"}

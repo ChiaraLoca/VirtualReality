@@ -17,7 +17,8 @@ public:
 	int normLoc;
 	int ptColorLoc;
 
-	static Program program;
+	static Program programPPL;
+	static Program programPT;
 	static int const maxLight{ 8 };
 };
 

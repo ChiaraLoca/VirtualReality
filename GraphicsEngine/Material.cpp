@@ -20,20 +20,20 @@ void LIB_API Material::render()
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(_emission));*/
 
 
-	auto shiPos = Program::program.getParamLocation("matShininess");
-	Program::program.setFloat(shiPos, 1.0f); //todo cambia _shininess
+	auto shiPos = Program::programPPL.getParamLocation("matShininess");
+	Program::programPPL.setFloat(shiPos, 1.0f); //todo cambia _shininess
 
-	auto ambPos = Program::program.getParamLocation("matAmbient");
-	Program::program.setVec3(ambPos, _ambient);
+	auto ambPos = Program::programPPL.getParamLocation("matAmbient");
+	Program::programPPL.setVec3(ambPos, _ambient);
 
-	auto ambDiff = Program::program.getParamLocation("matDiffuse");
-	Program::program.setVec3(ambDiff, _diffuse);
+	auto ambDiff = Program::programPPL.getParamLocation("matDiffuse");
+	Program::programPPL.setVec3(ambDiff, _diffuse);
 
-	auto emiPos = Program::program.getParamLocation("matEmission");
-	Program::program.setVec3(emiPos, _emission);
+	auto emiPos = Program::programPPL.getParamLocation("matEmission");
+	Program::programPPL.setVec3(emiPos, _emission);
 
-	auto specPos = Program::program.getParamLocation("matSpecular");
-	Program::program.setVec3(specPos, _specular);
+	auto specPos = Program::programPPL.getParamLocation("matSpecular");
+	Program::programPPL.setVec3(specPos, _specular);
 
 	_texture->render();
 	/*if (_texture != nullptr) {

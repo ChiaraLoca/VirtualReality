@@ -14,7 +14,7 @@ void FboContainer::disable()
     FBO::disable();
 }
 
-FboContainer::FboContainer(int fboSixeX, int fboSixeY)
+FboContainer::FboContainer(int fboSizeX, int fboSizeY)
 {
     
     _fboPerspective = glm::perspective(glm::radians(45.0f), (float)APP_FBOSIZEX / (float)APP_FBOSIZEY, 1.0f, 1024.0f);
@@ -23,11 +23,13 @@ FboContainer::FboContainer(int fboSixeX, int fboSixeY)
     createBox();
     //createTexBox();
 
+    
+
     for (int c = 0; c < EYE_LAST; c++)
     {
         glGenTextures(1, &fboTexId[c]);
         glBindTexture(GL_TEXTURE_2D, fboTexId[c]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, fboSixeX, fboSixeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, fboSizeX, fboSizeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -35,7 +37,7 @@ FboContainer::FboContainer(int fboSixeX, int fboSixeY)
 
         fbo[c] = new FBO();
         fbo[c]->bindTexture(0, FBO::BIND_COLORTEXTURE, fboTexId[c]);
-        fbo[c]->bindRenderBuffer(1, FBO::BIND_DEPTHBUFFER, fboSixeX, fboSixeY);
+        fbo[c]->bindRenderBuffer(1, FBO::BIND_DEPTHBUFFER, fboSizeX, fboSizeY);
         if (!fbo[c]->isOk())
             std::cout << "[ERROR] Invalid FBO" << std::endl;
     }
@@ -50,10 +52,10 @@ void FboContainer::render()
     glm::mat4 f = glm::mat4(1.0f);
 
     // Setup the passthrough shader:
-    Program::program.render();
-    Program::program.setMatrix(Program::program.projLoc , _ortho);
-    Program::program.setMatrix(Program::program.mvLoc, f);
-    Program::program.setVec4(Program::program.ptColorLoc, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    Program::programPT.render();
+    Program::programPT.setMatrix(Program::programPT.projLoc , _ortho);
+    Program::programPT.setMatrix(Program::programPT.mvLoc, f);
+    Program::programPT.setVec4(Program::programPT.ptColorLoc, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 
     glBindBuffer(GL_ARRAY_BUFFER, boxVertexVbo);
     glVertexAttribPointer((GLuint)0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
@@ -71,8 +73,8 @@ void FboContainer::render()
 
     // Do the same for the right "eye": 
     f = glm::translate(glm::mat4(1.0f), glm::vec3(APP_WINDOWSIZEX / 2, 0.0f, 0.0f));
-    Program::program.setMatrix(Program::program.mvLoc, f);
-    Program::program.setVec4(Program::program.ptColorLoc, glm::vec4(0.0f, 1.0f, 1.0f, 0.0f));
+    Program::programPT.setMatrix(Program::programPT.mvLoc, f);
+    Program::programPT.setVec4(Program::programPT.ptColorLoc, glm::vec4(0.0f, 1.0f, 1.0f, 0.0f));
     glBindTexture(GL_TEXTURE_2D, fboTexId[EYE_RIGHT]);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
