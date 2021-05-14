@@ -72,11 +72,11 @@ void reshapeCall(int width, int height)
 bool doShowLaser(bool show) {
     Node* laser = _graphicsEngine.getNodeByName("FascioLaser");
     if (show) {
-        laser->setMatrix(laser->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(0, 200.0f, 0.0f)));
+        laser->setMatrix(laser->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(0, 200.0f, 0.0f)));
         return false;
     }
     else {
-        laser->setMatrix(laser->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(0, -200.0f, 0.0f)));
+        laser->setMatrix(laser->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(0, -200.0f, 0.0f)));
         return true;
     }
 }
@@ -100,20 +100,20 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
 
         // move spot light
         case 'a':
-            dynamicLight->setMatrix(dynamicLight->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(lightSpeed), glm::vec3(1.0f, 0.0f, 0.0f)));
+            dynamicLight->setMatrix(dynamicLight->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(lightSpeed), glm::vec3(1.0f, 0.0f, 0.0f)));
             break;
         case 'd':
-            dynamicLight->setMatrix(dynamicLight->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(-lightSpeed), glm::vec3(1.0f, 0.0f, 0.0f)));
+            dynamicLight->setMatrix(dynamicLight->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(-lightSpeed), glm::vec3(1.0f, 0.0f, 0.0f)));
             break;
         case 'w':
-            dynamicLight->setMatrix(dynamicLight->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(lightSpeed), glm::vec3(0.0f, 0.0f, 1.0f)));
+            dynamicLight->setMatrix(dynamicLight->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(lightSpeed), glm::vec3(0.0f, 0.0f, 1.0f)));
             break;
         case 's':
-            dynamicLight->setMatrix(dynamicLight->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(-lightSpeed), glm::vec3(0.0f, 0.0f, 1.0f)));
+            dynamicLight->setMatrix(dynamicLight->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(-lightSpeed), glm::vec3(0.0f, 0.0f, 1.0f)));
             break;
 
-        // move current camera - A Peternier non piace :(
-        case 'j':
+        
+        /*case 'j':
             _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(cameraSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
             break;
         case 'l':
@@ -130,14 +130,14 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
             break;
         case 'o':
             _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, cameraSpeed)));
-            break;
+            break;*/
 
         // rotate dome
         case 't':
-            dome->setMatrix(dome->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
+            dome->setMatrix(dome->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
             break;
         case 'r':
-            dome->setMatrix(dome->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(-domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
+            dome->setMatrix(dome->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(-domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
             break;
 
             // Open close hatch
@@ -201,8 +201,8 @@ void timerCallback(int value)
     // Control for open
     if (currentOpening < maxOpening && isHatchOnOpen)
     {
-        leftHatch->setMatrix(leftHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
-        rightHatch->setMatrix(rightHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
+        leftHatch->setMatrix(leftHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
+        rightHatch->setMatrix(rightHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
         if (currentOpening < 0.0f && !hasToBeOff)
             showLaser = doShowLaser(showLaser);
         currentOpening += hatchSpeed;
@@ -211,8 +211,8 @@ void timerCallback(int value)
     // Control for closing
     if (currentOpening >= 0.0f && !isHatchOnOpen)
     {
-        leftHatch->setMatrix(leftHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
-        rightHatch->setMatrix(rightHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
+        leftHatch->setMatrix(leftHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
+        rightHatch->setMatrix(rightHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
         currentOpening -= hatchSpeed;
         if (currentOpening < 0.0f && !hasToBeOff)
             showLaser = doShowLaser(showLaser);
@@ -221,13 +221,13 @@ void timerCallback(int value)
     //Control for telescope
     if (isHatchOnOpen && currentOutTelescope < maxOutTelescope) {
         currentOutTelescope += telescopeSpeed;
-        telescope->setMatrix(telescope->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(-telescopeSpeed / 10, telescopeSpeed, -0.012)));
+        telescope->setMatrix(telescope->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(-telescopeSpeed / 10, telescopeSpeed, -0.012)));
     }
 
     if (!isHatchOnOpen && currentOutTelescope >= 0.0f) {
 
         currentOutTelescope -= telescopeSpeed;
-        telescope->setMatrix(telescope->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(telescopeSpeed / 10, -telescopeSpeed, 0.012)));
+        telescope->setMatrix(telescope->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(telescopeSpeed / 10, -telescopeSpeed, 0.012)));
 
     }
 

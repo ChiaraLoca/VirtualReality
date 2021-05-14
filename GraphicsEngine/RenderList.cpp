@@ -57,12 +57,15 @@ void RenderList::render() {
 		_ortho->render();
 }
 
-void RenderList::setAllMatrix(Node* node) {
+void RenderList::setAllMatrix(Node* node ) {
+
+	
+
 	if (node->getParent() != nullptr) {
-		RenderList::renderList.add(node, _map.at(node->getParent()) * node->getMatrix());
+		RenderList::renderList.add(node, _map.at(node->getParent()) * node->_matrix);
 	}
 	else {
-		RenderList::renderList.add(node, node->getMatrix());
+		RenderList::renderList.add(node, node->_matrix);
 	}
 	for (auto x : node->getChildren())
 		setAllMatrix(x);

@@ -223,8 +223,7 @@ void GraphicsEngine::resize()
  */
 void GraphicsEngine::render()
 {
-    RenderList::renderList.removeAll();
-    RenderList::renderList.setAllMatrix(_root);
+    
     setStandardShader();
     
     
@@ -247,19 +246,24 @@ void GraphicsEngine::render()
             std::cout << "Eye " << curEye << " modelview matrix: " << glm::to_string(ovrModelViewMat) << std::endl;
         #endif
 
-        /*
+        
         Program::programPPL.render();
         Program::programPPL.setMatrix(Program::programPPL.projLoc, ovrProjMat);
         Program::programPPL.setMatrix(Program::programPPL.mvLoc, ovrModelViewMat);
         glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(ovrModelViewMat));
-        Program::programPPL.setMatrix3(Program::programPPL.normLoc, normalMatrix);*/
+        Program::programPPL.setMatrix3(Program::programPPL.normLoc, normalMatrix);
 
+        getCurrentCamera()->setMatrix(ovrModelViewMat);
+        RenderList::renderList.setAllMatrix(_root);
 
         // Render into this FBO:
         _fboContainer->get(curEye)->render();
         // Clear the FBO content:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         RenderList::renderList.render();
+        RenderList::renderList.removeAll();
+        
         OVRManager::ovrManager.pass(curEye, _fboContainer->getFboTexId(curEye));
     }
     OVRManager::ovrManager.render();

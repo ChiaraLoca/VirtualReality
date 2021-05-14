@@ -37,10 +37,11 @@ void LIB_API Node::render()
  * 
  * @return the matrix
  */
-glm::mat4 LIB_API Node::getMatrix() const
+/*glm::mat4 LIB_API Node::getMatrix() const
 {
+    
     return _matrix;
-}
+}*/
 
 /**
  * @brief final matrix getter
@@ -117,9 +118,9 @@ std::vector<Node*> Node::getChildren() const
 glm::mat4 LIB_API Node::computeWorldCoordinates() const
 {
     if (getParent() != nullptr)
-        return getParent()->computeWorldCoordinates() * getMatrix();
+        return getParent()->computeWorldCoordinates() * _matrix;
     else
-        return getMatrix();    
+        return _matrix;    
 }
 
 /**
