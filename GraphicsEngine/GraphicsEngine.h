@@ -8,6 +8,7 @@
 #include "Util.h"
 #include "Node.h"
 #include "RenderList.h"
+#include "FboContainer.h"
 
 #ifdef _WINDOWS
 #include <Windows.h>
@@ -41,8 +42,10 @@ private:
 	char* _title;
 	int _frames;
 	Node* _root; // contains a reference to the root of the scene
+	FboContainer* _fboContainer;
 	void enableDebugger();
 	void initShaders();
+	void initFbo();
 
 
 public:
@@ -75,7 +78,10 @@ public:
 	void setReshapeCallback(void(*call2)(int, int));
 	void setKeyboardCallback(void (*call)(unsigned char, int, int));
 	void setTimerCallback(int time,void(*call1)(int),int value);
-
+	void resize();
+	void setStandardShader();
+	void setPassthroughShader();
+	
 
 	const char* vertShaderEasy = R"(
 	   #version 440 core
@@ -223,6 +229,190 @@ public:
 				fragOutput = vec4(result, 1.0f);
 			}
 		)";
+
+	///////////////////////////////////////////////////////
+	const char* vertShaderTexture = R"(
+	#version 440 core
+		// Uniforms:
+		uniform mat4 projection;
+		uniform mat4 modelview;
+		uniform mat3 normalMatrix; // Inverse-transpose
+		// Attributes:
+		layout(location = 0) in vec3 in_Position;
+		layout(location = 1) in vec3 in_Normal;
+		layout(location = 2) in vec2 in_TexCoord;
+		// Varying:
+		out vec4 fragPos; // In eye coordinates
+		out vec3 normal;
+		out vec2 texCoord; 
+		void main(void)
+		{
+			texCoord = in_TexCoord;
+			fragPos = modelview * vec4(in_Position, 1.0f);
+			gl_Position = projection * fragPos;
+			normal = normalMatrix * in_Normal;
+		}
+	)";
+
+	const char* fragShaderTexture = R"(
+	   #version 440 core
+			// Varying variables from the vertex shader:
+			in vec4 fragPos;
+			in vec3 normal;
+			in vec2 texCoord;
+			out vec4 fragOutput;
+			// Material properties:
+			uniform vec3 matEmission;
+			uniform vec3 matAmbient;
+			uniform vec3 matDiffuse;
+			uniform vec3 matSpecular;
+			uniform float matShininess;
+
+			// Light properties:
+			uniform vec3 lightPos; // In eye coordinates
+			uniform vec3 lightAmbient;
+			uniform vec3 lightDiffuse;
+			uniform vec3 lightSpecular;
+
+			// Texture mapping:
+			layout(binding = 0) uniform sampler2D texSampler;
+
+			void main(void)
+				{
+				// Texture element:
+				vec4 texel = texture(texSampler, texCoord);
+
+				// Emission and ambient:
+				vec3 fragColor = matEmission + matAmbient * lightAmbient;
+				// Diffuse term:
+				vec3 _normal = normalize(normal);
+				vec3 lightDir = normalize(lightPos - fragPos.xyz);
+				float nDotL = dot(lightDir, _normal);
+				if (nDotL > 0.0f) {
+					fragColor += matDiffuse * nDotL * lightDiffuse;
+					// Specular term:
+					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+					float nDotHV = dot(_normal, halfVector);
+					fragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecular;
+				}
+
+				fragOutput = texel*vec4(fragColor, 1.0f);
+			}
+		)";
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	const char* fragShaderTextureMultiLight = R"(
+	   #version 440 core
+			// Varying variables from the vertex shader:
+			in vec4 fragPos;
+			in vec3 normal;
+			in vec2 texCoord;
+			out vec4 fragOutput;
+			
+			// Material properties:
+			uniform vec3 matEmission;
+			uniform vec3 matAmbient;
+			uniform vec3 matDiffuse;
+			uniform vec3 matSpecular;
+			uniform float matShininess;
+
+			// Light properties:
+			#define MAX_LIGHT 8
+			
+			uniform vec3 lightPos[MAX_LIGHT]; // In eye coordinates
+			uniform vec3 lightAmbient[MAX_LIGHT];
+			uniform vec3 lightDiffuse[MAX_LIGHT];
+			uniform vec3 lightSpecular[MAX_LIGHT];
+
+			// Texture mapping:
+			layout(binding = 0) uniform sampler2D texSampler;
+
+			vec3 CalcOmniLight(int index)
+			{
+				vec3 internalFragColor = matEmission + matAmbient * lightAmbient[index];
+				// Diffuse term:
+				vec3 _normal = normalize(normal);
+				vec3 lightDir = normalize(lightPos[index] - fragPos.xyz);
+				float nDotL = dot(lightDir, _normal);
+				if (nDotL > 0.0f) {
+					internalFragColor += matDiffuse * nDotL * lightDiffuse[index];
+					// Specular term:
+					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+					float nDotHV = dot(_normal, halfVector);
+					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecular[index];
+			}
+			return internalFragColor;
+
+			} 
+
+			void main(void)
+				{
+				// Texture element:
+				vec4 texel = texture(texSampler, texCoord);
+
+
+
+
+				vec3 result;	
+				for(int i = 0; i < MAX_LIGHT; i++){
+					result += CalcOmniLight(i);
+				}
+
+				fragOutput = texel*vec4(result, 1.0f);
+
+			}
+		)";
+
+	const char* passthroughVertShader = R"(
+   #version 440 core
+
+   // Uniforms:
+   uniform mat4 projection;
+   uniform mat4 modelview;   
+
+   // Attributes:
+   layout(location = 0) in vec2 in_Position;   
+   layout(location = 2) in vec2 in_TexCoord;
+
+   // Varying:   
+   out vec2 texCoord;
+
+   void main(void)
+   {      
+      gl_Position = projection * modelview * vec4(in_Position, 0.0f, 1.0f);    
+      texCoord = in_TexCoord;
+   }
+)";
+
+	const char* passthroughFragShader = R"(
+   #version 440 core
+   
+   in vec2 texCoord;
+   
+   uniform vec4 color;
+
+   out vec4 fragOutput;   
+
+   // Texture mapping:
+   layout(binding = 0) uniform sampler2D texSampler;
+
+   void main(void)   
+   {  
+      // Texture element:
+      vec4 texel = texture(texSampler, texCoord);      
+      
+      // Final color:
+		//vec4 verde =  vec4(1.0f, 0.0f, 1.0f,0.5f);
+        fragOutput = color * texel;       
+		//fragOutput = verde * texel;    
+   }
+)";
+
+
+
+
+
+
 };
 
 

@@ -4,9 +4,13 @@
 // FreeGLUT:
 #include <GL/freeglut.h>
 
+#include "Util.h"
 #include "Material.h"
 #include "GraphicsEngine.h"
-#include"Program.h"
+#include "Program.h"
+#include "FboContainer.h"
+
+
 
 /**
  * @brief Initialization of all component of the GraphicsEngine
@@ -18,7 +22,7 @@
 int LIB_API GraphicsEngine::initialize()
 {
     // Initializing the required buffers
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
     //Initialize OpenGL_4.4 context
     glutInitContextVersion(4, 4);
@@ -27,6 +31,7 @@ int LIB_API GraphicsEngine::initialize()
 
     // Create window
     glutInitWindowPosition(_posx, _posy);
+    glutInitWindowSize(_dimx, _dimy);
 
     // FreeGLUT can parse command-line params, in case:
     int argc = 1;
@@ -66,6 +71,11 @@ int LIB_API GraphicsEngine::initialize()
 
     //Initialize shaders
     initShaders();
+
+    //Initalize FBOs
+    //initFbo();
+    _fboContainer = new FboContainer();
+    glViewport(0, 0, _dimx, _dimy);
 
     return 0;
 }
@@ -178,6 +188,17 @@ void GraphicsEngine::refresh()
     // Force rendering refresh:
     glutPostWindowRedisplay(_windowId);
 }
+void GraphicsEngine::resize()
+{
+   /* fboPerspective = glm::perspective(glm::radians(45.0f), (float)APP_FBOSIZEX / (float)APP_FBOSIZEY, 1.0f, 1024.0f);
+    ortho = glm::ortho(0.0f, (float)APP_WINDOWSIZEX, 0.0f, (float)APP_WINDOWSIZEY, -1.0f, 1.0f);*/
+
+    // (bad) trick to avoid window resizing:
+    
+        glutReshapeWindow(_dimx, _dimy);
+}
+
+
 
 /**
  * @brief Main rendering method
@@ -188,7 +209,19 @@ void GraphicsEngine::render()
 {
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
-    RenderList::renderList.render();
+    setStandardShader();
+    for (int c = 0; c < 2; c++) // fix hardcode
+    {
+        // Render into this FBO:
+        _fboContainer->get(c)->render();
+        // Clear the FBO content:
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        RenderList::renderList.render();
+    }
+    _fboContainer->disable();
+    glViewport(0, 0, _dimx, _dimy);
+    setPassthroughShader();
+    _fboContainer->render();
 }
 
 /**
@@ -370,21 +403,60 @@ void GraphicsEngine::enableDebugger() {
  */
 LIB_API void GraphicsEngine::initShaders()
 {
-    Shader* vertexShader = new Shader();
-    Shader* fragmentShader= new Shader();
+    setStandardShader();
 
-    vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShader);
-    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderMultiLight);
+}
+LIB_API void GraphicsEngine::setStandardShader()
+{
+    Shader* vertexShader = new Shader();
+    Shader* fragmentShader = new Shader();
+
+    vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShaderTexture);
+    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderTextureMultiLight);
 
     Program::program.build(vertexShader, fragmentShader);
     Program::program.render();
     Program::program.bind(0, "in_Position");
     Program::program.bind(1, "in_Normal");
+    Program::program.bind(2, "in_TexCoord");
 
     // Get shader variable locations:
     Program::program.projLoc = Program::program.getParamLocation("projection");
     Program::program.mvLoc = Program::program.getParamLocation("modelview");
     Program::program.normLoc = Program::program.getParamLocation("normalMatrix");
+}
+
+
+LIB_API void GraphicsEngine::setPassthroughShader()
+{
+    // Build passthrough shader:
+    Shader*  passthroughVs = new Shader();
+    passthroughVs->loadFromMemory(Shader::TYPE_VERTEX, passthroughVertShader);
+
+    Shader*  passthroughFs = new Shader();
+    passthroughFs->loadFromMemory(Shader::TYPE_FRAGMENT, passthroughFragShader);
+
+    
+    Program::program.build(passthroughVs, passthroughFs);
+    Program::program.render();
+
+    // Bind params:
+    Program::program.bind(0, "in_Position");
+    Program::program.bind(2, "in_TexCoord");
+
+    Program::program.projLoc = Program::program.getParamLocation("projection");
+    Program::program.mvLoc = Program::program.getParamLocation("modelview");
+    Program::program.ptColorLoc = Program::program.getParamLocation("color");
+}
+
+/**
+ * @brief Intitializer of FBO
+ *
+ */
+void GraphicsEngine::initFbo()
+{
+
+   
 
 }
 

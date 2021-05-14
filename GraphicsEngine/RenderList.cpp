@@ -43,7 +43,6 @@ void RenderList::render() {
 	
 	for (auto i = _map.begin(); i != _map.end(); i++) {			
 		i->first->setFinalMatrix(current->getInverseMatrix() * i->second);
-		i->first->render();
 	}
 
 	CounterLight::render();
