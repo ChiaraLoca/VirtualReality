@@ -28,7 +28,7 @@ void LIB_API Node::render()
     //glLoadMatrixf(glm::value_ptr(_finalMatrix));
     
     Program::programPPL.setMatrix(Program::programPPL.mvLoc, _finalMatrix);
-    Program::programPPL.setMatrix(Program::programPPL.normLoc, glm::inverseTranspose(glm::mat3(_finalMatrix)));
+    Program::programPPL.setMatrix3(Program::programPPL.normLoc, glm::inverseTranspose(glm::mat3(_finalMatrix)));
     
 }
 

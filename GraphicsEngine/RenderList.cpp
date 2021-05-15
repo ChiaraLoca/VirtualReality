@@ -1,6 +1,7 @@
 #include "RenderList.h"
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
+#include <iostream>
 
 RenderList LIB_API RenderList::renderList;
 

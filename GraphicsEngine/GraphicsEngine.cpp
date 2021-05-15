@@ -223,16 +223,21 @@ void GraphicsEngine::resize()
  */
 void GraphicsEngine::render()
 {
+    RenderList::renderList.removeAll();
     
-    setStandardShader();
-    
-    
+    RenderList::renderList.setAllMatrix(_root);
+   
     OVRManager::ovrManager.update();
+   
     glm::mat4 headPos = OVRManager::ovrManager.getModelviewMatrix();
+    
     for (int curEye = 0; curEye < OpenVR::EYE_LAST; curEye++)
     {
+        
         glm::mat4 projMat = OVRManager::ovrManager.getProjMatrix(curEye);
+       
         glm::mat4 eye2Head = OVRManager::ovrManager.getEye2HeadMatrix(curEye);
+        
 
         // Update camera projection matrix:
         glm::mat4 ovrProjMat = projMat * glm::inverse(eye2Head);
@@ -246,33 +251,45 @@ void GraphicsEngine::render()
             std::cout << "Eye " << curEye << " modelview matrix: " << glm::to_string(ovrModelViewMat) << std::endl;
         #endif
 
-        
+       
         Program::programPPL.render();
         Program::programPPL.setMatrix(Program::programPPL.projLoc, ovrProjMat);
         Program::programPPL.setMatrix(Program::programPPL.mvLoc, ovrModelViewMat);
         glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(ovrModelViewMat));
         Program::programPPL.setMatrix3(Program::programPPL.normLoc, normalMatrix);
-
-        getCurrentCamera()->setMatrix(ovrModelViewMat);
-        RenderList::renderList.setAllMatrix(_root);
-
+        
+        glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(00.0f, 10.0f, -35.0f));
+        
+       /*m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
+       m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
+       m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-45), glm::vec3(0.0f, 1.0f, 0.0f));*/
+        getCurrentCamera()->setMatrix( m * headPos);
+       
+        //RenderList::renderList.setAllMatrix(_root);
+       
         // Render into this FBO:
         _fboContainer->get(curEye)->render();
         // Clear the FBO content:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+       
         RenderList::renderList.render();
-        RenderList::renderList.removeAll();
+        
+        //RenderList::renderList.removeAll();
         
         OVRManager::ovrManager.pass(curEye, _fboContainer->getFboTexId(curEye));
     }
-    OVRManager::ovrManager.render();
-    _fboContainer->disable();
-    glViewport(0, 0, _dimx, _dimy);
-    setPassthroughShader();
     
+    OVRManager::ovrManager.render();
+    
+    _fboContainer->disable();
    
+    glViewport(0, 0, _dimx, _dimy);
+    
+    
+    
+    
     _fboContainer->render();
+    
 }
 
 /**

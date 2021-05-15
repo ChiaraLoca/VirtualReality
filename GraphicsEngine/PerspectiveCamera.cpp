@@ -31,7 +31,7 @@ void LIB_API PerspectiveCamera::render()
 
 	
 	Program::programPPL.setMatrix(Program::programPPL.projLoc, _view_matrix);
-	Program::programPPL.setMatrix(Program::programPPL.normLoc, glm::inverseTranspose(glm::mat3(_view_matrix)));
+	Program::programPPL.setMatrix3(Program::programPPL.normLoc, glm::inverseTranspose(glm::mat3(_view_matrix)));
 }
 
 /**
