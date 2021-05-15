@@ -93,8 +93,8 @@ void Skybox::render()
     perspective = glm::perspective(glm::radians(45.0f), (float)1024 / (float)512, 1.0f, 1024.0f);
 
     // Set model matrix as current OpenGL matrix: 
-    Program::program.render();
-    Program::program.setMatrix(Program::program.mvLoc, f);  
+    Program::programSB.render();
+    Program::programSB.setMatrix(Program::programSB.mvLoc, f);
     //Program::program.setMatrix(Program::program.projLoc, perspective);
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeFaces) / sizeof(unsigned short), GL_UNSIGNED_SHORT, nullptr);

@@ -8,7 +8,7 @@
 #include <ctime>
 #include "Util.h"
 
-enum class LIB_API ObjectType { Node, Mesh, Camera, Material,Light,List,Root, Texture,Program};
+enum class LIB_API ObjectType { Node, Mesh, Camera, Material, Light, List, Root, Texture, Program, Skybox};
 class LIB_API Object
 {
 private:

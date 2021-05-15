@@ -159,6 +159,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseTexture.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Face.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="RenderList.h" />
     <ClInclude Include="OVRManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Util.h" />
@@ -190,6 +192,7 @@
     <ClInclude Include="VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseTexture.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Face.cpp" />
@@ -212,6 +215,7 @@
     <ClCompile Include="RenderList.cpp" />
     <ClCompile Include="OVRManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UtilRender.cpp" />

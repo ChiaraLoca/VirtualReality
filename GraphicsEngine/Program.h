@@ -19,6 +19,7 @@ public:
 
 	static Program programPPL;
 	static Program programPT;
+	static Program programSB;
 	static int const maxLight{ 8 };
 };
 

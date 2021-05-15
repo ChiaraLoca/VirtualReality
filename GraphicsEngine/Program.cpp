@@ -8,6 +8,7 @@
 
 Program LIB_API Program::programPPL;
 Program LIB_API Program::programPT;
+Program LIB_API Program::programSB;
 
 Program::Program()
 	:Object{ ObjectType::Program ,"Program"}
