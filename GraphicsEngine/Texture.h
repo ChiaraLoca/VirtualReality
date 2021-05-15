@@ -1,18 +1,16 @@
 #pragma once
-#include "Object.h"
+#include "BaseTexture.h"
 
 
 class LIB_API Texture :
-    public Object
+    public BaseTexture
 {
 private:
-    unsigned int _texId;
-    static bool freeimageInit;
-   
+
+
 public:
     Texture(std::string name);
     ~Texture();
-    static void free();
     void loadFromFile(std::string fileName);
     void loadDefaultTexture();
     virtual void render();
