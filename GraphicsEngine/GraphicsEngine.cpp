@@ -412,7 +412,7 @@ LIB_API void GraphicsEngine::setStandardShader()
     Shader* fragmentShader = new Shader();
 
     vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShaderTexture);
-    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderTextureMultiLight);
+    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderSpot);
 
     Program::program.build(vertexShader, fragmentShader);
     Program::program.render();

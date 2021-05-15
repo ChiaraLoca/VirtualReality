@@ -2,17 +2,33 @@
 #include "Light.h"
 #include "OmniLight.h"
 #include <vector>
+#include <map>
 
-class CounterLight {
+
+class LIB_API CounterLight {
 
 public:
-	static void add(Light* light);
-	static void render();
-	static void clear();
+	CounterLight(LightType lightType) : _lightType{ lightType } {};
+	
+	void add(Light* light);
+	void render();
+	void clear();
 
+	static CounterLight omniLight;
+	static CounterLight spotLight;
 
 private:
-	static int getFreeLightValue();
-	static void freeValue(int valueToFree);
+	int getFreeLightValue();
+	void freeValue(int valueToFree);
+
+	static void omniSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
+		std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular);
+	static void spotSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
+		std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular);
+
+	std::map<int, bool> valueUsed{};
+	bool isCounterInitialize = false;
+
+	LightType _lightType;
 
 };

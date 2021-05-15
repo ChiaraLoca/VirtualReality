@@ -408,6 +408,88 @@ public:
    }
 )";
 
+	const char* fragShaderSpot = R"(
+	   #version 440 core
+			// Varying variables from the vertex shader:
+			in vec4 fragPos;
+			in vec3 normal;
+			in vec2 texCoord;
+			out vec4 fragOutput;
+			
+			// Material properties:
+			uniform vec3 matEmission;
+			uniform vec3 matAmbient;
+			uniform vec3 matDiffuse;
+			uniform vec3 matSpecular;
+			uniform float matShininess;
+
+			// Light properties:
+			#define MAX_LIGHT 8
+			
+			// Define vector for omniLight
+			uniform vec3 lightPosOmni[MAX_LIGHT]; // In eye coordinates
+			uniform vec3 lightAmbientOmni[MAX_LIGHT];
+			uniform vec3 lightDiffuseOmni[MAX_LIGHT];
+			uniform vec3 lightSpecularOmni[MAX_LIGHT];
+
+			// Define vector for spotLight
+			uniform vec3 lightPosSpot[MAX_LIGHT]; // In eye coordinates
+			uniform vec3 lightAmbientSpot[MAX_LIGHT];
+			uniform vec3 lightDiffuseSpot[MAX_LIGHT];
+			uniform vec3 lightSpecularSpot[MAX_LIGHT];
+
+			// Texture mapping:
+			layout(binding = 0) uniform sampler2D texSampler;
+
+			vec3 CalcOmniLight(int index)
+			{
+				vec3 internalFragColor = matEmission + matAmbient * lightAmbientOmni[index];
+				// Diffuse term:
+				vec3 _normal = normalize(normal);
+				vec3 lightDir = normalize(lightPosOmni[index] - fragPos.xyz);
+				float nDotL = dot(lightDir, _normal);
+				if (nDotL > 0.0f) {
+					internalFragColor += matDiffuse * nDotL * lightDiffuseOmni[index];
+					// Specular term:
+					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+					float nDotHV = dot(_normal, halfVector);
+					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecularOmni[index];
+				}
+				return internalFragColor;
+			}
+
+			vec3 CalcSpotLight(int index)
+			{
+				vec3 internalFragColor = matEmission + matAmbient * lightAmbientSpot[index];
+				// Diffuse term:
+				vec3 _normal = normalize(normal);
+				vec3 lightDir = normalize(lightPosSpot[index] - fragPos.xyz);
+				float nDotL = dot(lightDir, _normal);
+				if (nDotL > 0.0f) {
+					internalFragColor += matDiffuse * nDotL * lightDiffuseSpot[index];
+					// Specular term:
+					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+					float nDotHV = dot(_normal, halfVector);
+					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecularSpot[index];
+				}
+				return internalFragColor;
+			} 
+
+			void main(void)
+			{
+				// Texture element:
+				vec4 texel = texture(texSampler, texCoord);
+
+				vec3 result;	
+				for(int i = 0; i < MAX_LIGHT; i++){
+					result += CalcOmniLight(i);
+					//result += CalcSpotLight(i);
+				}
+
+				fragOutput = texel*vec4(result, 1.0f);
+
+			}
+		)";
 
 
 

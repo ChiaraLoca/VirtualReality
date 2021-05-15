@@ -7,7 +7,7 @@
 #include <GL/freeglut.h>
 #include <iostream>
 
-int lightCounter{ 0 };
+//int lightCounter{ 0 };
 
 /**
  * @brief Construct a new Light object 
@@ -20,9 +20,9 @@ int lightCounter{ 0 };
  * @param specular of the light 
  */
 LIB_API Light::Light(std::string name, glm::vec4 position, glm::mat4 matrix,
-	glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular)
+	glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular, LightType lightType)
 	: Node{ name,matrix,ObjectType::Light }, _position{ position },
-	_ambient{ ambient }, _diffuse{ diffuse }, _specular{ specular },_valueLight{lightCounter++}
+	_ambient{ ambient }, _diffuse{ diffuse }, _specular{ specular }, _lightType{ lightType }
 {
 	//glEnable(_valueLight);
 }
@@ -31,7 +31,8 @@ LIB_API Light::Light(std::string name, glm::vec4 position, glm::mat4 matrix,
  * @brief Destruct an Light object
  * 
  */
-LIB_API Light::~Light()
+LIB_API
+Light::~Light()
 {
 	//glDisable(_valueLight);
 	//CounterLight::freeValue(_valueLight);
@@ -71,5 +72,5 @@ void LIB_API Light::render()
 
 void Light::resetLight()
 {
-	lightCounter = 0;
+//	lightCounter = 0;
 }
