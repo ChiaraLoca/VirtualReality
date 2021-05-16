@@ -50,6 +50,11 @@ int UtilRender::getParamLocation(std::string name)
 	 glUniform3fv(param, sizeVec, (float *)vect);
  }
 
+ void UtilRender::setFloatArray(int param, float vect[], int sizeVec)
+ {
+	 glUniform3fv(param, sizeVec, (float*) vect);
+ }
+
  void UtilRender::bind(int location, const char* attribName)
 {
 	glBindAttribLocation(glId, location, attribName);

@@ -37,6 +37,7 @@ bool LIB_API  RenderList::removeAll() {
 	_map.clear();
 	Light::resetLight();
 	CounterLight::omniLight.clear();
+	CounterLight::spotLight.clear();
 	return true;
 	
 }
@@ -56,6 +57,8 @@ void RenderList::render() {
 	}
 
 	CounterLight::omniLight.render();
+	CounterLight::spotLight.render();
+
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {
 		i->first->render();

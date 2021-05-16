@@ -433,10 +433,13 @@ public:
 			uniform vec3 lightSpecularOmni[MAX_LIGHT];
 
 			// Define vector for spotLight
+			uniform float lightCutoffSpot[MAX_LIGHT];
+			uniform vec3 lightDirectionSpot[MAX_LIGHT];
+
 			uniform vec3 lightPosSpot[MAX_LIGHT]; // In eye coordinates
 			uniform vec3 lightAmbientSpot[MAX_LIGHT];
 			uniform vec3 lightDiffuseSpot[MAX_LIGHT];
-			uniform vec3 lightSpecularSpot[MAX_LIGHT];
+			uniform vec3 lightSpecularSpot[MAX_LIGHT];	
 
 			// Texture mapping:
 			layout(binding = 0) uniform sampler2D texSampler;
@@ -483,7 +486,10 @@ public:
 				vec3 result;	
 				for(int i = 0; i < MAX_LIGHT; i++){
 					result += CalcOmniLight(i);
-					//result += CalcSpotLight(i);
+					result += CalcSpotLight(i);
+					float z = lightCutoffSpot[i];
+					vec3 x = lightDirectionSpot[i];
+
 				}
 
 				fragOutput = texel*vec4(result, 1.0f);

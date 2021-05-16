@@ -61,7 +61,8 @@ void CounterLight::freeValue(int valueToFree)
 }*/
 
 #include "OmniLight.h"
-std::vector<Light*> _listLight;
+#include "SpotLight.h"
+
 
 void CounterLight::add(Light* light)
 {
@@ -69,6 +70,8 @@ void CounterLight::add(Light* light)
 		return;
 	if (OmniLight* omni = dynamic_cast<OmniLight*>(light))
 		_listLight.push_back(omni);
+	if (SpotLight* spot = dynamic_cast<SpotLight*>(light))
+		_listLight.push_back(spot);
 }
 
 void CounterLight::omniSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient, 
@@ -90,17 +93,34 @@ void CounterLight::omniSetProgramValue(std::vector<glm::vec3> position, std::vec
 void CounterLight::spotSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
 	std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular) {
 
-	auto ambPos = Program::program.getParamLocation("lightAmbient");
+	std::vector<float> cutoff(Program::maxLight - _listLight.size(), 0.0f);
+	std::vector<glm::vec3> direction(Program::maxLight - _listLight.size(), glm::vec3(0.0));
+
+
+	for (auto l : _listLight) {
+		if (SpotLight* spot = dynamic_cast<SpotLight*>(l)) {
+			cutoff.push_back(spot->getCutoff());
+			direction.push_back(spot->getDirection());
+		}
+	}
+
+	auto ambPos = Program::program.getParamLocation("lightAmbientSpot");
 	Program::program.setVec3Array(ambPos, ambient.data(), sizeof(ambient.data()));
 
-	auto diffPos = Program::program.getParamLocation("lightDiffuse");
+	auto diffPos = Program::program.getParamLocation("lightDiffuseSpot");
 	Program::program.setVec3Array(diffPos, diffuse.data(), sizeof(diffuse.data()));
 
-	auto specPos = Program::program.getParamLocation("lightSpecular");
+	auto specPos = Program::program.getParamLocation("lightSpecularSpot");
 	Program::program.setVec3Array(specPos, specular.data(), sizeof(specular.data()));
 
-	auto lightPos = Program::program.getParamLocation("lightPos");
+	auto lightPos = Program::program.getParamLocation("lightPosSpot");
 	Program::program.setVec3Array(lightPos, position.data(), sizeof(position.data()));
+
+	auto cutPos = Program::program.getParamLocation("lightCutoffSpot");
+	Program::program.setFloatArray(cutPos, cutoff.data(), sizeof(cutoff.data()));
+
+	auto dirPos = Program::program.getParamLocation("lightDirectionSpot");
+	Program::program.setVec3Array(dirPos, direction.data(), sizeof(direction.data()));
 }
 
 
@@ -127,7 +147,6 @@ void CounterLight::render()
 	case LightType::SPOT:
 		spotSetProgramValue(position, ambient, diffuse, specular);
 		break;
-
 	}
 
 }

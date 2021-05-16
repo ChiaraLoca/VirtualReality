@@ -21,13 +21,14 @@ private:
 	int getFreeLightValue();
 	void freeValue(int valueToFree);
 
-	static void omniSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
+	void omniSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
 		std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular);
-	static void spotSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
+	void spotSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
 		std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular);
 
 	std::map<int, bool> valueUsed{};
 	bool isCounterInitialize = false;
+	std::vector<Light*> _listLight;
 
 	LightType _lightType;
 

@@ -28,6 +28,9 @@ public:
 
 	void setVec3Array(int param, glm::vec3 vect[], int sizeVec);
 
+	void setFloatArray(int param, float vect[], int sizeVec);
+
+
 	void bind(int location, const char* attribName);
 
 public :
