@@ -17,7 +17,7 @@ public:
 
 	//void setMatrix(int param, const glm::mat3& mat);
 
-	void setMatrix3(int param, const glm::mat3& mat);
+	void setMatrix(int param, const glm::mat3& mat);
 	
 	void setFloat(int param, float value);
 

@@ -88,6 +88,9 @@ int LIB_API GraphicsEngine::initialize()
 
     _fboContainer = new FboContainer(OVRManager::ovrManager.getfboSizeX(), OVRManager::ovrManager.getfboSizeY());
     
+    // Load cubemap:
+    _skybox = new Skybox("Skybox");
+    _skybox->buildCubemap();
     
 
     glViewport(0, 0, _dimx, _dimy);
@@ -226,6 +229,7 @@ void GraphicsEngine::render()
     RenderList::renderList.removeAll();
     
     RenderList::renderList.setAllMatrix(_root);
+    RenderList::renderList.setSkybox(_skybox);
    
     OVRManager::ovrManager.update();
    
@@ -256,7 +260,7 @@ void GraphicsEngine::render()
         Program::programPPL.setMatrix(Program::programPPL.projLoc, ovrProjMat);
         Program::programPPL.setMatrix(Program::programPPL.mvLoc, ovrModelViewMat);
         glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(ovrModelViewMat));
-        Program::programPPL.setMatrix3(Program::programPPL.normLoc, normalMatrix);
+        Program::programPPL.setMatrix(Program::programPPL.normLoc, normalMatrix);
         
         glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(00.0f, 10.0f, -35.0f));
         
@@ -274,6 +278,9 @@ void GraphicsEngine::render()
        
         RenderList::renderList.render();
         
+        
+        
+
         //RenderList::renderList.removeAll();
         
         OVRManager::ovrManager.pass(curEye, _fboContainer->getFboTexId(curEye));
@@ -473,6 +480,7 @@ LIB_API void GraphicsEngine::initShaders()
 {
     setStandardShader();
     setPassthroughShader();
+    setSkyboxShader();
 
 }
 LIB_API void GraphicsEngine::setStandardShader()
@@ -531,3 +539,22 @@ void GraphicsEngine::initFbo()
 
 
 
+LIB_API void GraphicsEngine::setSkyboxShader()
+{
+    // Build passthrough shader:
+    Shader* skyboxVs = new Shader();
+    skyboxVs->loadFromMemory(Shader::TYPE_VERTEX, vertShaderSkybox);
+
+    Shader* skyboxFs = new Shader();
+    skyboxFs->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderSkybox);
+
+
+    Program::programSB.build(skyboxVs, skyboxFs);
+    Program::programSB.render();
+
+    // Bind params:
+    Program::programSB.bind(0, "in_Position");
+
+    Program::programSB.projLoc = Program::programSB.getParamLocation("projection");
+    Program::programSB.mvLoc = Program::programSB.getParamLocation("modelview");
+}

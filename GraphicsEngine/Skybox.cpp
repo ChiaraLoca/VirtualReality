@@ -77,7 +77,7 @@ void Skybox::drawSkyboxCube() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeFaces), cubeFaces, GL_STATIC_DRAW); // TODO: verifica
 }
 
-void Skybox::render()
+void Skybox::render(glm::mat4 ef, glm::mat4 eperspective)
 {
     glBindVertexArray(_vao);
 
@@ -89,17 +89,23 @@ void Skybox::render()
 
     // TODO: aggiungere la skybox alla lista
     // TODO: mettere matrice giusta
-    glm::mat4 perspective = glm::mat4(1.0f);
-    perspective = glm::perspective(glm::radians(45.0f), (float)1024 / (float)512, 1.0f, 1024.0f);
+    /* glm::mat4 perspective = glm::mat4(1.0f);
+    perspective = glm::perspective(glm::radians(45.0f), (float)1024 / (float)512, 1.0f, 1024.0f); */
+
+    Program::programSB.projLoc = Program::programSB.getParamLocation("projection");
+    Program::programSB.mvLoc = Program::programSB.getParamLocation("modelview");
+
+    printf("projLoc: %d, mvLoc: %d -------------------------------------------------------------------------------------------------------\n", Program::programSB.projLoc, Program::programSB.mvLoc);
 
     // Set model matrix as current OpenGL matrix: 
     Program::programSB.render();
-    Program::programSB.setMatrix(Program::programSB.mvLoc, f);
-    //Program::program.setMatrix(Program::program.projLoc, perspective);
+    Program::programSB.setMatrix(Program::programSB.mvLoc, ef);//f
+    Program::programSB.setMatrix(Program::programSB.projLoc, eperspective);//perspective
+    //Program::programSB.render();
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeFaces) / sizeof(unsigned short), GL_UNSIGNED_SHORT, nullptr);
 
-    angleX += 0.5f;
+    //angleX += 0.5f;
 }
 
 void Skybox::buildCubemap()

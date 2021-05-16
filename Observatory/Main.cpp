@@ -49,21 +49,12 @@ bool showOrthoText = true;
 
 void displayCall() {
 
-    std::cout << "_graphicsEngine.clear start" << std::endl;
-    _graphicsEngine.clear();
-    std::cout << "_graphicsEngine.clear end" << std::endl;
-    std::cout << "_graphicsEngine.setOption start" << std::endl;
+    _graphicsEngine.clear(); 
     _graphicsEngine.setOption();
-    std::cout << "_graphicsEngine.setOption end" << std::endl;
-    std::cout << "_graphicsEngine.render start" << std::endl;
     _graphicsEngine.render();
-    std::cout << "_graphicsEngine.render end" << std::endl;
-    std::cout << "_graphicsEngine.swapBuffer start" << std::endl;
     _graphicsEngine.swapBuffer();
-    std::cout << "_graphicsEngine.swapBuffer end" << std::endl;
-    std::cout << "_graphicsEngine.refresh start" << std::endl;
     _graphicsEngine.refresh();
-    std::cout << "_graphicsEngine.refresh end" << std::endl;
+    
 }
 
 void reshapeCall(int width, int height)

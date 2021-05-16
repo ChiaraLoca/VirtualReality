@@ -7,7 +7,7 @@ class Skybox :
 public:
     Skybox(std::string name);
     void drawSkyboxCube();
-    void render();
+    void render(glm::mat4 ef, glm::mat4 eperspective);
     void buildCubemap();
 private:
     // Cube VBO:

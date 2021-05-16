@@ -3,6 +3,7 @@
 #include "Node.h"
 #include "ListCamera.h"
 #include "CounterLight.h"
+#include "Skybox.h"
 
 
 #include <map>
@@ -14,6 +15,7 @@ private:
 	ListCamera _listCamera;
 	OrthoCamera* _ortho;
 	bool _showOrthoCamera = true;
+	Skybox* _skybox;
 
 public:
 	RenderList():Object{ObjectType::List,"lista"} {};
@@ -25,6 +27,7 @@ public:
 	void setCurrentCamera(int i);
 	Camera* getCurrentCamera();
 	void setOrthoCamera(OrthoCamera* o);
+	void setSkybox(Skybox* skybox);
 	void setShowOrthoCamera(bool _showOrthoCamera);
 	
 	static RenderList renderList; // contains all the elements of the scene

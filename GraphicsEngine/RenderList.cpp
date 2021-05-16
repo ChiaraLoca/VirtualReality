@@ -47,6 +47,9 @@ void RenderList::render() {
 	}
 
 	CounterLight::render();
+	
+	_skybox->render(current->_matrix,current->getInverseMatrix());
+	//_skybox->render();
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {
 		i->first->render();
@@ -95,6 +98,11 @@ Camera* RenderList::getCurrentCamera()
 void RenderList::setOrthoCamera(OrthoCamera* o)
 {
 	_ortho = o;
+}
+
+void RenderList::setSkybox(Skybox* skybox)
+{
+	_skybox = skybox;
 }
 
 
