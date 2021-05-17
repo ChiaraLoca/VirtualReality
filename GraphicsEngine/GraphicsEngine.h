@@ -463,25 +463,23 @@ public:
 
 			vec3 CalcSpotLight(int index)
 			{
-				lightCutoffSpot[0];
-				lightDirectionSpot[0];
-				
-				vec3 internalFragColor = matEmission + matAmbient * lightAmbientSpot[index];
-
 				// Diffuse term:
 				vec3 _normal = normalize(normal);
 				vec3 lightDir = normalize(lightPosSpot[index] - fragPos.xyz);
 				float nDotL = dot(lightDir, _normal);
-				if (nDotL > 0.0f) {
-					internalFragColor += matDiffuse * nDotL * lightDiffuseSpot[index];
-					// Specular term:
-					vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
-					float nDotHV = dot(_normal, halfVector);
-					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecularSpot[index];
-				}
 
-				//internalFragColor = internalFragColor * (1.0 - (1.0 - SpotFactor) * 1.0/(1.0 - lightCutoffSpot[index]));
- 
+				vec3 internalFragColor = matEmission + matAmbient * lightAmbientSpot[index];
+				float theta = dot(lightDir, normalize(lightDirectionSpot[index]));
+    
+				if(theta > lightCutoffSpot[index]) {       
+					if (nDotL > 0.0f) {
+						internalFragColor += matDiffuse * nDotL * lightDiffuseSpot[index];
+						// Specular term:
+						vec3 halfVector = normalize(lightDir + normalize(-fragPos.xyz));
+						float nDotHV = dot(_normal, halfVector);
+						internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecularSpot[index];
+					}
+				}
 				return internalFragColor;
 			}
 

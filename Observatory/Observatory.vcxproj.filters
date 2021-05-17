@@ -33,4 +33,59 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\OVOResources\default_texture.jpg">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\grass.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\legnoChiaro.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\mattoniScuri.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\Pave_small_bump.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\portaLegno.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\tapparelle.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\tegole.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+    <Image Include="..\OVOResources\vetro.dds">
+      <Filter>File di risorse</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\OVOResources\GiadaLuci.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+    <None Include="..\OVOResources\MultipleOmni.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+    <None Include="..\OVOResources\ObservatoryScene.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+    <None Include="..\OVOResources\ObservatorySceneDef.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+    <None Include="..\OVOResources\OmniSpot.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+    <None Include="..\OVOResources\ScenaStupida.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+    <None Include="..\OVOResources\SingolaOmni.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+    <None Include="..\OVOResources\Spot.OVO">
+      <Filter>File di risorse</Filter>
+    </None>
+  </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #include "CounterLight.h"
 #include "Program.h"
 
+
 #include "GL/freeglut.h"
 
 /*Static variable*/
@@ -99,7 +100,7 @@ void CounterLight::spotSetProgramValue(std::vector<glm::vec3> position, std::vec
 
 	for (auto l : _listLight) {
 		if (SpotLight* spot = dynamic_cast<SpotLight*>(l)) {
-			cutoff.push_back(spot->getCutoff());
+			cutoff.push_back(glm::radians(spot->getCutoff()));
 			direction.push_back(spot->getDirection());
 		}
 	}
@@ -123,7 +124,6 @@ void CounterLight::spotSetProgramValue(std::vector<glm::vec3> position, std::vec
 	Program::program.setVec3Array(dirPos, direction.data(), sizeof(direction.data()));
 }
 
-
 void CounterLight::render()
 {
 	std::vector<glm::vec3> position(Program::maxLight - _listLight.size(), glm::vec3(0.0));
@@ -138,6 +138,7 @@ void CounterLight::render()
 		diffuse.push_back(l->getDiffuse());
 		specular.push_back(l->getSpecular());
 	}
+
 
 	switch (_lightType)
 	{

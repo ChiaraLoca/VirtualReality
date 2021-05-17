@@ -153,6 +153,27 @@
     <ClInclude Include="UtilClient.h" />
     <ClInclude Include="Test.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\OVOResources\default_texture.jpg" />
+    <Image Include="..\OVOResources\grass.dds" />
+    <Image Include="..\OVOResources\legnoChiaro.dds" />
+    <Image Include="..\OVOResources\mattoniScuri.dds" />
+    <Image Include="..\OVOResources\Pave_small_bump.dds" />
+    <Image Include="..\OVOResources\portaLegno.dds" />
+    <Image Include="..\OVOResources\tapparelle.dds" />
+    <Image Include="..\OVOResources\tegole.dds" />
+    <Image Include="..\OVOResources\vetro.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\OVOResources\GiadaLuci.OVO" />
+    <None Include="..\OVOResources\MultipleOmni.OVO" />
+    <None Include="..\OVOResources\ObservatoryScene.OVO" />
+    <None Include="..\OVOResources\ObservatorySceneDef.OVO" />
+    <None Include="..\OVOResources\OmniSpot.OVO" />
+    <None Include="..\OVOResources\ScenaStupida.OVO" />
+    <None Include="..\OVOResources\SingolaOmni.OVO" />
+    <None Include="..\OVOResources\Spot.OVO" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

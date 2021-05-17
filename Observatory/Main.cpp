@@ -85,7 +85,7 @@ bool doShowLaser(bool show) {
 void keyboardCallback(unsigned char key, int mouseX, int mouseY)
 {
     Node* dome = _graphicsEngine.getNodeByName("CupolaOsservatorio");
-    Node* dynamicLight = _graphicsEngine.getNodeByName("LuceDinamica");
+    Node* dynamicLight = _graphicsEngine.getNodeByName("Fspot001");
 
     switch (key)
     {
@@ -251,7 +251,7 @@ void observatoryScene()
     std::string s{ util.buildContext("../OVOResources","/") };
 
     OVOReader reader{ s };
-    root = reader.load("Spot.OVO");
+    root = reader.load("OmniSpot.OVO");
 
     _graphicsEngine.setRoot(root);
 
