@@ -36,6 +36,11 @@ void RenderList::setShowOrthoCamera(bool showOrthoCamera) {
 	_showOrthoCamera = showOrthoCamera;
 }
 
+void RenderList::setSKyboxMatrix(glm::mat4 m)
+{
+	_skybox->setProj(m);
+}
+
 void RenderList::render() {
 
 	PerspectiveCamera* current = (PerspectiveCamera * )_listCamera.getCurrentCamera();
@@ -48,7 +53,7 @@ void RenderList::render() {
 
 	CounterLight::render();
 	
-	_skybox->render(current->_matrix,current->getInverseMatrix());
+	_skybox->render(current->_matrix,_skybox->_proj);
 	//_skybox->render();
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {

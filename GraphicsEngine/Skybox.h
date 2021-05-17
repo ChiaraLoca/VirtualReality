@@ -9,6 +9,8 @@ public:
     void drawSkyboxCube();
     void render(glm::mat4 ef, glm::mat4 eperspective);
     void buildCubemap();
+    glm::mat4 _proj;
+    void setProj(glm::mat4 proj);
 private:
     // Cube VBO:
     unsigned int _vao; // fix

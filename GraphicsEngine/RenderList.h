@@ -29,6 +29,7 @@ public:
 	void setOrthoCamera(OrthoCamera* o);
 	void setSkybox(Skybox* skybox);
 	void setShowOrthoCamera(bool _showOrthoCamera);
+	void setSKyboxMatrix(glm::mat4 m);
 	
 	static RenderList renderList; // contains all the elements of the scene
 };

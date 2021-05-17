@@ -97,6 +97,8 @@ void Skybox::render(glm::mat4 ef, glm::mat4 eperspective)
 
     printf("projLoc: %d, mvLoc: %d -------------------------------------------------------------------------------------------------------\n", Program::programSB.projLoc, Program::programSB.mvLoc);
 
+    ef[3] = glm::vec4( 0,0,0,1 );
+
     // Set model matrix as current OpenGL matrix: 
     Program::programSB.render();
     Program::programSB.setMatrix(Program::programSB.mvLoc, ef);//f
@@ -147,4 +149,9 @@ void Skybox::buildCubemap()
         // Free resources:
         FreeImage_Unload(fBitmap);
     }
+}
+
+void Skybox::setProj(glm::mat4 proj)
+{
+    _proj = proj;
 }
