@@ -52,7 +52,7 @@ int UtilRender::getParamLocation(std::string name)
 
  void UtilRender::setFloatArray(int param, float vect[], int sizeVec)
  {
-	 glUniform3fv(param, sizeVec, (float*) vect);
+	 glUniform1fv(param, sizeVec, (float*) vect);
  }
 
  void UtilRender::bind(int location, const char* attribName)

@@ -463,7 +463,11 @@ public:
 
 			vec3 CalcSpotLight(int index)
 			{
+				lightCutoffSpot[0];
+				lightDirectionSpot[0];
+				
 				vec3 internalFragColor = matEmission + matAmbient * lightAmbientSpot[index];
+
 				// Diffuse term:
 				vec3 _normal = normalize(normal);
 				vec3 lightDir = normalize(lightPosSpot[index] - fragPos.xyz);
@@ -475,8 +479,11 @@ public:
 					float nDotHV = dot(_normal, halfVector);
 					internalFragColor += matSpecular * pow(nDotHV, matShininess) * lightSpecularSpot[index];
 				}
+
+				//internalFragColor = internalFragColor * (1.0 - (1.0 - SpotFactor) * 1.0/(1.0 - lightCutoffSpot[index]));
+ 
 				return internalFragColor;
-			} 
+			}
 
 			void main(void)
 			{
@@ -487,9 +494,6 @@ public:
 				for(int i = 0; i < MAX_LIGHT; i++){
 					result += CalcOmniLight(i);
 					result += CalcSpotLight(i);
-					float z = lightCutoffSpot[i];
-					vec3 x = lightDirectionSpot[i];
-
 				}
 
 				fragOutput = texel*vec4(result, 1.0f);
