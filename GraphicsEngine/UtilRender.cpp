@@ -19,6 +19,11 @@ int UtilRender::getParamLocation(std::string name)
 
 }
 
+void UtilRender::setFloatArray(int param, float vect[], int sizeVec)
+{
+	glUniform1fv(param, sizeVec, (float*)vect);
+}
+
 void UtilRender::setMatrix(int param, const glm::mat4& mat)
 {
 	glUniformMatrix4fv(param, 1, GL_FALSE, glm::value_ptr(mat));

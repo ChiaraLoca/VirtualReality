@@ -33,13 +33,13 @@ int LIB_API GraphicsEngine::initialize()
     //Initialize OpenGL_4.4 context
     glutInitContextVersion(4, 4);
     glutInitContextProfile(GLUT_CORE_PROFILE);     //or glutInitContextProfile(GLUT_COMPABILITY_PROFILE);
-    glutInitContextFlags(GLUT_DEBUG);             
+    glutInitContextFlags(GLUT_DEBUG);
 
     // Create window
     glutInitWindowPosition(_posx, _posy);
     glutInitWindowSize(_dimx, _dimy);
 
-    
+
 
     // Set some optional flags:
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
@@ -71,23 +71,29 @@ int LIB_API GraphicsEngine::initialize()
     //glEnable(GL_LIGHTING);
     //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f); // for a most accurate computation of the specular highlights
 
-   
+
 
     //Initialize shaders
     initShaders();
 
     //Initalize FBOs
     //initFbo();
-    if (OVRManager::ovrManager.init() < 0)
-    {
-        return -3;
+    if (_stereoscopicRender){
+        if (OVRManager::ovrManager.init() < 0)
+        {
+            //return -3;
+            _stereoscopicRender = false;
+            _fboContainer = new FboContainer(_dimx, _dimy);
+        }
+        else {
+            OVRManager::ovrManager.setFboSize();
+            _fboContainer = new FboContainer(OVRManager::ovrManager.getfboSizeX(), OVRManager::ovrManager.getfboSizeY());
+        }
     }
-
-    OVRManager::ovrManager.setFboSize();
-
-
-    _fboContainer = new FboContainer(OVRManager::ovrManager.getfboSizeX(), OVRManager::ovrManager.getfboSizeY());
-    
+    else
+    {
+        _fboContainer = new FboContainer(_dimx,_dimy);
+    }
     // Load cubemap:
     _skybox = new Skybox("Skybox");
     _skybox->buildCubemap();
@@ -95,6 +101,8 @@ int LIB_API GraphicsEngine::initialize()
 
     glViewport(0, 0, _dimx, _dimy);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+    enableWireframe(false);
 
     return 0;
 }
@@ -226,79 +234,120 @@ void GraphicsEngine::resize()
  */
 void GraphicsEngine::render()
 {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    RenderList::renderList.removeAll();
     
+    if (_stereoscopicRender) {
+        stereoscopicRender(); 
+    }
+    else {
+        
+        standardRender();
+    }
+}
+
+void GraphicsEngine::standardRender()
+{
+    RenderList::renderList.removeAll();
+    RenderList::renderList.setAllMatrix(_root);
+    for (int c = 0; c < 2; c++) // fix hardcode
+    {
+        // Render into this FBO:
+        _fboContainer->get(c)->render();
+
+        // Clear the FBO content:
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        setStandardShader();
+        RenderList::renderList.render();
+ 
+    }
+
+    _fboContainer->disable();
+    glViewport(0, 0, _dimx, _dimy);
+    setPassthroughShader();
+    _fboContainer->render();
+
+    // Clear the FBO content:
+    /*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    setSkyboxShader();
+    _skybox->render();
+    glViewport(0, 0, _dimx, _dimy);*/
+}
+void GraphicsEngine::stereoscopicRender()
+{
+    RenderList::renderList.removeAll();
+
     RenderList::renderList.setAllMatrix(_root);
     RenderList::renderList.setSkybox(_skybox);
-   
+
     OVRManager::ovrManager.update();
-   
+
     glm::mat4 headPos = OVRManager::ovrManager.getModelviewMatrix();
-    
+
     for (int curEye = 0; curEye < OpenVR::EYE_LAST; curEye++)
     {
-        
+
         glm::mat4 projMat = OVRManager::ovrManager.getProjMatrix(curEye);
-       
+
         glm::mat4 eye2Head = OVRManager::ovrManager.getEye2HeadMatrix(curEye);
-        
+
 
         // Update camera projection matrix:
         glm::mat4 ovrProjMat = projMat * glm::inverse(eye2Head);
-        #ifdef APP_VERBOSE   
-            std::cout << "Eye " << curEye << " proj matrix: " << glm::to_string(ovrProjMat) << std::endl;
-        #endif
+#ifdef APP_VERBOSE   
+        std::cout << "Eye " << curEye << " proj matrix: " << glm::to_string(ovrProjMat) << std::endl;
+#endif
 
         // Update camera modelview matrix:
         glm::mat4 ovrModelViewMat = glm::inverse(headPos); // Inverted because this is the camera matrix
-        #ifdef APP_VERBOSE   
-            std::cout << "Eye " << curEye << " modelview matrix: " << glm::to_string(ovrModelViewMat) << std::endl;
-        #endif
+#ifdef APP_VERBOSE   
+        std::cout << "Eye " << curEye << " modelview matrix: " << glm::to_string(ovrModelViewMat) << std::endl;
+#endif
 
-       
+
         Program::programPPL.render();
         Program::programPPL.setMatrix(Program::programPPL.projLoc, ovrProjMat);
         Program::programPPL.setMatrix(Program::programPPL.mvLoc, ovrModelViewMat);
         glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(ovrModelViewMat));
         Program::programPPL.setMatrix(Program::programPPL.normLoc, normalMatrix);
-        
+
         glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(00.0f, 10.0f, -35.0f));
-        
-       /*m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
-       m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
-       m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-45), glm::vec3(0.0f, 1.0f, 0.0f));*/
-        getCurrentCamera()->setMatrix( m * headPos);
+
+        /*m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
+        m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
+        m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-45), glm::vec3(0.0f, 1.0f, 0.0f));*/
+
+        getCurrentCamera()->setMatrix(m * headPos);
+
         RenderList::renderList.setSKyboxMatrix(projMat);
-       
+
         //RenderList::renderList.setAllMatrix(_root);
-       
+
         // Render into this FBO:
         _fboContainer->get(curEye)->render();
         // Clear the FBO content:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-       
+
         RenderList::renderList.render();
-        
-        
-        
+
+
+
 
         //RenderList::renderList.removeAll();
-        
+
         OVRManager::ovrManager.pass(curEye, _fboContainer->getFboTexId(curEye));
-    }
-    
+}
+
     OVRManager::ovrManager.render();
-    
+
     _fboContainer->disable();
-   
+
     glViewport(0, 0, _dimx, _dimy);
-    
-    
-    
-    
+
+
+
+
     _fboContainer->render();
-    
 }
 
 /**
@@ -491,7 +540,7 @@ LIB_API void GraphicsEngine::setStandardShader()
     Shader* fragmentShader = new Shader();
 
     vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShaderTexture);
-    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderTextureMultiLight);
+    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderSpot);
 
     Program::programPPL.build(vertexShader, fragmentShader);
     Program::programPPL.render();
@@ -559,4 +608,16 @@ LIB_API void GraphicsEngine::setSkyboxShader()
 
     Program::programSB.projLoc = Program::programSB.getParamLocation("projection");
     Program::programSB.mvLoc = Program::programSB.getParamLocation("modelview");
+}
+LIB_API void GraphicsEngine::enableWireframe(bool b)
+{
+    if(b)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void GraphicsEngine::enableStereoscopicRender(bool b)
+{
+    _stereoscopicRender = b;
 }

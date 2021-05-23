@@ -1,16 +1,19 @@
 #include "CounterLight.h"
 #include "Program.h"
 
-#include "GL/freeglut.h"
-#include <map>
 
-/*Static variable*/
-std::map<int, bool> valueUsed;
-bool isCounterInitialize = false;
+#include "GL/freeglut.h"
+
+// Static variable /
+CounterLight LIB_API CounterLight::omniLight{ LightType::OMNI };
+CounterLight LIB_API CounterLight::spotLight{ LightType::SPOT };
+
+
+
 
 /**
  * @brief Control the map valueUsed and return the first free value that is free
- * 
+ *
  * @return the position of the first free value or 0 if all position are taken
  */
 int CounterLight::getFreeLightValue()
@@ -36,7 +39,7 @@ int CounterLight::getFreeLightValue()
 /**
  * @brief Free a value to use in the map
  * 	This method must be called before destroing a light
- * 
+ *
  * @param valueToFree value of the light that we must free
  */
 void CounterLight::freeValue(int valueToFree)
@@ -50,16 +53,17 @@ void CounterLight::freeValue(int valueToFree)
 }
 /**
  * @brief Reset the map by cleaning it
- * 
+ *
  */
-/*void CounterLight::clear()
-{
-	valueUsed.clear();
-	isCounterInitialize = false;
-}*/
+ /*void CounterLight::clear()
+ {
+	 valueUsed.clear();
+	 isCounterInitialize = false;
+ }*/
 
 #include "OmniLight.h"
-std::vector<Light*> _listLight;
+#include "SpotLight.h"
+
 
 void CounterLight::add(Light* light)
 {
@@ -67,11 +71,62 @@ void CounterLight::add(Light* light)
 		return;
 	if (OmniLight* omni = dynamic_cast<OmniLight*>(light))
 		_listLight.push_back(omni);
+	if (SpotLight* spot = dynamic_cast<SpotLight*>(light))
+		_listLight.push_back(spot);
+}
+
+void CounterLight::omniSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
+	std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular) {
+
+	auto ambPos = Program::programPPL.getParamLocation("lightAmbientOmni");
+	Program::programPPL.setVec3Array(ambPos, ambient.data(), sizeof(ambient.data()));
+
+	auto diffPos = Program::programPPL.getParamLocation("lightDiffuseOmni");
+	Program::programPPL.setVec3Array(diffPos, diffuse.data(), sizeof(diffuse.data()));
+
+	auto specPos = Program::programPPL.getParamLocation("lightSpecularOmni");
+	Program::programPPL.setVec3Array(specPos, specular.data(), sizeof(specular.data()));
+
+	auto lightPos = Program::programPPL.getParamLocation("lightPosOmni");
+	Program::programPPL.setVec3Array(lightPos, position.data(), sizeof(position.data()));
+}
+
+void CounterLight::spotSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
+	std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular) {
+
+	std::vector<float> cutoff(Program::maxLight - _listLight.size(), 0.0f);
+	std::vector<glm::vec3> direction(Program::maxLight - _listLight.size(), glm::vec3(0.0));
+
+
+	for (auto l : _listLight) {
+		if (SpotLight* spot = dynamic_cast<SpotLight*>(l)) {
+			cutoff.push_back(glm::radians(spot->getCutoff()));
+			direction.push_back(spot->getDirection());
+		}
+	}
+
+	auto ambPos = Program::programPPL.getParamLocation("lightAmbientSpot");
+	Program::programPPL.setVec3Array(ambPos, ambient.data(), sizeof(ambient.data()));
+
+	auto diffPos = Program::programPPL.getParamLocation("lightDiffuseSpot");
+	Program::programPPL.setVec3Array(diffPos, diffuse.data(), sizeof(diffuse.data()));
+
+	auto specPos = Program::programPPL.getParamLocation("lightSpecularSpot");
+	Program::programPPL.setVec3Array(specPos, specular.data(), sizeof(specular.data()));
+
+	auto lightPos = Program::programPPL.getParamLocation("lightPosSpot");
+	Program::programPPL.setVec3Array(lightPos, position.data(), sizeof(position.data()));
+
+	auto cutPos = Program::programPPL.getParamLocation("lightCutoffSpot");
+	Program::programPPL.setFloatArray(cutPos, cutoff.data(), sizeof(cutoff.data()));
+
+	auto dirPos = Program::programPPL.getParamLocation("lightDirectionSpot");
+	Program::programPPL.setVec3Array(dirPos, direction.data(), sizeof(direction.data()));
 }
 
 void CounterLight::render()
 {
-	std::vector<glm::vec3> position(Program::maxLight - _listLight.size(),glm::vec3(0.0));
+	std::vector<glm::vec3> position(Program::maxLight - _listLight.size(), glm::vec3(0.0));
 	std::vector<glm::vec3> ambient(Program::maxLight - _listLight.size(), glm::vec3(0.0));
 	std::vector<glm::vec3> diffuse(Program::maxLight - _listLight.size(), glm::vec3(0.0));
 	std::vector<glm::vec3> specular(Program::maxLight - _listLight.size(), glm::vec3(0.0));
@@ -83,18 +138,18 @@ void CounterLight::render()
 		diffuse.push_back(l->getDiffuse());
 		specular.push_back(l->getSpecular());
 	}
-	
-	auto ambPos = Program::programPPL.getParamLocation("lightAmbient");
-	Program::programPPL.setVec3Array(ambPos, ambient.data(), sizeof(ambient.data()));
 
-	auto diffPos = Program::programPPL.getParamLocation("lightDiffuse");
-	Program::programPPL.setVec3Array(diffPos, diffuse.data(),sizeof(diffuse.data()));
 
-	auto specPos = Program::programPPL.getParamLocation("lightSpecular");
-	Program::programPPL.setVec3Array(specPos, specular.data(), sizeof(specular.data()));
+	switch (_lightType)
+	{
+	case LightType::OMNI:
+		omniSetProgramValue(position, ambient, diffuse, specular);
+		break;
+	case LightType::SPOT:
+		spotSetProgramValue(position, ambient, diffuse, specular);
+		break;
+	}
 
-	auto lightPos = Program::programPPL.getParamLocation("lightPos");
-	Program::programPPL.setVec3Array(lightPos, position.data(), sizeof(position.data()));
 }
 
 void CounterLight::clear() {

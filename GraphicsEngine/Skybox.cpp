@@ -68,22 +68,22 @@ void Skybox::drawSkyboxCube() {
     // Load cube data into a VBO:
     glGenBuffers(1, &_cubeVboVertices);
     glBindBuffer(GL_ARRAY_BUFFER, _cubeVboVertices);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW); // TODO: verifica
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW); 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 
     glGenBuffers(1, &_cubeVboFaces);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _cubeVboFaces);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeFaces), cubeFaces, GL_STATIC_DRAW); // TODO: verifica
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeFaces), cubeFaces, GL_STATIC_DRAW); 
 }
 
 void Skybox::render(glm::mat4 ef, glm::mat4 eperspective)
 {
-    glBindVertexArray(_vao);
+    //glBindVertexArray(_vao);
 
     // Set a matrix to move our object:
     glm::mat4 f = glm::mat4(1.0f);
-    f = glm::scale(f, glm::vec3(2.0f, 2.0f, 2.0f));
+    f = glm::scale(f, glm::vec3(100.0f, 100.0f, 100.0f));
     f = glm::rotate(f, glm::radians(angleX), glm::vec3(1.0f, 0.0f, 0.0f));
     f = glm::rotate(f, glm::radians(angleY), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -98,12 +98,13 @@ void Skybox::render(glm::mat4 ef, glm::mat4 eperspective)
     printf("projLoc: %d, mvLoc: %d -------------------------------------------------------------------------------------------------------\n", Program::programSB.projLoc, Program::programSB.mvLoc);
 
     ef[3] = glm::vec4( 0,0,0,1 );
-
+ 
+    //ef = glm::scale(ef, glm::vec3(100.0f, 100.0f, 100.0f));
+    
     // Set model matrix as current OpenGL matrix: 
     Program::programSB.render();
     Program::programSB.setMatrix(Program::programSB.mvLoc, ef);//f
     Program::programSB.setMatrix(Program::programSB.projLoc, eperspective);//perspective
-    //Program::programSB.render();
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeFaces) / sizeof(unsigned short), GL_UNSIGNED_SHORT, nullptr);
 

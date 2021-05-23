@@ -8,8 +8,18 @@ RenderList LIB_API RenderList::renderList;
 bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 	
 	if (obj->getType() == ObjectType::Light) {
-		_map.insert(_map.begin(),{ (Node*)obj, mat });
-		CounterLight::add((Light *)obj);
+		_map.insert(_map.begin(), { (Node*)obj, mat });
+		Light* light = (Light*)obj;
+		switch (light->getLightType())
+		{
+		case LightType::OMNI:
+			CounterLight::omniLight.add((Light*)obj);
+			break;
+		case LightType::SPOT:
+			CounterLight::spotLight.add((Light*)obj);
+			break;
+		}
+
 	}
 	else if (obj->getType() == ObjectType::Camera)
 	{
@@ -27,7 +37,8 @@ bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 bool LIB_API  RenderList::removeAll() {
 	_map.clear();
 	Light::resetLight();
-	CounterLight::clear();
+	CounterLight::omniLight.clear();
+	CounterLight::spotLight.clear();
 	return true;
 	
 }
@@ -51,10 +62,11 @@ void RenderList::render() {
 		i->first->setFinalMatrix(current->getInverseMatrix() * i->second);
 	}
 
-	CounterLight::render();
+	CounterLight::omniLight.render();
+	CounterLight::spotLight.render();
 	
-	_skybox->render(current->_matrix,_skybox->_proj);
-	//_skybox->render();
+	//_skybox->render(current->_matrix,_skybox->_proj);
+	
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {
 		i->first->render();

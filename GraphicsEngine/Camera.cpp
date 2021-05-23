@@ -56,6 +56,7 @@ void Camera::render()
  */
 glm::mat4 Camera::getInverseMatrix() const
 {
+    
     return glm::inverse(computeWorldCoordinates());
 }
 
@@ -69,6 +70,10 @@ glm::mat4 Camera::getInitial_matrix() const
 {
     return _initial_matrix;
 }
+glm::mat4 Camera::getHead_matrix() const
+{
+    return _head;
+}
 
 /**
  * @brief Setter of the initial matrix
@@ -78,6 +83,9 @@ glm::mat4 Camera::getInitial_matrix() const
 void Camera::setInitial_matrix(glm::mat4 matrix)
 {
     _initial_matrix = matrix;
+}void Camera::setHead_matrix(glm::mat4 matrix)
+{
+    _head = matrix;
 }
 
 /**

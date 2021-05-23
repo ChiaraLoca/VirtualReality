@@ -43,6 +43,7 @@ bool hasToBeOff = false;
 
 bool isHatchOnOpen = true;
 bool showOrthoText = true;
+bool _wireFrame = true;
 
 
 
@@ -100,7 +101,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
         break;
 
         // move spot light
-        case 'a':
+        /*case 'a':
             dynamicLight->setMatrix(dynamicLight->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(lightSpeed), glm::vec3(1.0f, 0.0f, 0.0f)));
             break;
         case 'd':
@@ -111,26 +112,6 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
             break;
         case 's':
             dynamicLight->setMatrix(dynamicLight->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(-lightSpeed), glm::vec3(0.0f, 0.0f, 1.0f)));
-            break;
-
-        
-        /*case 'j':
-            _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(cameraSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
-            break;
-        case 'l':
-            _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(-cameraSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
-            break;
-        case 'i':
-            _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(cameraSpeed), glm::vec3(1.0f, 0.0f, 0.0f)));
-            break;
-        case 'k':
-            _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(-cameraSpeed), glm::vec3(1.0f, 0.0f, 0.0f)));
-            break;
-        case 'u':
-            _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -cameraSpeed)));
-            break;
-        case 'o':
-            _graphicsEngine.getCurrentCamera()->setMatrix(_graphicsEngine.getCurrentCamera()->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, cameraSpeed)));
             break;*/
 
         // rotate dome
@@ -173,6 +154,15 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
             _graphicsEngine.getCurrentCamera()->reset();
             reshapeCall(_width, _height);
             break;
+
+        case 'w':
+
+            _graphicsEngine.enableWireframe(_wireFrame);
+            _wireFrame = !_wireFrame;
+            break;
+        
+
+
     }
 
     // Force rendering refresh:
@@ -246,13 +236,14 @@ void timerCallback(int value)
 }*/
 void observatoryScene()
 {
+    _graphicsEngine.enableStereoscopicRender(true);
     if (_graphicsEngine.initialize() < 0)
         return;
     UtilClient util{};
     std::string s{ util.buildContext("../OVOResources","/") };
 
     OVOReader reader{ s };
-    root = reader.load("MultipleOmni.OVO");
+    root = reader.load("OmniSpot.OVO");
 
     _graphicsEngine.setRoot(root);
 
@@ -290,6 +281,7 @@ void observatoryScene()
     _graphicsEngine.setReshapeCallback(reshapeCall);
     _graphicsEngine.setKeyboardCallback(keyboardCallback);
     _graphicsEngine.setTimerCallback(10, timerCallback, 0);
+   
     _graphicsEngine.start();
 
     _graphicsEngine.free();
