@@ -65,17 +65,23 @@ void RenderList::render() {
 	CounterLight::omniLight.render();
 	CounterLight::spotLight.render();
 	
-	//_skybox->render(current->_matrix,_skybox->_proj);
+	glm::mat4 ef = current->_matrix;
+	//glm::mat4 ef = glm::mat4(1.0);
+	ef[3] = glm::vec4(0, 0, 0, 1);
+
+	//ef = glm::translate(glm::mat4(1.0f),glm::vec3(ef[3]));
+	ef = glm::scale(ef, glm::vec3(500.0f, 500.0f, 500.0f));
 	
+	_skybox->render(ef, _skybox->_proj);
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {
 		i->first->render();
 	}
 
-
-
 	if (_showOrthoCamera)
 		_ortho->render();
+
+	
 }
 
 void RenderList::setAllMatrix(Node* node ) {

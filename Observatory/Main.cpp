@@ -243,7 +243,7 @@ void observatoryScene()
     std::string s{ util.buildContext("../OVOResources","/") };
 
     OVOReader reader{ s };
-    root = reader.load("OmniSpot.OVO");
+    root = reader.load("Observatory.OVO");
 
     _graphicsEngine.setRoot(root);
 

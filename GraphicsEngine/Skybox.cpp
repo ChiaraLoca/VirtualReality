@@ -79,7 +79,7 @@ void Skybox::drawSkyboxCube() {
 
 void Skybox::render(glm::mat4 ef, glm::mat4 eperspective)
 {
-    //glBindVertexArray(_vao);
+    glBindVertexArray(_vao);
 
     // Set a matrix to move our object:
     glm::mat4 f = glm::mat4(1.0f);
@@ -95,11 +95,12 @@ void Skybox::render(glm::mat4 ef, glm::mat4 eperspective)
     Program::programSB.projLoc = Program::programSB.getParamLocation("projection");
     Program::programSB.mvLoc = Program::programSB.getParamLocation("modelview");
 
-    printf("projLoc: %d, mvLoc: %d -------------------------------------------------------------------------------------------------------\n", Program::programSB.projLoc, Program::programSB.mvLoc);
+   
 
-    ef[3] = glm::vec4( 0,0,0,1 );
- 
-    //ef = glm::scale(ef, glm::vec3(100.0f, 100.0f, 100.0f));
+    //ef[3] = glm::vec4( 0,0,0,1 );
+    
+    //ef = glm::translate(glm::mat4(1.0f),glm::vec3(ef[3]));
+   //ef = glm::scale(ef, glm::vec3(100.0f, 100.0f, 100.0f));
     
     // Set model matrix as current OpenGL matrix: 
     Program::programSB.render();

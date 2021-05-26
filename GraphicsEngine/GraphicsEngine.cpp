@@ -96,8 +96,9 @@ int LIB_API GraphicsEngine::initialize()
     }
     // Load cubemap:
     _skybox = new Skybox("Skybox");
+        
     _skybox->buildCubemap();
-    
+    RenderList::renderList.setSkybox(_skybox);
 
     glViewport(0, 0, _dimx, _dimy);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -248,6 +249,7 @@ void GraphicsEngine::standardRender()
 {
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
+    RenderList::renderList.setSkybox(_skybox);
     for (int c = 0; c < 2; c++) // fix hardcode
     {
         // Render into this FBO:
@@ -255,7 +257,7 @@ void GraphicsEngine::standardRender()
 
         // Clear the FBO content:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        RenderList::renderList.setSKyboxMatrix(glm::mat4(1));
         setStandardShader();
         RenderList::renderList.render();
  
@@ -305,7 +307,7 @@ void GraphicsEngine::stereoscopicRender()
 #endif
 
 
-        Program::programPPL.render();
+        //Program::programPPL.render();
         Program::programPPL.setMatrix(Program::programPPL.projLoc, ovrProjMat);
         Program::programPPL.setMatrix(Program::programPPL.mvLoc, ovrModelViewMat);
         glm::mat3 normalMatrix = glm::inverseTranspose(glm::mat3(ovrModelViewMat));
@@ -319,7 +321,7 @@ void GraphicsEngine::stereoscopicRender()
 
         getCurrentCamera()->setMatrix(m * headPos);
 
-        RenderList::renderList.setSKyboxMatrix(projMat);
+        RenderList::renderList.setSKyboxMatrix(ovrProjMat);
 
         //RenderList::renderList.setAllMatrix(_root);
 

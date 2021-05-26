@@ -26,7 +26,7 @@ LIB_API Node::Node(std::string name, glm::mat4 matrix, ObjectType type) : Object
 void LIB_API Node::render()
 {
     //glLoadMatrixf(glm::value_ptr(_finalMatrix));
-    
+    Program::programPPL.render();
     Program::programPPL.setMatrix(Program::programPPL.mvLoc, _finalMatrix);
     Program::programPPL.setMatrix(Program::programPPL.normLoc, glm::inverseTranspose(glm::mat3(_finalMatrix)));
     
