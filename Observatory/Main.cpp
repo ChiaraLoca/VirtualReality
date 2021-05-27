@@ -146,10 +146,6 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
             _graphicsEngine.setCurrentCamera(2);
             reshapeCall(_width, _height);
             break;
-        case '4':
-            _graphicsEngine.setCurrentCamera(3);
-            reshapeCall(_width, _height);
-            break;
         case 'x':
             _graphicsEngine.getCurrentCamera()->reset();
             reshapeCall(_width, _height);
@@ -255,16 +251,12 @@ void observatoryScene()
     m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)180), glm::vec3(0.0f, 1.0f, 0.0f));
     PerspectiveCamera* c1 = new PerspectiveCamera("Camera1", m, 1, 400);
 
-    m = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 100.0f, 0.0f));
-    m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)270), glm::vec3(1.0f, 0.0f, 0.0f));
-    PerspectiveCamera* c2 = new PerspectiveCamera("Camera2", m, 1, 200);
-
     m = glm::translate(glm::mat4(1.0f), glm::vec3(30.0f, 10.0f, -40.0f));
     m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)135), glm::vec3(0.0f, 1.0f, 0.0f));
-    PerspectiveCamera* c3 = new PerspectiveCamera("Camera3", m, 1, 200);
+    PerspectiveCamera* c2 = new PerspectiveCamera("Camera2", m, 1, 200);
 
     m = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 30.0f, 100.0f));
-    PerspectiveCamera* c4 = new PerspectiveCamera("Camera4", m, 1, 200);
+    PerspectiveCamera* c3 = new PerspectiveCamera("Camera3", m, 1, 200);
 
     orthoCamera = new OrthoCamera("Ortho", glm::mat4(1));
     _graphicsEngine.setOrthoCamera(orthoCamera);
@@ -272,7 +264,6 @@ void observatoryScene()
     _graphicsEngine.setCamera(c1);
     _graphicsEngine.setCamera(c2);
     _graphicsEngine.setCamera(c3);
-    _graphicsEngine.setCamera(c4);
     _graphicsEngine.setCurrentCamera(0);
 
 
