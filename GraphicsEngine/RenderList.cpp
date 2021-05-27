@@ -65,14 +65,14 @@ void RenderList::render() {
 	CounterLight::omniLight.render();
 	CounterLight::spotLight.render();
 	
-	glm::mat4 ef = current->_matrix;
-	//glm::mat4 ef = glm::mat4(1.0);
-	ef[3] = glm::vec4(0, 0, 0, 1);
+	glm::mat4 mv = current->_matrix;
+	mv = glm::scale(mv, glm::vec3(500.0f, 500.0f, 500.0f));
 
-	//ef = glm::translate(glm::mat4(1.0f),glm::vec3(ef[3]));
-	ef = glm::scale(ef, glm::vec3(500.0f, 500.0f, 500.0f));
+	glm::mat4 proj = _skybox->_proj;
+	proj[3] = glm::vec4(0, 0, 0, 1);
 	
-	_skybox->render(ef, _skybox->_proj);
+	
+	_skybox->render(mv, proj);
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {
 		i->first->render();

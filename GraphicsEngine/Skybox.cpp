@@ -77,39 +77,17 @@ void Skybox::drawSkyboxCube() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeFaces), cubeFaces, GL_STATIC_DRAW); 
 }
 
-void Skybox::render(glm::mat4 ef, glm::mat4 eperspective)
+void Skybox::render(glm::mat4 mv, glm::mat4 proj)
 {
     glBindVertexArray(_vao);
 
-    // Set a matrix to move our object:
-    glm::mat4 f = glm::mat4(1.0f);
-    f = glm::scale(f, glm::vec3(100.0f, 100.0f, 100.0f));
-    f = glm::rotate(f, glm::radians(angleX), glm::vec3(1.0f, 0.0f, 0.0f));
-    f = glm::rotate(f, glm::radians(angleY), glm::vec3(0.0f, 1.0f, 0.0f));
-
-    // TODO: aggiungere la skybox alla lista
-    // TODO: mettere matrice giusta
-    /* glm::mat4 perspective = glm::mat4(1.0f);
-    perspective = glm::perspective(glm::radians(45.0f), (float)1024 / (float)512, 1.0f, 1024.0f); */
-
-    Program::programSB.projLoc = Program::programSB.getParamLocation("projection");
-    Program::programSB.mvLoc = Program::programSB.getParamLocation("modelview");
-
-   
-
-    //ef[3] = glm::vec4( 0,0,0,1 );
-    
-    //ef = glm::translate(glm::mat4(1.0f),glm::vec3(ef[3]));
-   //ef = glm::scale(ef, glm::vec3(100.0f, 100.0f, 100.0f));
-    
     // Set model matrix as current OpenGL matrix: 
     Program::programSB.render();
-    Program::programSB.setMatrix(Program::programSB.mvLoc, ef);//f
-    Program::programSB.setMatrix(Program::programSB.projLoc, eperspective);//perspective
+    Program::programSB.setMatrix(Program::programSB.mvLoc, mv);
+    Program::programSB.setMatrix(Program::programSB.projLoc, proj);
 
     glDrawElements(GL_TRIANGLES, sizeof(cubeFaces) / sizeof(unsigned short), GL_UNSIGNED_SHORT, nullptr);
 
-    //angleX += 0.5f;
 }
 
 void Skybox::buildCubemap()

@@ -95,8 +95,7 @@ int LIB_API GraphicsEngine::initialize()
         _fboContainer = new FboContainer(_dimx,_dimy);
     }
     // Load cubemap:
-    _skybox = new Skybox("Skybox");
-        
+    _skybox = new Skybox("Skybox");    
     _skybox->buildCubemap();
     RenderList::renderList.setSkybox(_skybox);
 
@@ -249,23 +248,25 @@ void GraphicsEngine::standardRender()
 {
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
-    RenderList::renderList.setSkybox(_skybox);
+    //RenderList::renderList.setSkybox(_skybox);
     for (int c = 0; c < 2; c++) // fix hardcode
     {
+        
         // Render into this FBO:
         _fboContainer->get(c)->render();
 
         // Clear the FBO content:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        RenderList::renderList.setSKyboxMatrix(glm::mat4(1));
-        setStandardShader();
+        Camera* camera = (Camera*)getCurrentCamera();
+        RenderList::renderList.setSKyboxMatrix(camera->_view_matrix);
+        //setStandardShader();
         RenderList::renderList.render();
  
     }
 
     _fboContainer->disable();
     glViewport(0, 0, _dimx, _dimy);
-    setPassthroughShader();
+    //setPassthroughShader();
     _fboContainer->render();
 
     // Clear the FBO content:
@@ -280,7 +281,7 @@ void GraphicsEngine::stereoscopicRender()
     RenderList::renderList.removeAll();
 
     RenderList::renderList.setAllMatrix(_root);
-    RenderList::renderList.setSkybox(_skybox);
+    //RenderList::renderList.setSkybox(_skybox);
 
     OVRManager::ovrManager.update();
 
@@ -288,7 +289,7 @@ void GraphicsEngine::stereoscopicRender()
 
     for (int curEye = 0; curEye < OpenVR::EYE_LAST; curEye++)
     {
-
+        std::cout << curEye << "------------------------------------------------------------------------" << std::endl;
         glm::mat4 projMat = OVRManager::ovrManager.getProjMatrix(curEye);
 
         glm::mat4 eye2Head = OVRManager::ovrManager.getEye2HeadMatrix(curEye);
@@ -319,7 +320,7 @@ void GraphicsEngine::stereoscopicRender()
         m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
         m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-45), glm::vec3(0.0f, 1.0f, 0.0f));*/
 
-        getCurrentCamera()->setMatrix(m * headPos);
+        getCurrentCamera()->setMatrix(getCurrentCamera()->getInitial_matrix()*headPos);
 
         RenderList::renderList.setSKyboxMatrix(ovrProjMat);
 
@@ -338,9 +339,10 @@ void GraphicsEngine::stereoscopicRender()
         //RenderList::renderList.removeAll();
 
         OVRManager::ovrManager.pass(curEye, _fboContainer->getFboTexId(curEye));
-}
-
+        
+    }
     OVRManager::ovrManager.render();
+    
 
     _fboContainer->disable();
 

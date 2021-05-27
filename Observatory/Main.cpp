@@ -156,7 +156,6 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
             break;
 
         case 'w':
-
             _graphicsEngine.enableWireframe(_wireFrame);
             _wireFrame = !_wireFrame;
             break;
