@@ -1,13 +1,16 @@
-
 #include "UtilClient.h"
 
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 std::string UtilClient::buildContext(std::string path, const char* delims)
 {
 
     char* charPath = &path[0];
     char* token = NULL;
-    std::string context;
+    string context;
 
     // Establish string and get the first token:
     token = strtok(charPath, delims);
@@ -28,7 +31,7 @@ std::string UtilClient::buildContext(std::string path, const char* delims)
 }
 void UtilClient::infoText()
 {
-    std::cout << std::endl << std::endl;
+    cout << std::endl << endl;
     std::string text = "";
     text.append("Observatory\n");
     text.append("\t[space]\t-> on/of laser\n");
@@ -45,10 +48,25 @@ void UtilClient::infoText()
     text.append("\t[2]    \t-> above viev\n");
     text.append("\t[3]    \t-> 'human' view\n");
     text.append("\t[4]    \t-> rear view\n");
-    text.append("Text\n");
-    text.append("\t[v]    \t-> show/hide FPS\n");
 
-    std::cout << text << std::endl;
+    cout << text << endl;
+}
+
+bool UtilClient::getRenderType(std::string _fileName)
+{
+    fstream fileInfo;
+    fileInfo.open(_fileName, ios::in); //open a file to perform read operation using file object
+    if (fileInfo.is_open()) {   //checking whether the file is open
+        string tp;
+        string stringToFind{ "stereoscopic" };
+        while (getline(fileInfo, tp)) { //read data from file object and put it into string.
+            if (tp.find(stringToFind) != std::string::npos) {
+                return tp.find("true") != std::string::npos;
+            }
+        }
+        fileInfo.close(); //close the file object.
+    }
+    return false;
 }
 
 

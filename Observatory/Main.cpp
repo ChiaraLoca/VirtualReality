@@ -235,10 +235,10 @@ void timerCallback(int value)
 }*/
 void observatoryScene()
 {
-    _graphicsEngine.enableStereoscopicRender(true);
+    UtilClient util{};
+    _graphicsEngine.enableStereoscopicRender(util.getRenderType("props.gse"));
     if (_graphicsEngine.initialize() < 0)
         return;
-    UtilClient util{};
     std::string s{ util.buildContext("../OVOResources","/") };
 
     OVOReader reader{ s };

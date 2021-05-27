@@ -71,7 +71,6 @@ void RenderList::render() {
 	glm::mat4 proj = _skybox->_proj;
 	proj[3] = glm::vec4(0, 0, 0, 1);
 	
-	
 	_skybox->render(mv, proj);
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {

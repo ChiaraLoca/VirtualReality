@@ -217,12 +217,8 @@ void GraphicsEngine::refresh()
 }
 void GraphicsEngine::resize()
 {
-   /* fboPerspective = glm::perspective(glm::radians(45.0f), (float)APP_FBOSIZEX / (float)APP_FBOSIZEY, 1.0f, 1024.0f);
-    ortho = glm::ortho(0.0f, (float)APP_WINDOWSIZEX, 0.0f, (float)APP_WINDOWSIZEY, -1.0f, 1.0f);*/
-
     // (bad) trick to avoid window resizing:
-    
-        glutReshapeWindow(_dimx, _dimy);
+    glutReshapeWindow(_dimx, _dimy);
 }
 
 
@@ -246,42 +242,23 @@ void GraphicsEngine::render()
 
 void GraphicsEngine::standardRender()
 {
+    glutReshapeWindow(_dimx/2, _dimy); // forces the size of the window to be a single square
+    glViewport(0, 0, _dimx/2, _dimy);
+
     RenderList::renderList.removeAll();
     RenderList::renderList.setAllMatrix(_root);
-    //RenderList::renderList.setSkybox(_skybox);
-    for (int c = 0; c < 2; c++) // fix hardcode
-    {
-        
-        // Render into this FBO:
-        _fboContainer->get(c)->render();
-
-        // Clear the FBO content:
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        Camera* camera = (Camera*)getCurrentCamera();
-        RenderList::renderList.setSKyboxMatrix(camera->_view_matrix);
-        //setStandardShader();
-        RenderList::renderList.render();
- 
-    }
-
-    _fboContainer->disable();
-    glViewport(0, 0, _dimx, _dimy);
-    //setPassthroughShader();
-    _fboContainer->render();
 
     // Clear the FBO content:
-    /*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Camera* camera = (Camera*)getCurrentCamera();
+    RenderList::renderList.setSKyboxMatrix(glm::inverse(camera->_view_matrix));
+    RenderList::renderList.render();
 
-    setSkyboxShader();
-    _skybox->render();
-    glViewport(0, 0, _dimx, _dimy);*/
 }
 void GraphicsEngine::stereoscopicRender()
 {
     RenderList::renderList.removeAll();
-
     RenderList::renderList.setAllMatrix(_root);
-    //RenderList::renderList.setSkybox(_skybox);
 
     OVRManager::ovrManager.update();
 
@@ -289,7 +266,6 @@ void GraphicsEngine::stereoscopicRender()
 
     for (int curEye = 0; curEye < OpenVR::EYE_LAST; curEye++)
     {
-        std::cout << curEye << "------------------------------------------------------------------------" << std::endl;
         glm::mat4 projMat = OVRManager::ovrManager.getProjMatrix(curEye);
 
         glm::mat4 eye2Head = OVRManager::ovrManager.getEye2HeadMatrix(curEye);
@@ -316,15 +292,9 @@ void GraphicsEngine::stereoscopicRender()
 
         glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(00.0f, 10.0f, -35.0f));
 
-        /*m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
-        m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-90), glm::vec3(0.0f, 1.0f, 0.0f));
-        m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)-45), glm::vec3(0.0f, 1.0f, 0.0f));*/
-
         getCurrentCamera()->setMatrix(getCurrentCamera()->getInitial_matrix()*headPos);
 
         RenderList::renderList.setSKyboxMatrix(ovrProjMat);
-
-        //RenderList::renderList.setAllMatrix(_root);
 
         // Render into this FBO:
         _fboContainer->get(curEye)->render();
@@ -333,24 +303,13 @@ void GraphicsEngine::stereoscopicRender()
 
         RenderList::renderList.render();
 
-
-
-
-        //RenderList::renderList.removeAll();
-
         OVRManager::ovrManager.pass(curEye, _fboContainer->getFboTexId(curEye));
         
     }
     OVRManager::ovrManager.render();
-    
-
+   
     _fboContainer->disable();
-
     glViewport(0, 0, _dimx, _dimy);
-
-
-
-
     _fboContainer->render();
 }
 
