@@ -13,7 +13,7 @@ public:
     void setProj(glm::mat4 proj);
 private:
     // Cube VBO:
-    unsigned int _vao; // fix
+    unsigned int _vao; 
     unsigned int _cubeVboVertices = 0;
     unsigned int _cubeVboFaces = 0;
 };

@@ -253,7 +253,7 @@ void GraphicsEngine::standardRender()
     // Clear the FBO content:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Camera* camera = (Camera*)getCurrentCamera();
-    RenderList::renderList.setSKyboxMatrix(glm::inverse(camera->_view_matrix));
+    RenderList::renderList.setSKyboxMatrix(glm::inverse(camera->getView_matrix()));
     RenderList::renderList.render();
 
 }
@@ -368,14 +368,7 @@ void GraphicsEngine::setCamera(Camera *camera) {
     RenderList::renderList.setCurrentCamera(0);
 }
 
-/**
- * @brief Setter of an OrthoCamera in the scene
- *  It write string in the screen
- * @param camera 
- */
-void GraphicsEngine::setOrthoCamera(OrthoCamera* camera) {
-    RenderList::renderList.setOrthoCamera(camera);
-}
+
 
 /**
  * @brief Setter of the camera that the user want to use
@@ -406,15 +399,6 @@ void GraphicsEngine::setOption()
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 }
 
-/**
- * @brief Setter of a flag of using or not an otrhocamera
- * 
- * @param showOrthoCamera 
- */
-void GraphicsEngine::setShowOrthoCamera(bool showOrthoCamera)
-{
-    RenderList::renderList.setShowOrthoCamera(showOrthoCamera);
-}
 
 /**
  * @brief Wrapper of the setter from Open_GL that set a displayCallback
@@ -504,8 +488,8 @@ LIB_API void GraphicsEngine::setStandardShader()
     Shader* vertexShader = new Shader();
     Shader* fragmentShader = new Shader();
 
-    vertexShader->loadFromMemory(Shader::TYPE_VERTEX, vertShaderTexture);
-    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, fragShaderSpot);
+    vertexShader->loadFromMemory(Shader::TYPE_VERTEX, perPixelLightingVertexShader);
+    fragmentShader->loadFromMemory(Shader::TYPE_FRAGMENT, perPixelLightingFragmentShader);
 
     Program::programPPL.build(vertexShader, fragmentShader);
     Program::programPPL.render();
@@ -542,16 +526,7 @@ LIB_API void GraphicsEngine::setPassthroughShader()
     Program::programPT.ptColorLoc = Program::programPT.getParamLocation("color");
 }
 
-/**
- * @brief Intitializer of FBO
- *
- */
-void GraphicsEngine::initFbo()
-{
 
-   
-
-}
 
 
 

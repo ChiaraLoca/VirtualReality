@@ -1,5 +1,5 @@
 #include "SpotLight.h"
-#include "CounterLight.h"
+#include "ListLight.h"
 
 // FreeGLUT:
 #include <GL/freeglut.h>

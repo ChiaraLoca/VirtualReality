@@ -5,11 +5,8 @@
 class SphereCulling
 {
 public:
-	
-	
 
-
-	SphereCulling(float, float, glm::vec3 normale);
+	SphereCulling(float near, float far, glm::vec3 normale);
 
 	bool checkIfVisible(Mesh* mesh);
 

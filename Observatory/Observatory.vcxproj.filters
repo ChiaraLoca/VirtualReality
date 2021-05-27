@@ -18,17 +18,11 @@
     <ClCompile Include="Main.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="Test.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="UtilClient.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Test.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="UtilClient.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>

@@ -80,10 +80,15 @@ glm::mat4 Camera::getInitial_matrix() const
 {
     return _initial_matrix;
 }
-glm::mat4 Camera::getHead_matrix() const
+glm::mat4 Camera::getView_matrix() const
 {
-    return _head;
+    return _view_matrix;
 }
+void Camera::setVeiwMatrix(glm::mat4 matrix)
+{
+    _view_matrix = matrix;
+}
+
 
 /**
  * @brief Setter of the initial matrix
@@ -93,11 +98,7 @@ glm::mat4 Camera::getHead_matrix() const
 void Camera::setInitial_matrix(glm::mat4 matrix)
 {
     _initial_matrix = matrix;
-}void Camera::setHead_matrix(glm::mat4 matrix)
-{
-    _head = matrix;
 }
-
 /**
  * @brief Make the camera come back at its initial position (before appling the tranformation)
  * 

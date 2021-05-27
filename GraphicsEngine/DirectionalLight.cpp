@@ -1,8 +1,6 @@
 #include "DirectionalLight.h"
-#include "CounterLight.h"
+#include "ListLight.h"
 
-// FreeGLUT:
-#include <GL/freeglut.h>
 
 /**
  * @brief Construct a new Directional Light:: Directional Light object

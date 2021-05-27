@@ -77,17 +77,7 @@ LIB_API Material::Material(std::string name,
 		_texture->loadDefaultTexture();
 	}
 }
-// TODO: serve?
-/**
- * @brief constructor of a new Material object
- * 
- */
-LIB_API Material::Material()
-	: Object{ ObjectType::Material,"no-name material" }, _shininess{ 0.0f },
-	_ambient{ glm::vec4{1.0f} }, _diffuse{ glm::vec4{1.0f} }, _specular{ glm::vec4{1.0f} }, _emission{ glm::vec4{1.0f } }
-{
 
-}
 
 
 

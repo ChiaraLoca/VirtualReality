@@ -17,7 +17,7 @@ OrthoCamera::OrthoCamera(std::string name, glm::mat4 matrix)
 /**
  * @brief render of the orthocamera
  * it prints text to the window
- * 
+ * Works with openGl 1.1
  */
 void LIB_API OrthoCamera::render()
 {
@@ -27,13 +27,7 @@ void LIB_API OrthoCamera::render()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(glm::value_ptr(glm::mat4(1)));*/
 
-	/*
-
-	Program::program.setMatrix(Program::program.mvLoc, glm::mat4(1));
-	Program::program.setMatrix(Program::program.normLoc, glm::mat3(1));
-
-	Program::program.setMatrix(Program::program.projLoc, _view_matrix);
-	*/
+	
 
 	// Disable lighting before rendering 2D text:
 	//glDisable(GL_LIGHTING);
@@ -73,7 +67,3 @@ void LIB_API OrthoCamera::setWidthHeight(int width, int height)
  * 
  * @param fps to set
  */
-void OrthoCamera::setFps(int fps)
-{
-	_fps = fps;
-}

@@ -54,6 +54,16 @@ Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArra
 
 }
 
+float Mesh::getBoundingSphereRadius() const
+{
+	return _boundingSphereRadius;
+}
+
+void Mesh::setBoundingSphereRadius(float boundingSphereRadius)
+{
+	_boundingSphereRadius = boundingSphereRadius;
+}
+
 /**
  * @brief render of the Mesh
  * first in renders the associeted material (eventually) and then the elements of the mesh

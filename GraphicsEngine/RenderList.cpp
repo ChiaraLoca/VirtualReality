@@ -13,10 +13,10 @@ bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 		switch (light->getLightType())
 		{
 		case LightType::OMNI:
-			CounterLight::omniLight.add((Light*)obj);
+			ListLight::omniLight.add((Light*)obj);
 			break;
 		case LightType::SPOT:
-			CounterLight::spotLight.add((Light*)obj);
+			ListLight::spotLight.add((Light*)obj);
 			break;
 		}
 
@@ -36,16 +36,13 @@ bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 
 bool LIB_API  RenderList::removeAll() {
 	_map.clear();
-	Light::resetLight();
-	CounterLight::omniLight.clear();
-	CounterLight::spotLight.clear();
+	ListLight::omniLight.clear();
+	ListLight::spotLight.clear();
 	return true;
 	
 }
 
-void RenderList::setShowOrthoCamera(bool showOrthoCamera) {
-	_showOrthoCamera = showOrthoCamera;
-}
+
 
 void RenderList::setSKyboxMatrix(glm::mat4 m)
 {
@@ -57,7 +54,7 @@ void RenderList::setSKyboxMatrix(glm::mat4 m)
 void RenderList::render() {
 
 	PerspectiveCamera* current = (PerspectiveCamera * )_listCamera.getCurrentCamera();
-	SphereCulling sphereCulling{ current->getNearPlane(),current->getFarPlane() ,glm::inverseTranspose(glm::mat3(current->_view_matrix)) * glm::vec3(1)  };
+	SphereCulling sphereCulling{ current->getNearPlane(),current->getFarPlane() ,glm::inverseTranspose(glm::mat3(current->getView_matrix())) * glm::vec3(1)  };
 	current->setFinalMatrix(current->getInverseMatrix());
 	((Node*)current)->render();
 	
@@ -68,10 +65,10 @@ void RenderList::render() {
 		
 	}
 
-	CounterLight::omniLight.render();
-	CounterLight::spotLight.render();
+	ListLight::omniLight.render();
+	ListLight::spotLight.render();
 	
-	glm::mat4 mv = current->_matrix;
+	glm::mat4 mv = current->getMatrix();
 	mv = glm::scale(mv, glm::vec3(500.0f, 500.0f, 500.0f));
 
 	glm::mat4 proj = _skybox->_proj;
@@ -90,13 +87,8 @@ void RenderList::render() {
 			i->first->render();
 		}
 		
-				
 	}
 
-	if (_showOrthoCamera)
-		_ortho->render();
-
-	
 }
 
 void RenderList::setAllMatrix(Node* node ) {
@@ -104,10 +96,10 @@ void RenderList::setAllMatrix(Node* node ) {
 	
 
 	if (node->getParent() != nullptr) {
-		RenderList::renderList.add(node, _map.at(node->getParent()) * node->_matrix);
+		RenderList::renderList.add(node, _map.at(node->getParent()) * node->getMatrix());
 	}
 	else {
-		RenderList::renderList.add(node, node->_matrix);
+		RenderList::renderList.add(node, node->getMatrix());
 	}
 	for (auto x : node->getChildren())
 		setAllMatrix(x);
@@ -133,10 +125,6 @@ Camera* RenderList::getCurrentCamera()
 	return _listCamera.getCurrentCamera();
 }
 
-void RenderList::setOrthoCamera(OrthoCamera* o)
-{
-	_ortho = o;
-}
 
 void RenderList::setSkybox(Skybox* skybox)
 {

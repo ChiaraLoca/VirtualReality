@@ -15,8 +15,6 @@ public:
 	int getParamLocation(std::string name);
 	void setMatrix(int param, const glm::mat4& mat);
 
-	//void setMatrix(int param, const glm::mat3& mat);
-
 	void setMatrix(int param, const glm::mat3& mat);
 	
 	void setFloat(int param, float value);

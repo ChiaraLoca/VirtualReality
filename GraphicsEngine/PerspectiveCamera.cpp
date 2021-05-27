@@ -14,8 +14,7 @@
  */
 LIB_API PerspectiveCamera::PerspectiveCamera(std::string name, glm::mat4 matrix, float nearPlane, float farPlane)
 	:Camera{name,matrix,ObjectType::Camera,nearPlane,farPlane}
-{
-}
+{}
 
 /**
  * @brief render of the camera
@@ -24,12 +23,6 @@ LIB_API PerspectiveCamera::PerspectiveCamera(std::string name, glm::mat4 matrix,
  */
 void LIB_API PerspectiveCamera::render()
 { 
-	// Set perpsective matrix:
-	/*glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(glm::value_ptr(_view_matrix));
-	glMatrixMode(GL_MODELVIEW);*/
-
-	
 	Program::programPPL.setMatrix(Program::programPPL.projLoc, _view_matrix);
 	Program::programPPL.setMatrix(Program::programPPL.normLoc, glm::inverseTranspose(glm::mat3(_view_matrix)));
 }

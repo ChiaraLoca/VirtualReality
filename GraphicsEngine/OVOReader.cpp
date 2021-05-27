@@ -230,7 +230,7 @@ Mesh* OVOReader::loadMesh(char* data)
 	position += (unsigned int)strlen(materialName) + 1;
 
 	
-	// Mesh bounding sphere radius: SKIPPED-----------------------------------------------------------------------------------------------QUI
+	// Mesh bounding sphere radius: 
 	float boundingSphereRadius;
 	memcpy(&boundingSphereRadius, data + position, sizeof(float));
 	position += sizeof(float);
@@ -362,17 +362,14 @@ Mesh* OVOReader::loadMesh(char* data)
 		normalArray.push_back(m._v1._normal.x);
 		normalArray.push_back(m._v1._normal.y);
 		normalArray.push_back(m._v1._normal.z);
-		//normalArray.push_back(m._v1._normal.w);
 
 		normalArray.push_back(m._v2._normal.x);
 		normalArray.push_back(m._v2._normal.y);
-		normalArray.push_back(m._v2._normal.z);
-		//normalArray.push_back(m._v2._normal.w);
+		normalArray.push_back(m._v2._normal.z);	
 
 		normalArray.push_back(m._v3._normal.x);
 		normalArray.push_back(m._v3._normal.y);
 		normalArray.push_back(m._v3._normal.z);
-		//normalArray.push_back(m._v3._normal.w);
 
 		textureArray.push_back(m._v1._texture.s);
 		textureArray.push_back(m._v1._texture.t);
@@ -385,7 +382,6 @@ Mesh* OVOReader::loadMesh(char* data)
 	}
 
 	std::shared_ptr<Material> material = getMaterialFromName(materialName);
-	
 	
 	Mesh* thisMesh = new Mesh{ meshName, matrix, vertexArray, normalArray, textureArray, material,boundingSphereRadius };
 

@@ -13,7 +13,7 @@
 #include "Test.h"
 #include "RenderList.h"
 #include "PerspectiveCamera.h"
-#include <OrthoCamera.h>
+
 #include "UtilClient.h"
 
 
@@ -60,25 +60,24 @@ void displayCall() {
 
 void reshapeCall(int width, int height)
 {
-    // lasciamo così?
+    
     ((PerspectiveCamera*) _graphicsEngine.getCurrentCamera())->setWidthHeight(_width, _height);
-	orthoCamera->setWidthHeight(_width, _height);
 
     if (width != _width || height != _height)
         _graphicsEngine.resize();
 
 }
 
-// aggiungere close callback
+
 
 bool doShowLaser(bool show) {
     Node* laser = _graphicsEngine.getNodeByName("FascioLaser");
     if (show) {
-        laser->setMatrix(laser->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(0, 200.0f, 0.0f)));
+        laser->setMatrix(laser->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(0, 200.0f, 0.0f)));
         return false;
     }
     else {
-        laser->setMatrix(laser->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(0, -200.0f, 0.0f)));
+        laser->setMatrix(laser->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(0, -200.0f, 0.0f)));
         return true;
     }
 }
@@ -116,10 +115,10 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
 
         // rotate dome
         case 't':
-            dome->setMatrix(dome->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
+            dome->setMatrix(dome->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
             break;
         case 'r':
-            dome->setMatrix(dome->_matrix * glm::rotate(glm::mat4(1.0f), glm::radians(-domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
+            dome->setMatrix(dome->getMatrix() * glm::rotate(glm::mat4(1.0f), glm::radians(-domeSpeed), glm::vec3(0.0f, 1.0f, 0.0f)));
             break;
 
             // Open close hatch
@@ -127,11 +126,6 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
             isHatchOnOpen = !isHatchOnOpen;
             break;
 
-        case 'v':
-            // show hide text
-            showOrthoText = !showOrthoText;
-            _graphicsEngine.setShowOrthoCamera(showOrthoText);
-            break;
 
        // Camera choose
         case '1':
@@ -142,10 +136,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY)
             _graphicsEngine.setCurrentCamera(1);
             reshapeCall(_width, _height);
             break;
-        case '3':
-            _graphicsEngine.setCurrentCamera(2);
-            reshapeCall(_width, _height);
-            break;
+        
         case 'x':
             _graphicsEngine.getCurrentCamera()->reset();
             reshapeCall(_width, _height);
@@ -175,7 +166,6 @@ void timerCallback(int value)
     if (numCallFunction == 100){
 	    // Update values:
 	    frames = _graphicsEngine.getFrames();
-	    orthoCamera->setFps(frames);
 	    _graphicsEngine.setFrames(0);
         numCallFunction = 0;
     }
@@ -187,8 +177,8 @@ void timerCallback(int value)
     // Control for open
     if (currentOpening < maxOpening && isHatchOnOpen)
     {
-        leftHatch->setMatrix(leftHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
-        rightHatch->setMatrix(rightHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
+        leftHatch->setMatrix(leftHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
+        rightHatch->setMatrix(rightHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
         if (currentOpening < 0.0f && !hasToBeOff)
             showLaser = doShowLaser(showLaser);
         currentOpening += hatchSpeed;
@@ -197,8 +187,8 @@ void timerCallback(int value)
     // Control for closing
     if (currentOpening >= 0.0f && !isHatchOnOpen)
     {
-        leftHatch->setMatrix(leftHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
-        rightHatch->setMatrix(rightHatch->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
+        leftHatch->setMatrix(leftHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(-hatchSpeed, 0.0f, hatchSpeed / 1.5)));
+        rightHatch->setMatrix(rightHatch->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(hatchSpeed, 0.0f, -hatchSpeed / 1.5)));
         currentOpening -= hatchSpeed;
         if (currentOpening < 0.0f && !hasToBeOff)
             showLaser = doShowLaser(showLaser);
@@ -207,13 +197,13 @@ void timerCallback(int value)
     //Control for telescope
     if (isHatchOnOpen && currentOutTelescope < maxOutTelescope) {
         currentOutTelescope += telescopeSpeed;
-        telescope->setMatrix(telescope->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(-telescopeSpeed / 10, telescopeSpeed, -0.012)));
+        telescope->setMatrix(telescope->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(-telescopeSpeed / 10, telescopeSpeed, -0.012)));
     }
 
     if (!isHatchOnOpen && currentOutTelescope >= 0.0f) {
 
         currentOutTelescope -= telescopeSpeed;
-        telescope->setMatrix(telescope->_matrix * glm::translate(glm::mat4(1.0f), glm::vec3(telescopeSpeed / 10, -telescopeSpeed, 0.012)));
+        telescope->setMatrix(telescope->getMatrix() * glm::translate(glm::mat4(1.0f), glm::vec3(telescopeSpeed / 10, -telescopeSpeed, 0.012)));
 
     }
 
@@ -255,15 +245,14 @@ void observatoryScene()
     m = m * glm::rotate(glm::mat4(1.0f), glm::radians((float)135), glm::vec3(0.0f, 1.0f, 0.0f));
     PerspectiveCamera* c2 = new PerspectiveCamera("Camera2", m, 1, 200);
 
-    m = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 30.0f, 100.0f));
-    PerspectiveCamera* c3 = new PerspectiveCamera("Camera3", m, 1, 200);
+   
 
-    orthoCamera = new OrthoCamera("Ortho", glm::mat4(1));
-    _graphicsEngine.setOrthoCamera(orthoCamera);
+    
+   
 
     _graphicsEngine.setCamera(c1);
     _graphicsEngine.setCamera(c2);
-    _graphicsEngine.setCamera(c3);
+    
     _graphicsEngine.setCurrentCamera(0);
 
 
@@ -278,7 +267,7 @@ void observatoryScene()
 }
 int main()
 {
-	//test();
+	
 
     UtilClient util{};
     util.infoText();

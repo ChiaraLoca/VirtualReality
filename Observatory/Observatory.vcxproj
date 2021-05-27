@@ -147,11 +147,9 @@
   <ItemGroup>
     <ClCompile Include="UtilClient.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UtilClient.h" />
-    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="props.gse" />

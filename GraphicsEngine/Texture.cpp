@@ -15,9 +15,7 @@
 #include <FreeImage.h>
 
 Texture::Texture(std::string name) : BaseTexture{ ObjectType::Texture,name }
-{
-
-}
+{}
 
 
 void Texture::render()

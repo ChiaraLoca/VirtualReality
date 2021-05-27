@@ -15,8 +15,11 @@ private:
 	glm::mat4 _fboPerspective;
 	glm::mat4 _ortho;
 	unsigned int _vao;
-	unsigned int boxVertexVbo = 0;
-	unsigned int boxTexCoordVbo = 0;
+	unsigned int _boxVertexVbo = 0;
+	unsigned int _boxTexCoordVbo = 0;
+
+	int _fboSizeX;
+	int _fboSizeY;
 
 	enum Eye
 	{
@@ -27,20 +30,10 @@ private:
 		EYE_LAST,
 	};
 
-	//static FBO* fboEye[2];
-
 	FBO* fbo[EYE_LAST] = { nullptr, nullptr };
 	unsigned int fboTexId[EYE_LAST] = { 0, 0 };
-	int counter = 0;
-
-
-
+	
 	void createBox();
-
-	void createTexBox();
-	
-	
-
 
 };
 

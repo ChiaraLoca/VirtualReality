@@ -2,12 +2,7 @@
 #include "Node.h"
 #include "Util.h"
 
-#pragma once
-#include "Node.h"
-#include "Util.h"
-
 enum class LightType { OMNI, SPOT, DIR };
-
 
 class LIB_API Light : public Node
 {
@@ -17,7 +12,6 @@ protected:
 	glm::vec4 _diffuse;
 	glm::vec4 _specular;
 
-	//int _valueLight;
 	LightType _lightType;
 
 public:
@@ -26,8 +20,6 @@ public:
 		glm::vec4 ambient, glm::vec4 diffuse, glm::vec4 specular, LightType lightType);
 
 	virtual void render();
-
-	static void resetLight();
 
 	glm::vec4 getPosition() const { return _position; };
 	glm::vec4 getAmbient() const { return _ambient; };

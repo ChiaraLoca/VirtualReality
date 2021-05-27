@@ -12,9 +12,7 @@ Program LIB_API Program::programSB;
 
 Program::Program()
 	:Object{ ObjectType::Program ,"Program"}
-{
-
-}
+{}
 
 Program::~Program() {
 	if (glId)
