@@ -9,7 +9,11 @@ ListLight LIB_API ListLight::omniLight{ LightType::OMNI };
 ListLight LIB_API ListLight::spotLight{ LightType::SPOT };
 
 
-
+/**
+ * @brief Add a light to the list (if it is possible to)
+ * 
+ * \param light is the lîght to add
+ */
 void ListLight::add(Light* light)
 {
 	if (_listLight.size() >= Program::maxLight)
@@ -20,6 +24,14 @@ void ListLight::add(Light* light)
 		_listLight.push_back(spot);
 }
 
+/**
+ * @brief Set the omnilight parameter to per pixel lighting program
+ * 
+ * \param position is the vector of all light position values
+ * \param ambient is the vector of all light amibient values
+ * \param diffuse is the vector of all light diffuse values
+ * \param specular is the vector of all light specular values
+ */
 void ListLight::omniSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
 	std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular) {
 
@@ -36,6 +48,14 @@ void ListLight::omniSetProgramValue(std::vector<glm::vec3> position, std::vector
 	Program::programPPL.setVec3Array(lightPos, position.data(), sizeof(position.data()));
 }
 
+/**
+ * @brief Set the spotlight parameter to per pixel lighting program
+ *
+ * \param position is the vector of all light position values
+ * \param ambient is the vector of all light amibient values
+ * \param diffuse is the vector of all light diffuse values
+ * \param specular is the vector of all light specular values
+ */
 void ListLight::spotSetProgramValue(std::vector<glm::vec3> position, std::vector<glm::vec3> ambient,
 	std::vector<glm::vec3> diffuse, std::vector<glm::vec3> specular) {
 
@@ -69,6 +89,10 @@ void ListLight::spotSetProgramValue(std::vector<glm::vec3> position, std::vector
 	Program::programPPL.setVec3Array(dirPos, direction.data(), sizeof(direction.data()));
 }
 
+/**
+ * @brief Render all lights by passing the different values to the program shader
+ * 
+ */
 void ListLight::render()
 {
 	std::vector<glm::vec3> position(Program::maxLight - _listLight.size(), glm::vec3(0.0));

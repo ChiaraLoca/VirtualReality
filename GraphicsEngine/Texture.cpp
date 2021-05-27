@@ -39,6 +39,7 @@ Texture::~Texture()
 	glDeleteTextures(1, &_texId);
 }
 
+
 void Texture::loadFromFile(std::string fileName)
 {
 	// Load texture:

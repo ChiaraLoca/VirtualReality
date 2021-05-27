@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   RenderList.h
+ * \brief  Manage all nodes contained in a scene
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "Object.h"
 #include "Node.h"

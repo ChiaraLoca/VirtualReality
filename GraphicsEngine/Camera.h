@@ -1,6 +1,12 @@
+/*****************************************************************//**
+ * \file   Camera.h
+ * \brief  Camera base class, defines common methods
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "Node.h"
-
 class LIB_API Camera : public Node
 {
 protected:

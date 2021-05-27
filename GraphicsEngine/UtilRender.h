@@ -1,4 +1,10 @@
-
+/*****************************************************************//**
+ * \file   UtilRender.h
+ * \brief  Contains all utils for Program and Shader classes
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 
 #include "Util.h"
 #include <iostream>

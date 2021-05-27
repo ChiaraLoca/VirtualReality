@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   Util.h
+ * \brief  Contains some basic graphicsEngine utils 
+ * 
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #define LIB_NAME      "Graphics Engine V1"  
 #define LIB_VERSION   1                             

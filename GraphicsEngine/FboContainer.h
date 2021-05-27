@@ -1,6 +1,14 @@
+/*****************************************************************//**
+ * \file   FboContainer.h
+ * \brief  Container for class FBO, keep the state of both eyes
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "FBO.h"
 #include "Texture.h"
+
 class LIB_API FboContainer
 {
 public:

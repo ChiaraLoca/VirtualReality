@@ -4,12 +4,13 @@
 #include "Program.h"
 
 
-
-void FboContainer::disable()
-{
-    FBO::disable();
-}
-
+/**
+ * @brief FboContainer constructor.
+ *          Initilaize the eyes cameras for the stereoscopic render
+ * 
+ * @param fboSizeX FBO size in x axis  
+ * @param fboSizeX FBO size in y axis
+ */
 FboContainer::FboContainer(int fboSizeX, int fboSizeY)
     :_fboSizeX{ fboSizeX }, _fboSizeY{ fboSizeY }
 {
@@ -18,9 +19,6 @@ FboContainer::FboContainer(int fboSizeX, int fboSizeY)
     _ortho = glm::ortho(0.0f, (float)_fboSizeX, 0.0f, (float)_fboSizeY, -1.0f, 1.0f);
 
     createBox();
-    
-
-    
 
     for (int c = 0; c < EYE_LAST; c++)
     {
@@ -41,6 +39,17 @@ FboContainer::FboContainer(int fboSizeX, int fboSizeY)
     FBO::disable();
 }
 
+
+void FboContainer::disable()
+{
+    FBO::disable();
+}
+
+/**
+ * @brief FBOs render.
+ *          It bind the vao end the fbos for each eye
+ * 
+ */
 void FboContainer::render()
 {
     glBindVertexArray(_vao);
@@ -76,12 +85,21 @@ void FboContainer::render()
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
+/**
+ * @brief From an index return a specific FBO
+ * 
+ * \param i index of the eye
+ * \return pointer to an eye FBO
+ */
 FBO* FboContainer::get(int i)
 {
-    //TODO controllo sulla i
     return fbo[i];
 }
 
+/**
+ * @brief Create a 2D box for screen rendering for each eye
+ * 
+ */
 void FboContainer::createBox()
 {
     glGenVertexArrays(1, &_vao);
@@ -118,7 +136,12 @@ void FboContainer::createBox()
     glEnable(GL_DEPTH_TEST);
 }
 
-
+/**
+ * @brief Returns the texture id of a specific FBO
+ * 
+ * \param i FBO index 
+ * \return texture index
+ */
 unsigned int FboContainer::getFboTexId(int i)
 {
     return fboTexId[i];

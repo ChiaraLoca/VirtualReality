@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   Program.h
+ * @brief Wraps all the program functionality
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "Shader.h"
 #include "UtilRender.h"

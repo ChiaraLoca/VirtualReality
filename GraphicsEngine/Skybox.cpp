@@ -60,6 +60,8 @@ Skybox::Skybox(std::string name) : BaseTexture{ ObjectType::Skybox,name }
 {
     drawSkyboxCube();
 }
+
+
 void Skybox::drawSkyboxCube() {
     // Init VAO:
     glGenVertexArrays(1, &_vao);
@@ -90,6 +92,10 @@ void Skybox::render(glm::mat4 mv, glm::mat4 proj)
 
 }
 
+/**
+ * @brief Loads the texturo for each skybox face
+ * 
+ */
 void Skybox::buildCubemap()
 {
     // Create and bind cubemap:   

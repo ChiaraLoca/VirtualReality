@@ -1,6 +1,14 @@
+/*****************************************************************//**
+ * \file   ListCamera.h
+ * \brief  Manages camera rendering
+ * 
+ * \author Gruppo 1 
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "PerspectiveCamera.h"
 #include <vector>
+
 class ListCamera
 {
 private:

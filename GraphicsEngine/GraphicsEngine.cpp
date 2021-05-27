@@ -77,7 +77,6 @@ int LIB_API GraphicsEngine::initialize()
     initShaders();
 
     //Initalize FBOs
-    //initFbo();
     if (_stereoscopicRender){
         if (OVRManager::ovrManager.init() < 0)
         {
@@ -242,6 +241,10 @@ void GraphicsEngine::render()
     }
 }
 
+/**
+ * @brief Ensure a standard render (no stereoscopic)
+ * 
+ */
 void GraphicsEngine::standardRender()
 {
     glutReshapeWindow(_dimx/2, _dimy); // forces the size of the window to be a single square
@@ -257,6 +260,11 @@ void GraphicsEngine::standardRender()
     RenderList::renderList.render();
 
 }
+
+/**
+ * @brief Ensure a stereoscopic render (no stereoscopic)
+ *
+ */
 void GraphicsEngine::stereoscopicRender()
 {
     RenderList::renderList.removeAll();
@@ -473,7 +481,7 @@ void GraphicsEngine::enableDebugger() {
 }
 
 /**
- * @brief Intitializer of the vertexShader and fragmentShader
+ * @brief Intitializer of the vertexShader and fragmentShader for all program
  * 
  */
 LIB_API void GraphicsEngine::initShaders()
@@ -483,6 +491,11 @@ LIB_API void GraphicsEngine::initShaders()
     setSkyboxShader();
 
 }
+
+/**
+ * @brief Initialize the vertexShader and fragmentShader perPixelLighting
+ * 
+ */
 LIB_API void GraphicsEngine::setStandardShader()
 {
     Shader* vertexShader = new Shader();
@@ -503,7 +516,10 @@ LIB_API void GraphicsEngine::setStandardShader()
     Program::programPPL.normLoc = Program::programPPL.getParamLocation("normalMatrix");
 }
 
-
+/**
+ * @brief Initialize the vertexShader and fragmentShader passthroughShader
+ *
+ */
 LIB_API void GraphicsEngine::setPassthroughShader()
 {
     // Build passthrough shader:
@@ -527,9 +543,10 @@ LIB_API void GraphicsEngine::setPassthroughShader()
 }
 
 
-
-
-
+/**
+ * @brief Initialize the vertexShader and fragmentShader skyboxShader
+ *
+ */
 LIB_API void GraphicsEngine::setSkyboxShader()
 {
     // Build passthrough shader:
@@ -549,6 +566,12 @@ LIB_API void GraphicsEngine::setSkyboxShader()
     Program::programSB.projLoc = Program::programSB.getParamLocation("projection");
     Program::programSB.mvLoc = Program::programSB.getParamLocation("modelview");
 }
+
+/**
+ * @brief Enables and desables the wireframe
+ * 
+ * \param b is true if the wirefrime must be enabled false otherwise
+ */
 LIB_API void GraphicsEngine::enableWireframe(bool b)
 {
     if(b)
@@ -557,6 +580,12 @@ LIB_API void GraphicsEngine::enableWireframe(bool b)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+/**
+ * @brief Set, if possible, the stereoscopic render.
+ *          It must be done before initialize
+ * 
+ * \param b is true if the stereoscopic render must be enabled false otherwise
+ */
 void GraphicsEngine::enableStereoscopicRender(bool b)
 {
     _stereoscopicRender = b;

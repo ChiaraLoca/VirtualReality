@@ -5,6 +5,14 @@
 
 RenderList LIB_API RenderList::renderList;
 
+/**
+ * @brief Add an object to the list.
+ *			It controls if it is a Light or a camera (because are managed differently)
+ * 
+ * \param obj is the object to add
+ * \param mat is the obj matrix
+ * \return true if the insert ends correctly
+ */
 bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 	
 	if (obj->getType() == ObjectType::Light) {
@@ -33,7 +41,11 @@ bool LIB_API RenderList::add(Object*  obj, glm::mat4 mat) {
 	return true;
 }
 
-
+/**
+ * @Cleanup all list in renderlist
+ * 
+ * \return true if the method ends correctly
+ */
 bool LIB_API  RenderList::removeAll() {
 	_map.clear();
 	ListLight::omniLight.clear();
@@ -50,7 +62,10 @@ void RenderList::setSKyboxMatrix(glm::mat4 m)
 }
 
 
-
+/**
+ * @brief Render in the correct order all nodes in the list
+ * 
+ */
 void RenderList::render() {
 
 	PerspectiveCamera* current = (PerspectiveCamera * )_listCamera.getCurrentCamera();
@@ -91,9 +106,12 @@ void RenderList::render() {
 
 }
 
+/**
+ * @brief Recorsive method used to set all final matrix to all nodes
+ * 
+ * \param node that needs to calculate the final matrix
+ */
 void RenderList::setAllMatrix(Node* node ) {
-
-	
 
 	if (node->getParent() != nullptr) {
 		RenderList::renderList.add(node, _map.at(node->getParent()) * node->getMatrix());

@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   GraphicsEngine.h
+ * \brief  Principal engine class, manages all connections between classes 
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 
 // C/C++:
@@ -31,6 +38,7 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 }
 #endif
 
+
 class LIB_API GraphicsEngine
 {
 private:
@@ -49,7 +57,6 @@ private:
 	Skybox* _skybox;
 	void enableDebugger();
 	void initShaders();
-	void initFbo();
 	void standardRender();
 	void stereoscopicRender();
 	
@@ -90,6 +97,7 @@ public:
 	void enableWireframe(bool b);
 	void enableStereoscopicRender(bool b);
 
+	///////////////////////////////////////////////////////////////////////////////////////////////
 	const char* perPixelLightingFragmentShader = R"(
 	   #version 440 core
 			// Varying variables from the vertex shader:
@@ -180,40 +188,6 @@ public:
 
 			}
 		)";
-
-	const char* vertShaderSkybox = R"(
-   #version 440 core
-
-   uniform mat4 projection;
-   uniform mat4 modelview;
-
-   layout(location = 0) in vec3 in_Position;      
-
-   out vec3 texCoord;
-
-   void main(void)
-   {
-		texCoord = in_Position;
-		gl_Position = projection * modelview * vec4(in_Position, 1.0f);            
-   }
-)";
-
-	const char* fragShaderSkybox = R"(
-   #version 440 core
-   
-   in vec3 texCoord;
-   
-   // Texture mapping (cubemap):
-   layout(binding = 0) uniform samplerCube cubemapSampler;
-
-   out vec4 fragOutput;
-
-   void main(void)
-   {       
-      fragOutput = texture(cubemapSampler, texCoord);
-   }
-)";
-
 	const char* perPixelLightingVertexShader = R"(
 	#version 440 core
 		// Uniforms:
@@ -237,59 +211,85 @@ public:
 			normal = normalMatrix * in_Normal;
 		}
 	)";
+	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	
+	const char* vertShaderSkybox = R"(
+			#version 440 core
 
-	
+			uniform mat4 projection;
+			uniform mat4 modelview;
+
+			layout(location = 0) in vec3 in_Position;      
+
+			out vec3 texCoord;
+
+			void main(void)
+			{
+				texCoord = in_Position;
+				gl_Position = projection * modelview * vec4(in_Position, 1.0f);            
+			}
+		)";
+
+	const char* fragShaderSkybox = R"(
+		   #version 440 core
+   
+		   in vec3 texCoord;
+   
+		   // Texture mapping (cubemap):
+		   layout(binding = 0) uniform samplerCube cubemapSampler;
+
+		   out vec4 fragOutput;
+
+		   void main(void)
+		   {       
+			  fragOutput = texture(cubemapSampler, texCoord);
+		   }
+		)";
+	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	const char* passthroughVertShader = R"(
-   #version 440 core
+		#version 440 core
 
-   // Uniforms:
-   uniform mat4 projection;
-   uniform mat4 modelview;   
+		// Uniforms:
+		uniform mat4 projection;
+		uniform mat4 modelview;   
 
-   // Attributes:
-   layout(location = 0) in vec2 in_Position;   
-   layout(location = 2) in vec2 in_TexCoord;
+		// Attributes:
+		layout(location = 0) in vec2 in_Position;   
+		layout(location = 2) in vec2 in_TexCoord;
 
-   // Varying:   
-   out vec2 texCoord;
+		// Varying:   
+		out vec2 texCoord;
 
-   void main(void)
-   {      
-      gl_Position = projection * modelview * vec4(in_Position, 0.0f, 1.0f);    
-      texCoord = in_TexCoord;
-   }
-)";
+		void main(void)
+		{      
+			gl_Position = projection * modelview * vec4(in_Position, 0.0f, 1.0f);    
+			texCoord = in_TexCoord;
+		}
+	)";
 
 	const char* passthroughFragShader = R"(
-   #version 440 core
+	   #version 440 core
    
-   in vec2 texCoord;
+	   in vec2 texCoord;
    
-   uniform vec4 color;
+	   uniform vec4 color;
 
-   out vec4 fragOutput;   
+	   out vec4 fragOutput;   
 
-   // Texture mapping:
-   layout(binding = 0) uniform sampler2D texSampler;
+	   // Texture mapping:
+	   layout(binding = 0) uniform sampler2D texSampler;
 
-   void main(void)   
-   {  
-      // Texture element:
-      vec4 texel = texture(texSampler, texCoord);      
+	   void main(void)   
+	   {  
+		  // Texture element:
+		  vec4 texel = texture(texSampler, texCoord);      
       
-      // Final color:
-      fragOutput = color * texel;       
+		  // Final color:
+		  fragOutput = color * texel;       
 		
-   }
-)";
-
-
-
-
-
+	   }
+	)";
 
 };
 

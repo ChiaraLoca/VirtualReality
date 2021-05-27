@@ -1,6 +1,14 @@
+/*****************************************************************//**
+ * \file   BaseTexture.h
+ * \brief  Texture base class, defines common methods and initialize freeimage
+ * 
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "Object.h"
-//Classe base di texture,definisce metodi in comune e inizializza freeimage
+
 class LIB_API BaseTexture :
     public Object
 {

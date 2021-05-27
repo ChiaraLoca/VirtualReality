@@ -14,6 +14,12 @@ Shader::~Shader()
 		glDeleteShader(glId);		
 }
 
+/**
+ * @param Returns the correct type of the shader
+ * 
+ * \param type is the int type of shader
+ * \return GL_VERTEX_SHADER / GL_FRAGMENT_SHADER or -1 if 'type' is wrong
+ */
 int Shader::getKind(int type) {
 	int i = 0;
 	switch (type)

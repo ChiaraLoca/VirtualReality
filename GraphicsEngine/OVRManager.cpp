@@ -3,6 +3,12 @@
 
 OVRManager  OVRManager::ovrManager;
 
+/**
+ * @brief Initialize the OpenVR class
+ * 
+ * \return	0 if the initalization ends correctly 
+ *			-2 otherwise
+ */
 int OVRManager::init()
 {
 	_ovr = new OpenVR();

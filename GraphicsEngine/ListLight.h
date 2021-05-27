@@ -1,10 +1,17 @@
+/*****************************************************************//**
+ * \file   ListLight.h
+ * \brief  Manages lights rendering
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "Light.h"
 #include "OmniLight.h"
 #include <vector>
 #include <map>
 
-//Contiene le listi gestiscono le varie tipologie di luci
+
 class LIB_API ListLight {
 
 public:

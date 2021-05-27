@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   SphereCulling.cpp
+ *   
+ * Currently not operational
+ * 
+ * \author giada
+ * \date   May 2021
+ *********************************************************************/
 #include "SphereCulling.h"
 #include "PerspectiveCamera.h"
 

@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   Mesh.h
+ * \brief  Manages the VAO and the VBOs related to the mesh
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "Node.h"
 #include "Util.h"

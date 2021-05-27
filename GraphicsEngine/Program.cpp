@@ -20,6 +20,14 @@ Program::~Program() {
 
 };
 
+/**
+ * @brief Add to the program a vertexShader and a fragmentShader
+ *			Before bind in OpenGL, it controls if the shader are correct 
+ * 
+ * \param vertexShader
+ * \param fragmentShader
+ * \return true if the bulid ended correctly false otherwise
+ */
 bool LIB_API Program::build(Shader* vertexShader, Shader* fragmentShader){
 	// Safety net:
 	if (vertexShader && vertexShader->type != TYPE_VERTEX)

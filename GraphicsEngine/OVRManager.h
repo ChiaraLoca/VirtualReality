@@ -1,5 +1,13 @@
+/*****************************************************************//**
+ * \file   OVRManager.h
+ * \brief  Wrap OpenVR functionality 
+ * 
+ * \author Gruppo 1
+ * \date   May 2021
+ *********************************************************************/
 #pragma once
 #include "OpenVR.h";
+
 class OVRManager
 {
 	
