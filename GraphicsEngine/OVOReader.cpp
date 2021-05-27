@@ -229,7 +229,10 @@ Mesh* OVOReader::loadMesh(char* data)
 	strcpy(materialName, data + position);
 	position += (unsigned int)strlen(materialName) + 1;
 
-	// Mesh bounding sphere radius: SKIPPED
+	
+	// Mesh bounding sphere radius: SKIPPED-----------------------------------------------------------------------------------------------QUI
+	float boundingSphereRadius;
+	memcpy(&boundingSphereRadius, data + position, sizeof(float));
 	position += sizeof(float);
 
 	// Mesh bounding box minimum corner: SKIPPED
@@ -382,7 +385,9 @@ Mesh* OVOReader::loadMesh(char* data)
 	}
 
 	std::shared_ptr<Material> material = getMaterialFromName(materialName);
-	Mesh* thisMesh = new Mesh{ meshName, matrix, vertexArray, normalArray, textureArray, material };
+	
+	
+	Mesh* thisMesh = new Mesh{ meshName, matrix, vertexArray, normalArray, textureArray, material,boundingSphereRadius };
 
 	recursiveLoadChild(thisMesh, children);
 	return thisMesh;

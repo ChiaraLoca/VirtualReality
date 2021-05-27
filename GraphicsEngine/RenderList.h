@@ -8,6 +8,7 @@
 
 #include <map>
 #include "OrthoCamera.h"
+#include "SphereCulling.h"
 class LIB_API RenderList : Object
 {
 private:
@@ -16,6 +17,7 @@ private:
 	OrthoCamera* _ortho;
 	bool _showOrthoCamera = true;
 	Skybox* _skybox;
+	SphereCulling* _sphereCulling;
 
 public:
 	RenderList():Object{ObjectType::List,"lista"} {};
@@ -30,6 +32,7 @@ public:
 	void setSkybox(Skybox* skybox);
 	void setShowOrthoCamera(bool _showOrthoCamera);
 	void setSKyboxMatrix(glm::mat4 m);
+
 	
 	static RenderList renderList; // contains all the elements of the scene
 };

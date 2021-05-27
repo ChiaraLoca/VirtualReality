@@ -17,8 +17,8 @@
  * @param material associeted to the mesh
  */
 Mesh::Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArray, std::vector<float> normalArray,
-	std::vector<float> textureArray, std::shared_ptr<Material> material)
-	:Node{ meshName,matrix,ObjectType::Mesh }, _material{ material }
+	std::vector<float> textureArray, std::shared_ptr<Material> material, float boundingSphereRadius)
+	:Node{ meshName,matrix,ObjectType::Mesh }, _material{ material }, _boundingSphereRadius{ boundingSphereRadius }
 {
 	// Generate a vertex array object and bind it:
 	glGenVertexArrays(1, &_vao);						

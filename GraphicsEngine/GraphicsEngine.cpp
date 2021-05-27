@@ -99,6 +99,8 @@ int LIB_API GraphicsEngine::initialize()
     _skybox->buildCubemap();
     RenderList::renderList.setSkybox(_skybox);
 
+   
+
     glViewport(0, 0, _dimx, _dimy);
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 

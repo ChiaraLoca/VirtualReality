@@ -39,6 +39,16 @@ void LIB_API Camera::setFarPlane(const float farPlane)
     _farPlane = farPlane;
 }
 
+float Camera::getNearPlane()
+{
+    return _nearPlane;
+}
+
+float Camera::getFarPlane()
+{
+    return _farPlane;
+}
+
 /**
  * @brief Render of the camera.
  *  It does nothing because the room does not have to be rendered.

@@ -16,10 +16,12 @@ private:
     unsigned int _colorVbo;
 
     unsigned int _vertexNumber;
+    
 public:
+    float _boundingSphereRadius;
 
     Mesh(std::string meshName, glm::mat4 matrix, std::vector<float> vertexArray, std::vector<float> normalArray,
-        std::vector<float> textureArray, std::shared_ptr<Material> material);
+        std::vector<float> textureArray, std::shared_ptr<Material> material, float boundingSphereRadius);
 
 
     virtual void render();

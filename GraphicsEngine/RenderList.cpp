@@ -52,14 +52,20 @@ void RenderList::setSKyboxMatrix(glm::mat4 m)
 	_skybox->setProj(m);
 }
 
+
+
 void RenderList::render() {
 
 	PerspectiveCamera* current = (PerspectiveCamera * )_listCamera.getCurrentCamera();
+	SphereCulling sphereCulling{ current->getNearPlane(),current->getFarPlane() ,glm::inverseTranspose(glm::mat3(current->_view_matrix)) * glm::vec3(1)  };
 	current->setFinalMatrix(current->getInverseMatrix());
 	((Node*)current)->render();
 	
-	for (auto i = _map.begin(); i != _map.end(); i++) {			
+	for (auto i = _map.begin(); i != _map.end(); i++) {
+		
 		i->first->setFinalMatrix(current->getInverseMatrix() * i->second);
+		
+		
 	}
 
 	CounterLight::omniLight.render();
@@ -75,7 +81,17 @@ void RenderList::render() {
 	_skybox->render(mv, proj);
 
 	for (auto i = _map.begin(); i != _map.end(); i++) {
-		i->first->render();
+		
+		if (i->first->getType() == ObjectType::Mesh) {
+			if (sphereCulling.checkIfVisible((Mesh*)i->first))
+				i->first->render();
+		}
+		else
+		{
+			i->first->render();
+		}
+		
+				
 	}
 
 	if (_showOrthoCamera)
